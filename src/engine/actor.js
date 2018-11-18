@@ -186,9 +186,9 @@ Actor.animations = {
           1,
         ]),
         new Float32Array([
-          ...eulerToQuat(0, 0, Math.PI * -0.025),
-          ...eulerToQuat(0, 0, Math.PI * 0.025),
-          ...eulerToQuat(0, 0, Math.PI * -0.025),
+          ...eulerToQuat(Math.PI * -0.075, 0, Math.PI * -0.025),
+          ...eulerToQuat(Math.PI * -0.075, 0, Math.PI * 0.025),
+          ...eulerToQuat(Math.PI * -0.075, 0, Math.PI * -0.025),
         ])
       ),
       new QuaternionKeyframeTrack(
@@ -229,9 +229,9 @@ Actor.animations = {
           1,
         ]),
         new Float32Array([
-          ...eulerToQuat(Math.PI * -0.03, 0, 0),
-          ...eulerToQuat(Math.PI * 0.03, 0, 0),
-          ...eulerToQuat(Math.PI * -0.03, 0, 0),
+          ...eulerToQuat(Math.PI * -0.02, 0, Math.PI * 0.01),
+          ...eulerToQuat(Math.PI * 0.02, 0, Math.PI * -0.01),
+          ...eulerToQuat(Math.PI * -0.02, 0, Math.PI * 0.01),
         ])
       ),
       new QuaternionKeyframeTrack(
@@ -242,9 +242,9 @@ Actor.animations = {
           1,
         ]),
         new Float32Array([
-          ...eulerToQuat(0, 0, Math.PI * -0.05),
-          ...eulerToQuat(0, 0, Math.PI * 0.05),
-          ...eulerToQuat(0, 0, Math.PI * -0.05),
+          ...eulerToQuat(0, 0, Math.PI * -0.025),
+          ...eulerToQuat(0, 0, Math.PI * 0.025),
+          ...eulerToQuat(0, 0, Math.PI * -0.025),
         ])
       ),
       new QuaternionKeyframeTrack(
@@ -281,9 +281,9 @@ Actor.animations = {
           1,
         ]),
         new Float32Array([
-          ...eulerToQuat(Math.PI * -0.15, 0, 0),
+          ...eulerToQuat(Math.PI * -0.15, 0, Math.PI * -0.015),
           ...eulerToQuat(Math.PI * 0.15, 0, 0),
-          ...eulerToQuat(Math.PI * -0.15, 0, 0),
+          ...eulerToQuat(Math.PI * -0.15, 0, Math.PI * -0.015),
         ])
       ),
       new QuaternionKeyframeTrack(
@@ -294,9 +294,9 @@ Actor.animations = {
           1,
         ]),
         new Float32Array([
-          ...eulerToQuat(Math.PI * 0.15, 0, 0),
+          ...eulerToQuat(Math.PI * 0.15, 0, Math.PI * 0.015),
           ...eulerToQuat(Math.PI * -0.15, 0, 0),
-          ...eulerToQuat(Math.PI * 0.15, 0, 0),
+          ...eulerToQuat(Math.PI * 0.15, 0, Math.PI * 0.015),
         ])
       ),
     ])

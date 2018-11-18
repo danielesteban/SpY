@@ -7,12 +7,14 @@ class Camera extends PerspectiveCamera {
   constructor() {
     super(60, 1, 0.01, 1024);
     this.targetOffset = new Vector3();
+    this.speed = 1.5;
     this.step = new Vector3();
   }
 
   onAnimationTick({ delta }) {
     const {
       position,
+      speed,
       step,
       target,
       targetOffset,
@@ -24,7 +26,7 @@ class Camera extends PerspectiveCamera {
       .copy(targetOffset)
       .sub(position)
       .normalize()
-      .multiplyScalar(delta * 1.5);
+      .multiplyScalar(delta * speed);
     position.add(step);
   }
 }
