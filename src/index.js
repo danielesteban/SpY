@@ -5,7 +5,7 @@ import Scene from '@/engine/scene';
 const scene = new Scene({ mount: document.body });
 
 const pack = {
-  dudes: [...Array(7)].map((v, i) => {
+  dudes: [...Array(13)].map((v, i) => {
     const dude = new Dude({
       arms: 0x222222,
       eyes: i === 0 ? 0x990000 : (0x999999 * Math.random()),

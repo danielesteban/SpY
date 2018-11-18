@@ -255,9 +255,9 @@ Actor.animations = {
           1,
         ]),
         new Float32Array([
-          ...eulerToQuat(Math.PI * 0.15, 0, Math.PI * -0.05),
-          ...eulerToQuat(Math.PI * -0.15, 0, Math.PI * -0.15),
-          ...eulerToQuat(Math.PI * 0.15, 0, Math.PI * -0.05),
+          ...eulerToQuat(Math.PI * 0.1, 0, 0),
+          ...eulerToQuat(Math.PI * -0.1, 0, Math.PI * -0.1),
+          ...eulerToQuat(Math.PI * 0.1, 0, 0),
         ])
       ),
       new QuaternionKeyframeTrack(
@@ -268,9 +268,9 @@ Actor.animations = {
           1,
         ]),
         new Float32Array([
-          ...eulerToQuat(Math.PI * -0.15, 0, Math.PI * 0.15),
-          ...eulerToQuat(Math.PI * 0.15, 0, Math.PI * 0.05),
-          ...eulerToQuat(Math.PI * -0.15, 0, Math.PI * 0.15),
+          ...eulerToQuat(Math.PI * -0.1, 0, Math.PI * 0.1),
+          ...eulerToQuat(Math.PI * 0.1, 0, 0),
+          ...eulerToQuat(Math.PI * -0.1, 0, Math.PI * 0.1),
         ])
       ),
       new QuaternionKeyframeTrack(
@@ -282,7 +282,7 @@ Actor.animations = {
         ]),
         new Float32Array([
           ...eulerToQuat(Math.PI * -0.15, 0, Math.PI * -0.015),
-          ...eulerToQuat(Math.PI * 0.15, 0, 0),
+          ...eulerToQuat(Math.PI * 0.15, 0, Math.PI * 0.015),
           ...eulerToQuat(Math.PI * -0.15, 0, Math.PI * -0.015),
         ])
       ),
@@ -295,7 +295,7 @@ Actor.animations = {
         ]),
         new Float32Array([
           ...eulerToQuat(Math.PI * 0.15, 0, Math.PI * 0.015),
-          ...eulerToQuat(Math.PI * -0.15, 0, 0),
+          ...eulerToQuat(Math.PI * -0.15, 0, Math.PI * -0.015),
           ...eulerToQuat(Math.PI * 0.15, 0, Math.PI * 0.015),
         ])
       ),

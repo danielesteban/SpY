@@ -1,6 +1,6 @@
 import {
   CylinderGeometry,
-  MeshLambertMaterial,
+  MeshPhongMaterial,
   SphereGeometry,
   Vector3,
   VertexColors,
@@ -24,8 +24,8 @@ Dude.bones = {
   hip: new Vector3(0, 0.5, 0),
   torso: new Vector3(0, 0, 0),
   head: new Vector3(0, 0.5, 0),
-  leftArm: new Vector3(-0.125, 0.475, 0),
-  rightArm: new Vector3(0.125, 0.475, 0),
+  leftArm: new Vector3(-0.15, 0.475, 0),
+  rightArm: new Vector3(0.15, 0.475, 0),
   leftLeg: new Vector3(-0.075, 0, 0),
   rightLeg: new Vector3(0.075, 0, 0),
 };
@@ -50,21 +50,21 @@ Dude.geometry = (palette) => {
   rightEye.translate(0.1, 0.2, 0.15);
   head.merge(leftEye);
   head.merge(rightEye);
-  const leftArm = new CylinderGeometry(0.05, 0.03, 0.4, 8);
+  const leftArm = new CylinderGeometry(0.05, 0.03, 0.4, 6);
   leftArm.faces.forEach((face) => {
     face.color.set(palette.arms);
   });
   const rightArm = leftArm.clone();
   leftArm.translate(0, -0.2, 0);
   rightArm.translate(0, -0.2, 0);
-  const leftLeg = new CylinderGeometry(0.05, 0.05, 0.5, 8);
+  const leftLeg = new CylinderGeometry(0.05, 0.05, 0.5, 4);
   leftLeg.faces.forEach((face) => {
     face.color.set(palette.legs);
   });
   const rightLeg = leftLeg.clone();
   leftLeg.translate(0, -0.25, 0);
   rightLeg.translate(0, -0.25, 0);
-  return Actor.geometryFromLimbs({
+  const geometry = Actor.geometryFromLimbs({
     torso,
     head,
     leftArm,
@@ -72,9 +72,11 @@ Dude.geometry = (palette) => {
     leftLeg,
     rightLeg,
   });
+  geometry.computeVertexNormals();
+  return geometry;
 };
 
-Dude.material = new MeshLambertMaterial({
+Dude.material = new MeshPhongMaterial({
   skinning: true,
   vertexColors: VertexColors,
 });
