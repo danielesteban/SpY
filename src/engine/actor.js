@@ -81,6 +81,7 @@ class Actor extends SkinnedMesh {
 
   onAnimationTick({ delta }) {
     const {
+      actions: { walk: { timeScale: walkingSpeed } },
       destination,
       mixer,
       movementAux,
@@ -105,7 +106,7 @@ class Actor extends SkinnedMesh {
     }
     if (!destination) return;
     const distance = position.distanceTo(destination);
-    const step = delta * 2;
+    const step = delta * 2 * walkingSpeed;
     position.add(
       movementAux
         .copy(destination)
@@ -133,7 +134,7 @@ class Actor extends SkinnedMesh {
   walkTo(point) {
     const { position, rotationAux } = this;
     this.setAnimation('walk');
-    this.destination = point;
+    this.destination = point.clone();
     const angle = rotationAux.set(point.x - position.x, point.z - position.z).angle();
     while (this.rotation.y < -Math.PI) this.rotation.y += Math.PI * 2;
     while (this.rotation.y > Math.PI) this.rotation.y -= Math.PI * 2;

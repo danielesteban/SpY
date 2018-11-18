@@ -18,7 +18,7 @@ import Grid from './grid';
 
 class Scene {
   constructor({
-    background = new Color(0x778846),
+    background = new Color(0x333333),
     mount = document.body,
   } = {}) {
     this.camera = new Camera();
@@ -34,7 +34,7 @@ class Scene {
     this.renderer.setClearColor(background);
     mount.appendChild(this.renderer.domElement);
     this.root = new Root();
-    this.root.fog = new FogExp2(background, 0.05);
+    this.root.fog = new FogExp2(background, 0.06);
     this.root.add(new AmbientLight(0x454545));
     const light = new DirectionalLight(0xffffff, 0.8);
     light.position.set(0, 10, 10);

@@ -34,7 +34,7 @@ Dude.geometry = (() => {
   const torso = new CylinderGeometry(0.125, 0.175, 0.5, 6);
   torso.translate(0, 0.25, 0);
   torso.faces.forEach((face) => {
-    face.color.set(0xff0000);
+    face.color.set(0x990000);
   });
   const head = new SphereGeometry(0.2, 8, 4);
   head.translate(0, 0.2, 0);
