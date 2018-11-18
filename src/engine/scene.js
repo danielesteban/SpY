@@ -18,7 +18,7 @@ import Grid from './grid';
 
 class Scene {
   constructor({
-    background = new Color(0x333333),
+    background = new Color(0x223322),
     mount = document.body,
   } = {}) {
     this.camera = new Camera();

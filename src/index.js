@@ -23,7 +23,7 @@ const pack = {
       point.x = mainDudeX + Math.floor((i + 1) / 2) * ((i + 1) % 2 === 0 ? 1 : -1);
       point.z = mainDudeZ + Math.floor((i + 1) / 2) * -1;
       if (i > 0) {
-        dude.actions.walk.timeScale = 0.75 + Math.random() * 0.4;
+        dude.actions.walk.timeScale = 0.8 + Math.random() * 0.4;
       }
       dude.walkTo(point);
     });
