@@ -37,14 +37,11 @@ class Scene {
     this.root.fog = new FogExp2(background, 0.06);
     this.root.add(new AmbientLight(0x454545));
     const light = new DirectionalLight(0xffffff, 0.8);
-    light.position.set(0, 10, 10);
+    light.position.set(1, 1, 1);
     this.root.add(light);
     const secondaryLight = new DirectionalLight(0xffffff, 0.2);
-    secondaryLight.position.set(-10, 10, -10);
+    secondaryLight.position.set(-1, 1, 1);
     this.root.add(secondaryLight);
-    const tertiaryLight = new DirectionalLight(0xffffff, 0.2);
-    tertiaryLight.position.set(10, 10, 10);
-    this.root.add(tertiaryLight);
     this.grid = new Grid({ background });
     this.root.add(this.grid);
     window.addEventListener('contextmenu', e => e.preventDefault(), false);
