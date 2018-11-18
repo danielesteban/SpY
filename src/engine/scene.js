@@ -32,7 +32,7 @@ class Scene {
     this.renderer.setClearColor(background);
     mount.appendChild(this.renderer.domElement);
     this.root = new Root();
-    this.root.fog = new FogExp2(background, 0.05);
+    this.root.fog = new FogExp2(background, 0.03);
     this.root.add(new AmbientLight(0x454545));
     const light = new DirectionalLight(0xffffff, 0.8);
     light.position.set(1, 1, 1);

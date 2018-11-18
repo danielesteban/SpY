@@ -7,10 +7,10 @@ import {
 class Camera extends PerspectiveCamera {
   constructor() {
     super(60, 1, 0.01, 1024);
-    this.distance = 5;
+    this.distance = 9;
     this.offset = new Vector3(0, 1.5, 0);
     this.tilt = Math.PI * -0.5;
-    this.pitch = 0;
+    this.pitch = Math.PI * 0.125;
     this.speed = 1;
     this.step = new Vector3();
     this.root = new Object3D();
