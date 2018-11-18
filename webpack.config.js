@@ -1,11 +1,13 @@
-const autoprefixer = require('autoprefixer');
-const webpack = require('webpack');
+const childProcess = require('child_process');
+const fs = require('fs');
 const path = require('path');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const webpack = require('webpack');
+const autoprefixer = require('autoprefixer');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 const GHPagesSPAWebpackPlugin = require('ghpages-spa-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const RobotstxtPlugin = require('robotstxt-webpack-plugin').default;
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
@@ -14,6 +16,29 @@ const srcPath = path.resolve(__dirname, 'src');
 const outputPath = path.resolve(__dirname, 'dist');
 const mode = process.env.NODE_ENV === 'production' ? 'production' : 'development';
 const basename = process.env.BASENAME || '/';
+const version = (() => {
+  let version;
+  if (fs.existsSync('.git')) {
+    /* Get version from the repo commit count */
+    let commitCount;
+    try {
+      commitCount = parseInt(childProcess.execSync('git rev-list HEAD --count').toString(), 10);
+    } catch (e) {
+      commitCount = 0;
+    }
+    version = `${Math.floor(commitCount / 1000)}.${Math.floor(commitCount / 100) % 10}.${commitCount % 100}`;
+  } else {
+    /* Failover to package.json version */
+    try {
+      // eslint-disable-next-line prefer-destructuring
+      version = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'package.json'))).version;
+    } catch (e) {
+      version = '0.0.0';
+    }
+  }
+  return `v${version}`;
+})();
+
 
 module.exports = {
   mode,
@@ -143,6 +168,7 @@ module.exports = {
       minify: { collapseWhitespace: true },
       template: path.join(srcPath, 'index.ejs'),
       title: 'SpY',
+      version,
     }),
     new MiniCssExtractPlugin({
       filename: 'code/[name].[contenthash].css',

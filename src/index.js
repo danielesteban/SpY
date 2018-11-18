@@ -1,11 +1,15 @@
-// import { Vector3 } from 'three';
 import Dude from '@/actors/dude';
 import Input from '@/engine/input';
 import Marker from '@/items/marker';
 import Scene from '@/engine/scene';
 
-const input = new Input({ mount: document.body });
-const scene = new Scene({ mount: document.body });
+const mount = document.getElementById('mount');
+const input = new Input({ mount });
+const scene = new Scene({ mount });
+
+input.touches.once('start', () => {
+  document.getElementById('credits').style.display = 'none';
+});
 
 const pack = {
   dudes: [...Array(13)].map((v, i) => {
@@ -64,10 +68,3 @@ scene.onAnimationTick = () => {
     camera.updateOrbit();
   }
 };
-
-// Stayin' alive demo hack
-// let z = 0;
-// setInterval(() => {
-//   z += 8;
-//   pack.walkTo(new Vector3(z * 0.5, 0, z));
-// }, 3000);
