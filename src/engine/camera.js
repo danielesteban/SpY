@@ -6,7 +6,7 @@ import {
 
 class Camera extends PerspectiveCamera {
   constructor() {
-    super(60, 1, 0.01, 1024);
+    super(60, 1, 0.01, 2048);
     this.distance = 9;
     this.offset = new Vector3(0, 1.5, 0);
     this.tilt = Math.PI * -0.5;
