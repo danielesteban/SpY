@@ -44,7 +44,10 @@ class Actor extends SkinnedMesh {
       geometry,
       material
     );
+    const hip = new Bone();
+    this.add(hip);
     const torso = new Bone();
+    hip.add(torso);
     const head = new Bone();
     torso.add(head);
     const leftArm = new Bone();
@@ -52,11 +55,11 @@ class Actor extends SkinnedMesh {
     const rightArm = new Bone();
     torso.add(rightArm);
     const leftLeg = new Bone();
-    torso.add(leftLeg);
+    hip.add(leftLeg);
     const rightLeg = new Bone();
-    torso.add(rightLeg);
-    this.add(torso);
+    hip.add(rightLeg);
     this.bind(new Skeleton([
+      hip,
       torso,
       head,
       leftArm,
@@ -70,6 +73,7 @@ class Actor extends SkinnedMesh {
       [action]: this.mixer.clipAction(Actor.animations[action]),
     }), {});
     this.animation = 'idle';
+    this.actions.idle.timeScale = 0.5;
     this.actions.idle.play();
     this.rotationAux = new Vector2();
     this.movementAux = new Vector3();
@@ -146,12 +150,13 @@ class Actor extends SkinnedMesh {
 }
 
 Actor.Bones = {
-  torso: 0,
-  head: 1,
-  leftArm: 2,
-  rightArm: 3,
-  leftLeg: 4,
-  rightLeg: 5,
+  hip: 0,
+  torso: 1,
+  head: 2,
+  leftArm: 3,
+  rightArm: 4,
+  leftLeg: 5,
+  rightLeg: 6,
 };
 
 const eulerToQuat = (x, y, z) => (new Quaternion()).setFromEuler(new Euler(x, y, z)).toArray();
@@ -160,48 +165,74 @@ Actor.animations = {
   idle: (
     new AnimationClip('idle', 1, [
       new QuaternionKeyframeTrack(
-        `.bones[${Actor.Bones.head}].quaternion`,
+        `.bones[${Actor.Bones.torso}].quaternion`,
         new Float32Array([
           0,
           0.5,
           1,
         ]),
         new Float32Array([
-          ...eulerToQuat(Math.PI * -0.05, 0, 0),
-          ...eulerToQuat(Math.PI * 0.05, 0, 0),
-          ...eulerToQuat(Math.PI * -0.05, 0, 0),
+          ...eulerToQuat(0, Math.PI * -0.05, 0),
+          ...eulerToQuat(0, Math.PI * 0.05, 0),
+          ...eulerToQuat(0, Math.PI * -0.05, 0),
+        ])
+      ),
+      new QuaternionKeyframeTrack(
+        `.bones[${Actor.Bones.head}].quaternion`,
+        new Float32Array([
+          0,
+          0.75,
+          1,
+        ]),
+        new Float32Array([
+          ...eulerToQuat(0, 0, Math.PI * -0.025),
+          ...eulerToQuat(0, 0, Math.PI * 0.025),
+          ...eulerToQuat(0, 0, Math.PI * -0.025),
         ])
       ),
       new QuaternionKeyframeTrack(
         `.bones[${Actor.Bones.leftArm}].quaternion`,
         new Float32Array([
           0,
-          0.5,
+          0.75,
           1,
         ]),
         new Float32Array([
-          ...eulerToQuat(0, 0, 0),
+          ...eulerToQuat(0, 0, Math.PI * -0.05),
           ...eulerToQuat(0, 0, Math.PI * -0.1),
-          ...eulerToQuat(0, 0, 0),
+          ...eulerToQuat(0, 0, Math.PI * -0.05),
         ])
       ),
       new QuaternionKeyframeTrack(
         `.bones[${Actor.Bones.rightArm}].quaternion`,
         new Float32Array([
           0,
-          0.5,
+          0.25,
           1,
         ]),
         new Float32Array([
-          ...eulerToQuat(0, 0, 0),
+          ...eulerToQuat(0, 0, Math.PI * 0.05),
           ...eulerToQuat(0, 0, Math.PI * 0.1),
-          ...eulerToQuat(0, 0, 0),
+          ...eulerToQuat(0, 0, Math.PI * 0.05),
         ])
       ),
     ])
   ),
   walk: (
     new AnimationClip('walk', 1, [
+      new QuaternionKeyframeTrack(
+        `.bones[${Actor.Bones.torso}].quaternion`,
+        new Float32Array([
+          0,
+          0.5,
+          1,
+        ]),
+        new Float32Array([
+          ...eulerToQuat(Math.PI * -0.03, 0, 0),
+          ...eulerToQuat(Math.PI * 0.03, 0, 0),
+          ...eulerToQuat(Math.PI * -0.03, 0, 0),
+        ])
+      ),
       new QuaternionKeyframeTrack(
         `.bones[${Actor.Bones.head}].quaternion`,
         new Float32Array([
@@ -223,9 +254,9 @@ Actor.animations = {
           1,
         ]),
         new Float32Array([
-          ...eulerToQuat(Math.PI * 0.15, 0, 0),
+          ...eulerToQuat(Math.PI * 0.15, 0, Math.PI * -0.05),
           ...eulerToQuat(Math.PI * -0.15, 0, Math.PI * -0.15),
-          ...eulerToQuat(Math.PI * 0.15, 0, 0),
+          ...eulerToQuat(Math.PI * 0.15, 0, Math.PI * -0.05),
         ])
       ),
       new QuaternionKeyframeTrack(
@@ -237,7 +268,7 @@ Actor.animations = {
         ]),
         new Float32Array([
           ...eulerToQuat(Math.PI * -0.15, 0, Math.PI * 0.15),
-          ...eulerToQuat(Math.PI * 0.15, 0, 0),
+          ...eulerToQuat(Math.PI * 0.15, 0, Math.PI * 0.05),
           ...eulerToQuat(Math.PI * -0.15, 0, Math.PI * 0.15),
         ])
       ),
