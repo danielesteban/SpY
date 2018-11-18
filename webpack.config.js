@@ -137,8 +137,7 @@ module.exports = {
     }),
     new HtmlWebpackPlugin({
       csp: (
-        "default-src 'self' ws: wss: 'unsafe-eval';"
-        + "style-src 'self' 'unsafe-inline';"
+        `default-src 'self'${mode !== 'production' ? " ws: 'unsafe-eval'" : ''};`
       ),
       minify: { collapseWhitespace: true },
       template: path.join(srcPath, 'index.ejs'),

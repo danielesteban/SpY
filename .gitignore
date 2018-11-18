@@ -1,5 +1,3 @@
-editor/build/output/
+dist/
 node_modules/
-protocol/compiler/
-protocol/output/
 .eslintcache
