@@ -11,7 +11,7 @@ class Camera extends PerspectiveCamera {
     this.offset = new Vector3(0, 1.5, 0);
     this.tilt = Math.PI * -0.5;
     this.pitch = Math.PI * 0.125;
-    this.speed = 1;
+    this.speed = 1.5;
     this.step = new Vector3();
     this.root = new Object3D();
     this.root.add(this);

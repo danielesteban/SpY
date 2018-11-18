@@ -83,6 +83,7 @@ class Actor extends SkinnedMesh {
     const {
       actions: { walk: { timeScale: walkingSpeed } },
       destination,
+      destinationMarker,
       mixer,
       movementAux,
       position,
@@ -117,6 +118,9 @@ class Actor extends SkinnedMesh {
     if (distance <= step) {
       this.setAnimation('idle');
       this.destination = false;
+      if (destinationMarker) {
+        destinationMarker.visible = false;
+      }
     }
   }
 
@@ -132,9 +136,13 @@ class Actor extends SkinnedMesh {
   }
 
   walkTo(point) {
-    const { position, rotationAux } = this;
+    const { destinationMarker, position, rotationAux } = this;
     this.setAnimation('walk');
     this.destination = point.clone();
+    if (destinationMarker) {
+      destinationMarker.position.copy(this.destination);
+      destinationMarker.visible = true;
+    }
     const angle = rotationAux.set(point.x - position.x, point.z - position.z).angle();
     while (this.rotation.y < -Math.PI) this.rotation.y += Math.PI * 2;
     while (this.rotation.y > Math.PI) this.rotation.y -= Math.PI * 2;
@@ -146,7 +154,7 @@ class Actor extends SkinnedMesh {
     } else if ((this.targetRotation - this.rotation.y) < -Math.PI) {
       this.targetRotation += Math.PI * 2;
     }
-    this.rotationSpeed = Math.abs(this.targetRotation - this.rotation.y) * 2;
+    this.rotationSpeed = Math.abs(this.targetRotation - this.rotation.y) * 1.5;
   }
 }
 

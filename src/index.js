@@ -1,6 +1,7 @@
-// import { Vector3 } from 'three';
+import { Vector3 } from 'three';
 import Dude from '@/actors/dude';
 import Input from '@/engine/input';
+import Marker from '@/items/marker';
 import Scene from '@/engine/scene';
 
 const input = new Input({ mount: document.body });
@@ -34,7 +35,10 @@ const pack = {
   },
 };
 
-scene.camera.target = pack.dudes[0].position;
+const [mainDude] = pack.dudes;
+mainDude.destinationMarker = new Marker();
+scene.root.add(mainDude.destinationMarker);
+scene.camera.target = mainDude.position;
 
 scene.onAnimationTick = () => {
   const { camera, grid } = scene;
@@ -51,7 +55,7 @@ scene.onAnimationTick = () => {
     const sensitivity = 0.003;
     camera.tilt -= movement.x * sensitivity;
     camera.pitch += movement.y * sensitivity;
-    camera.pitch = Math.min(Math.max(camera.pitch, Math.PI * -0.5), Math.PI * 0.5);
+    camera.pitch = Math.min(Math.max(camera.pitch, 0), Math.PI * 0.5);
     camera.updateOrbit();
   }
   if (pointer.wheel) {
@@ -67,4 +71,3 @@ scene.onAnimationTick = () => {
 //   z += 8;
 //   pack.walkTo(new Vector3(z * 0.5, 0, z));
 // }, 3000);
-// scene.camera.speed = 1.5;
