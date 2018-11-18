@@ -106,7 +106,7 @@ class Actor extends SkinnedMesh {
     }
     if (!destination) return;
     const distance = position.distanceTo(destination);
-    const step = delta * 2 * walkingSpeed;
+    const step = delta * 1.5 * walkingSpeed;
     position.add(
       movementAux
         .copy(destination)
@@ -281,9 +281,9 @@ Actor.animations = {
           1,
         ]),
         new Float32Array([
-          ...eulerToQuat(Math.PI * -0.15, 0, Math.PI * -0.015),
-          ...eulerToQuat(Math.PI * 0.15, 0, Math.PI * 0.015),
-          ...eulerToQuat(Math.PI * -0.15, 0, Math.PI * -0.015),
+          ...eulerToQuat(Math.PI * -0.15, 0, Math.PI * 0.01),
+          ...eulerToQuat(Math.PI * 0.15, 0, Math.PI * -0.01),
+          ...eulerToQuat(Math.PI * -0.15, 0, Math.PI * 0.01),
         ])
       ),
       new QuaternionKeyframeTrack(
@@ -294,9 +294,9 @@ Actor.animations = {
           1,
         ]),
         new Float32Array([
-          ...eulerToQuat(Math.PI * 0.15, 0, Math.PI * 0.015),
-          ...eulerToQuat(Math.PI * -0.15, 0, Math.PI * -0.015),
-          ...eulerToQuat(Math.PI * 0.15, 0, Math.PI * 0.015),
+          ...eulerToQuat(Math.PI * 0.15, 0, Math.PI * -0.01),
+          ...eulerToQuat(Math.PI * -0.15, 0, Math.PI * 0.01),
+          ...eulerToQuat(Math.PI * 0.15, 0, Math.PI * -0.01),
         ])
       ),
     ])

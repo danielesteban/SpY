@@ -40,7 +40,7 @@ class Scene {
     light.position.set(1, 1, 1);
     this.root.add(light);
     const secondaryLight = new DirectionalLight(0xffffff, 0.2);
-    secondaryLight.position.set(-1, 1, 1);
+    secondaryLight.position.set(-1, -1, 1);
     this.root.add(secondaryLight);
     this.grid = new Grid({ background });
     this.root.add(this.grid);

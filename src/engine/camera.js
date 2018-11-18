@@ -7,7 +7,7 @@ class Camera extends PerspectiveCamera {
   constructor() {
     super(60, 1, 0.01, 1024);
     this.targetOffset = new Vector3();
-    this.speed = 1.5;
+    this.speed = 1;
     this.step = new Vector3();
   }
 

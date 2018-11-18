@@ -30,10 +30,10 @@ const pack = {
   },
 };
 
-scene.camera.lookAt(0, -0.5, -1);
+scene.camera.lookAt(0, -0.25, -1);
 scene.camera.target = {
   position: pack.dudes[0].position,
-  offset: new Vector3(0, 2, 4),
+  offset: new Vector3(0, 1.5, 4),
 };
 
 const pointer = new Vector2();
@@ -52,7 +52,7 @@ scene.mount.addEventListener('mousedown', ({ button, clientX: x, clientY: y }) =
 let z = 0;
 setInterval(() => {
   z += 8;
-  pack.walkTo(new Vector3(0, 0, z));
+  pack.walkTo(new Vector3(z * 0.5, 0, z));
 }, 3000);
-scene.camera.speed = 2;
+scene.camera.speed = 1.5;
 scene.camera.position.copy(scene.camera.target.offset);
