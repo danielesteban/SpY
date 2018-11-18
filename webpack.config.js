@@ -3,6 +3,7 @@ const webpack = require('webpack');
 const path = require('path');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+const GHPagesSPAWebpackPlugin = require('ghpages-spa-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const RobotstxtPlugin = require('robotstxt-webpack-plugin').default;
@@ -154,6 +155,9 @@ module.exports = {
           userAgent: '*',
           disallow: '/',
         }],
+      }),
+      new GHPagesSPAWebpackPlugin({
+        domain: 'spygame.tk',
       }),
       new webpack.SourceMapDevToolPlugin({
         test: /\.js$/,
