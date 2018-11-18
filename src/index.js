@@ -1,4 +1,4 @@
-import { Vector3 } from 'three';
+// import { Vector3 } from 'three';
 import Dude from '@/actors/dude';
 import Input from '@/engine/input';
 import Marker from '@/items/marker';
