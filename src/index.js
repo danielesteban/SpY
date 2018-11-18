@@ -1,11 +1,13 @@
-import { Vector2, Vector3 } from 'three';
+import { Vector3 } from 'three';
 import Dude from '@/actors/dude';
+import Input from '@/engine/input';
 import Scene from '@/engine/scene';
 
+const input = new Input({ mount: document.body });
 const scene = new Scene({ mount: document.body });
 
 const pack = {
-  dudes: [...Array(13)].map((v, i) => {
+  dudes: [...Array(7)].map((v, i) => {
     const dude = new Dude({
       arms: 0x222222,
       eyes: i === 0 ? 0x990000 : (0x999999 * Math.random()),
@@ -23,6 +25,8 @@ const pack = {
       point.x = mainDudeX + Math.floor((i + 1) / 2) * ((i + 1) % 2 === 0 ? 1 : -1);
       point.z = mainDudeZ + Math.floor((i + 1) / 2) * -1;
       if (i > 0) {
+        point.x += (Math.random() * 2) - 1;
+        point.z += (Math.random() * 2) - 1;
         dude.actions.walk.timeScale = 0.8 + Math.random() * 0.4;
       }
       dude.walkTo(point);
@@ -30,29 +34,37 @@ const pack = {
   },
 };
 
-scene.camera.lookAt(0, -0.25, -1);
-scene.camera.target = {
-  position: pack.dudes[0].position,
-  offset: new Vector3(0, 1.5, 4),
+scene.camera.target = pack.dudes[0].position;
+
+scene.onAnimationTick = () => {
+  const { camera, grid } = scene;
+  const pointer = input.getPointerFrame();
+  if (pointer.primaryUp) {
+    const { raycaster } = pointer;
+    raycaster.setFromCamera(pointer.normalized, camera);
+    const hit = raycaster.intersectObject(grid)[0];
+    if (!hit) return;
+    pack.walkTo(hit.point);
+  }
+  if (pointer.secondary) {
+    const { movement } = pointer;
+    const sensitivity = 0.003;
+    camera.tilt -= movement.x * sensitivity;
+    camera.pitch += movement.y * sensitivity;
+    camera.pitch = Math.min(Math.max(camera.pitch, Math.PI * -0.5), Math.PI * 0.5);
+    camera.updateOrbit();
+  }
+  if (pointer.wheel) {
+    const sensitivity = 0.006;
+    camera.distance = Math.min(Math.max(camera.distance + (pointer.wheel * sensitivity), 1), 16);
+    camera.updateOrbit();
+  }
 };
 
-const pointer = new Vector2();
-scene.mount.addEventListener('mousedown', ({ button, clientX: x, clientY: y }) => {
-  if (button !== 0) return;
-  const { camera, grid, raycaster } = scene;
-  const { width, height } = scene.renderer.getSize();
-  pointer.x = ((x / width) * 2) - 1;
-  pointer.y = 1 - ((y / height) * 2);
-  raycaster.setFromCamera(pointer, camera);
-  const hit = scene.raycaster.intersectObject(grid)[0];
-  if (!hit) return;
-  pack.walkTo(hit.point);
-});
-
-let z = 0;
-setInterval(() => {
-  z += 8;
-  pack.walkTo(new Vector3(z * 0.5, 0, z));
-}, 3000);
-scene.camera.speed = 1.5;
-scene.camera.position.copy(scene.camera.target.offset);
+// Stayin' alive demo hack
+// let z = 0;
+// setInterval(() => {
+//   z += 8;
+//   pack.walkTo(new Vector3(z * 0.5, 0, z));
+// }, 3000);
+// scene.camera.speed = 1.5;

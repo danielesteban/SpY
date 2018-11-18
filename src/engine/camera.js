@@ -1,4 +1,5 @@
 import {
+  Object3D,
   PerspectiveCamera,
   Vector3,
 } from 'three';
@@ -6,28 +7,50 @@ import {
 class Camera extends PerspectiveCamera {
   constructor() {
     super(60, 1, 0.01, 1024);
-    this.targetOffset = new Vector3();
+    this.distance = 5;
+    this.offset = new Vector3(0, 1.5, 0);
+    this.tilt = Math.PI * -0.5;
+    this.pitch = 0;
     this.speed = 1;
     this.step = new Vector3();
+    this.root = new Object3D();
+    this.root.add(this);
+    this.updateOrbit();
   }
 
   onAnimationTick({ delta }) {
     const {
-      position,
+      root: { position },
       speed,
       step,
       target,
-      targetOffset,
     } = this;
-    if (!this.target) return;
-    targetOffset.copy(target.position).add(target.offset);
-    if (position.distanceTo(targetOffset) <= 0.1) return;
+    if (!target || position.distanceTo(target) <= 0.1) return;
     step
-      .copy(targetOffset)
+      .copy(target)
       .sub(position)
       .normalize()
       .multiplyScalar(delta * speed);
     position.add(step);
+  }
+
+  updateOrbit() {
+    const {
+      distance,
+      offset,
+      pitch,
+      root,
+      tilt,
+    } = this;
+    this.position.set(
+      Math.cos(tilt) * Math.cos(pitch),
+      Math.sin(pitch),
+      Math.sin(-tilt) * Math.cos(pitch)
+    )
+      .normalize()
+      .multiplyScalar(distance)
+      .add(offset);
+    this.lookAt(root.position);
   }
 }
 

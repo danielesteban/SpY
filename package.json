@@ -10,7 +10,9 @@
   },
   "dependencies": {
     "stats.js": "^0.17.0",
-    "three": "^0.98.0"
+    "three": "^0.98.0",
+    "touches": "^1.2.2",
+    "wheel": "^0.0.5"
   },
   "devDependencies": {
     "@babel/core": "^7.1.6",

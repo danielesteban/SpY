@@ -11,7 +11,6 @@ import {
   ShaderChunk,
   VectorKeyframeTrack,
   WebGLRenderer,
-  Raycaster,
 } from 'three';
 import Camera from './camera';
 import Grid from './grid';
@@ -24,7 +23,6 @@ class Scene {
     this.camera = new Camera();
     this.clock = new Clock();
     this.mount = mount;
-    this.raycaster = new Raycaster();
     this.renderer = new WebGLRenderer({
       alpha: false,
       antialias: true,
@@ -34,7 +32,7 @@ class Scene {
     this.renderer.setClearColor(background);
     mount.appendChild(this.renderer.domElement);
     this.root = new Root();
-    this.root.fog = new FogExp2(background, 0.06);
+    this.root.fog = new FogExp2(background, 0.05);
     this.root.add(new AmbientLight(0x454545));
     const light = new DirectionalLight(0xffffff, 0.8);
     light.position.set(1, 1, 1);
@@ -42,9 +40,9 @@ class Scene {
     const secondaryLight = new DirectionalLight(0xffffff, 0.2);
     secondaryLight.position.set(-1, -1, 1);
     this.root.add(secondaryLight);
-    this.grid = new Grid({ background });
+    this.root.add(this.camera.root);
+    this.grid = new Grid({ background: background.clone().multiplyScalar(0.75) });
     this.root.add(this.grid);
-    window.addEventListener('contextmenu', e => e.preventDefault(), false);
     window.addEventListener('resize', this.onResize.bind(this), false);
     this.onResize();
     if (!__PRODUCTION__) {
@@ -68,15 +66,18 @@ class Scene {
     } = this;
     if (stats) stats.begin();
     const animation = { delta: Math.min(clock.getDelta(), 1), time: clock.oldTime / 1000 };
-    if (camera.onAnimationTick) {
-      camera.onAnimationTick(animation);
+    if (this.onAnimationTick) {
+      this.onAnimationTick(animation);
     }
-    grid.position.set(Math.floor(camera.position.x), 0, Math.floor(camera.position.z));
     root.children.forEach((child) => {
       if (child.onAnimationTick) {
         child.onAnimationTick(animation);
       }
     });
+    if (camera.onAnimationTick) {
+      camera.onAnimationTick(animation);
+    }
+    grid.position.set(Math.floor(camera.position.x), 0, Math.floor(camera.position.z));
     renderer.render(root, camera);
     if (stats) stats.end();
   }
