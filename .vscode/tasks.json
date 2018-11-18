@@ -1,0 +1,46 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build",
+      "type": "shell",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "command": "yarn",
+      "args": ["build"],
+      "problemMatcher": []
+    },
+    {
+      "label": "Install",
+      "type": "shell",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "command": "yarn",
+      "args": ["install"],
+      "problemMatcher": []
+    },
+    {
+      "label": "Start",
+      "type": "shell",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "command": "yarn",
+      "args": ["start"],
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "custom",
+        "pattern": {
+          "regexp": "__________"
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ": Compiling\\.\\.\\.$",
+          "endsPattern": ": Compiled"
+        }
+      }
+    }
+  ]
+}

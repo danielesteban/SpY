@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "mgmcdermott.vscode-language-babel",
+    "msjsdiag.debugger-for-chrome",
+    "dbaeumer.vscode-eslint",
+    "jedmao.tabsanity",
+    "robinbentley.sass-indented",
+  ]
+}
