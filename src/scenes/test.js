@@ -17,25 +17,13 @@ export default ({ input, scene }) => {
   scene.onAnimationTick = () => {
     const { camera, grid } = scene;
     const pointer = input.getPointerFrame();
+    camera.processInput(pointer);
     if (pointer.primaryUp) {
       const { raycaster } = pointer;
       raycaster.setFromCamera(pointer.normalized, camera);
       const hit = raycaster.intersectObject(grid)[0];
       if (!hit) return;
       dude.walkTo(hit.point);
-    }
-    if (pointer.secondary) {
-      const { movement } = pointer;
-      const sensitivity = 0.003;
-      camera.tilt -= movement.x * sensitivity;
-      camera.pitch += movement.y * sensitivity;
-      camera.pitch = Math.min(Math.max(camera.pitch, 0), Math.PI * 0.5);
-      camera.updateOrbit();
-    }
-    if (pointer.wheel) {
-      const sensitivity = 0.006;
-      camera.distance = Math.min(Math.max(camera.distance + (pointer.wheel * sensitivity), 1), 16);
-      camera.updateOrbit();
     }
   };
 };

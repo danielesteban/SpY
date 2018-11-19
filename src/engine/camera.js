@@ -11,7 +11,7 @@ class Camera extends PerspectiveCamera {
     this.offset = new Vector3(0, 1.5, 0);
     this.tilt = Math.PI * -0.5;
     this.pitch = Math.PI * 0.125;
-    this.speed = 1.5;
+    this.speed = 1.25;
     this.step = new Vector3();
     this.root = new Object3D();
     this.root.add(this);
@@ -32,6 +32,25 @@ class Camera extends PerspectiveCamera {
       .normalize()
       .multiplyScalar(delta * speed);
     position.add(step);
+  }
+
+  processInput({
+    movement,
+    secondary,
+    wheel,
+  }) {
+    if (secondary) {
+      const sensitivity = 0.003;
+      this.tilt -= movement.x * sensitivity;
+      this.pitch += movement.y * sensitivity;
+      this.pitch = Math.min(Math.max(this.pitch, 0), Math.PI * 0.5);
+      this.updateOrbit();
+    }
+    if (wheel) {
+      const sensitivity = 0.006;
+      this.distance = Math.min(Math.max(this.distance + (wheel * sensitivity), 1), 16);
+      this.updateOrbit();
+    }
   }
 
   updateOrbit() {
