@@ -26,7 +26,7 @@ export default ({ input, scene }) => {
 
   /* Spawn test building */
   const building = {
-    dudes: [...Array(8)].map(() => {
+    dudes: [...Array(4)].map(() => {
       const dude = new Dude({
         arms: 0x222222,
         eyes: 0x999999 * Math.random(),
@@ -35,7 +35,7 @@ export default ({ input, scene }) => {
         torso: 0x999999 * Math.random(),
       });
       dude.position.set(
-        Math.random() * 20 - 10,
+        Math.random() * 19 - 9.5,
         Math.floor(Math.random() * 3) * 3,
         0
       );
@@ -46,6 +46,8 @@ export default ({ input, scene }) => {
       [...Array(5)].map((v, i) => {
         const hallway = new Hallway({
           hasElevator: i === 1,
+          // eslint-disable-next-line no-nested-ternary
+          isEdge: i === 0 ? 'left' : (i === 4 ? 'right' : false),
         });
         hallway.position.set(i * 4 - (2 * 4), 0, 0);
         return hallway;
@@ -53,6 +55,8 @@ export default ({ input, scene }) => {
       [...Array(5)].map((v, i) => {
         const hallway = new Hallway({
           hasElevator: i === 1 || i === 3,
+          // eslint-disable-next-line no-nested-ternary
+          isEdge: i === 0 ? 'left' : (i === 4 ? 'right' : false),
         });
         hallway.position.set(i * 4 - (2 * 4), 3, 0);
         return hallway;
@@ -60,12 +64,17 @@ export default ({ input, scene }) => {
       [...Array(5)].map((v, i) => {
         const hallway = new Hallway({
           hasElevator: i === 3,
+          // eslint-disable-next-line no-nested-ternary
+          isEdge: i === 0 ? 'left' : (i === 4 ? 'right' : false),
         });
         hallway.position.set(i * 4 - (2 * 4), 6, 0);
         return hallway;
       }),
       [...Array(5)].map((v, i) => {
-        const hallway = new Hallway();
+        const hallway = new Hallway({
+          // eslint-disable-next-line no-nested-ternary
+          isEdge: i === 0 ? 'left' : (i === 4 ? 'right' : false),
+        });
         hallway.position.set(i * 4 - (2 * 4), 9, 0);
         return hallway;
       }),
@@ -106,8 +115,9 @@ export default ({ input, scene }) => {
         ...building.floors[floor],
       ])[0];
       if (!hit) return;
+      hit.point.x = Math.min(Math.max(hit.point.x, -9.5), 9.5);
       hit.point.y = hit.object.position.y;
-      hit.point.z = Math.max(hit.point.z, -1.5);
+      hit.point.z = Math.min(Math.max(hit.point.z, -1.5), 1.5);
       dude.walkTo(hit.point);
     }
   };
