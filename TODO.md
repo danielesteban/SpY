@@ -13,7 +13,7 @@ TO DO
  * [ ] Elevators
  * [ ] Another dude model
  * [ ] 2D pathfinding
- * [ ] Add more detail to hallway mesh
+ * [ ] Add more detail to the hallway mesh
  * [ ] Some background noir music
  * [ ] Make a short video
  * [ ] Take it from there
