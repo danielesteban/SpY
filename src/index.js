@@ -12,7 +12,7 @@ input.touches.once('start', () => {
 
 let route = window.location.hash.split('/').slice(1)[0];
 if (!Scenes[route]) {
-  window.location.hash = '/debug';
-  route = 'debug';
+  window.location.hash = '/game';
+  route = 'game';
 }
 Scenes[route]({ input, scene });

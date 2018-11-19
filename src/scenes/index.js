@@ -1,2 +1,2 @@
 export { default as debug } from './debug';
-export { default as test } from './test';
+export { default as game } from './game';

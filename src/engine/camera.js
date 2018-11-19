@@ -7,10 +7,10 @@ import {
 class Camera extends PerspectiveCamera {
   constructor() {
     super(60, 1, 0.01, 2048);
-    this.distance = 6;
+    this.distance = 3;
     this.offset = new Vector3(0, 1.2, 0);
-    this.tilt = Math.PI * -0.5;
-    this.pitch = Math.PI * 0.125;
+    this.tilt = Math.PI * -0.65;
+    this.pitch = Math.PI * 0.15;
     this.speed = 1.25;
     this.step = new Vector3();
     this.root = new Object3D();
@@ -39,18 +39,21 @@ class Camera extends PerspectiveCamera {
     secondary,
     wheel,
   }) {
+    let hasUpdated = false;
     if (secondary) {
       const sensitivity = 0.003;
       this.tilt -= movement.x * sensitivity;
       this.pitch += movement.y * sensitivity;
       this.pitch = Math.min(Math.max(this.pitch, 0), Math.PI * 0.5);
-      this.updateOrbit();
+      hasUpdated = true;
     }
     if (wheel) {
       const sensitivity = 0.006;
-      this.distance = Math.min(Math.max(this.distance + (wheel * sensitivity), 1), 16);
-      this.updateOrbit();
+      this.distance = Math.min(Math.max(this.distance + (wheel * sensitivity), 1), 8);
+      hasUpdated = true;
     }
+    if (hasUpdated) this.updateOrbit();
+    return hasUpdated;
   }
 
   updateOrbit() {

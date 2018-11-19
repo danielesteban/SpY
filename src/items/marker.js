@@ -8,7 +8,7 @@ class Marker extends Mesh {
   constructor() {
     const geometry = new CircleBufferGeometry(0.25, 16);
     geometry.rotateX(Math.PI * -0.5);
-    geometry.translate(0, 0.002, 0);
+    geometry.translate(0, 0.01, 0);
     super(
       geometry,
       new MeshPhongMaterial({

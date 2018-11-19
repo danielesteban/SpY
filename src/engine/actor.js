@@ -125,6 +125,9 @@ class Actor extends SkinnedMesh {
       if (destinationMarker) {
         destinationMarker.visible = false;
       }
+      if (this.onDestinationCallback) {
+        this.onDestinationCallback();
+      }
     }
   }
 
@@ -140,13 +143,18 @@ class Actor extends SkinnedMesh {
   }
 
   walkTo(point) {
-    const { destinationMarker, position, rotationAux } = this;
+    const { destinationMarker } = this;
     this.setAnimation('walk');
     this.destination = point.clone();
     if (destinationMarker) {
       destinationMarker.position.copy(this.destination);
       destinationMarker.visible = true;
     }
+    this.faceTo(point);
+  }
+
+  faceTo(point) {
+    const { position, rotationAux } = this;
     const angle = rotationAux.set(point.x - position.x, point.z - position.z).angle();
     while (this.rotation.y < -Math.PI) this.rotation.y += Math.PI * 2;
     while (this.rotation.y > Math.PI) this.rotation.y -= Math.PI * 2;
