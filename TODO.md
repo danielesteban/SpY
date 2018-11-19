@@ -9,6 +9,7 @@ TO DO
  * [ ] "Fork me on github" ribbon
  * [ ] Background starfield
  * [ ] Bindable 3D buttons
+ * [ ] Improve orbit camera constraints
  * [ ] Elevators
  * [ ] Another dude model
  * [ ] 2D pathfinding
