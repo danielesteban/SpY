@@ -36,7 +36,6 @@ class Actor extends SkinnedMesh {
     const geometry = (new BufferGeometry()).fromGeometry(merged);
     geometry.computeVertexNormals();
     geometry.computeBoundingSphere();
-    geometry.boundingSphere.center.y = geometry.boundingSphere.radius;
     return geometry;
   }
 

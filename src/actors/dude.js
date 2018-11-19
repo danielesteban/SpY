@@ -64,7 +64,7 @@ Dude.geometry = (palette) => {
   const rightLeg = leftLeg.clone();
   leftLeg.translate(0, -0.25, 0);
   rightLeg.translate(0, -0.25, 0);
-  return Actor.geometryFromLimbs({
+  const geometry = Actor.geometryFromLimbs({
     torso,
     head,
     leftArm,
@@ -72,6 +72,9 @@ Dude.geometry = (palette) => {
     leftLeg,
     rightLeg,
   });
+  geometry.boundingSphere.center.set(0, 0.7, 0);
+  geometry.boundingSphere.radius = 0.7;
+  return geometry;
 };
 
 Dude.material = new MeshPhongMaterial({
