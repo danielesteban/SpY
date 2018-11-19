@@ -6,7 +6,7 @@ TO DO
  * [ ] Two fingers === Secondary button
  * [ ] Enable/Disable input (for credits/UI/etc...)
  * [ ] Controls help on credits
- * [ ] "Fork me on github" ribbon
+ * [ ] [Fresher](https://github.com/tholman/github-corners) "Fork me on github" ribbon
  * [ ] Background starfield
  * [ ] Bindable 3D buttons
  * [ ] Improve orbit camera constraints
