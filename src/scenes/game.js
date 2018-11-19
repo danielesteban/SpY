@@ -64,8 +64,7 @@ export default ({ input, scene }) => {
     const { camera } = scene;
     const pointer = input.getPointerFrame();
     if (camera.processInput(pointer) && !dude.destination) {
-      scene.camera.getWorldPosition(positionAux);
-      dude.faceTo(positionAux);
+      dude.onDestinationCallback();
     }
     if (pointer.primaryUp) {
       const { raycaster } = pointer;
