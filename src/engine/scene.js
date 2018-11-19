@@ -77,7 +77,7 @@ class Scene {
     if (camera.onAnimationTick) {
       camera.onAnimationTick(animation);
     }
-    grid.position.set(Math.floor(camera.position.x), 0, Math.floor(camera.position.z));
+    grid.position.set(Math.floor(camera.root.position.x), 0, Math.floor(camera.root.position.z));
     renderer.render(root, camera);
     if (stats) stats.end();
   }
