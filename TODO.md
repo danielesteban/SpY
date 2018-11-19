@@ -4,6 +4,7 @@ TO DO
 > This is just a random (non-binding) brain dump
 
  * [ ] Two fingers === Secondary button
+ * [ ] Enable/Disable input (for credits/UI/etc...)
  * [ ] Controls help on credits
  * [ ] "Fork me on github" ribbon
  * [ ] Background starfield
@@ -15,4 +16,3 @@ TO DO
  * [ ] Some background noir music
  * [ ] Make a short video
  * [ ] Take it from there
- 
