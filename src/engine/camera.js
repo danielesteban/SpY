@@ -8,7 +8,7 @@ class Camera extends PerspectiveCamera {
   constructor() {
     super(60, 1, 0.01, 2048);
     this.distance = 6;
-    this.offset = new Vector3(0, 1.5, 0);
+    this.offset = new Vector3(0, 1.2, 0);
     this.tilt = Math.PI * -0.5;
     this.pitch = Math.PI * 0.125;
     this.speed = 1.25;
@@ -58,18 +58,19 @@ class Camera extends PerspectiveCamera {
       distance,
       offset,
       pitch,
+      position,
       root,
       tilt,
     } = this;
-    this.position.set(
+    position.set(
       Math.cos(tilt) * Math.cos(pitch),
       Math.sin(pitch),
       Math.sin(-tilt) * Math.cos(pitch)
     )
       .normalize()
-      .multiplyScalar(distance)
-      .add(offset);
+      .multiplyScalar(distance);
     this.lookAt(root.position);
+    position.add(offset);
   }
 }
 

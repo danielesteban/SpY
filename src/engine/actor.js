@@ -16,24 +16,28 @@ import {
 
 class Actor extends SkinnedMesh {
   static geometryFromLimbs(limbs) {
-    const geometry = new Geometry();
+    const merged = new Geometry();
     Object.keys(limbs).forEach((limb) => {
       limbs[limb].faces.forEach((face) => {
         face.materialIndex = Actor.Bones[limb];
       });
-      geometry.merge(limbs[limb]);
+      merged.merge(limbs[limb]);
     });
-    geometry.faces.forEach((face) => {
-      geometry.vertices[face.a].bone = face.materialIndex;
-      geometry.vertices[face.b].bone = face.materialIndex;
-      geometry.vertices[face.c].bone = face.materialIndex;
+    merged.faces.forEach((face) => {
+      merged.vertices[face.a].bone = face.materialIndex;
+      merged.vertices[face.b].bone = face.materialIndex;
+      merged.vertices[face.c].bone = face.materialIndex;
       face.materialIndex = 0;
     });
-    geometry.vertices.forEach((vertex) => {
-      geometry.skinIndices.push(new Vector4(vertex.bone, 0, 0, 0));
-      geometry.skinWeights.push(new Vector4(1, 0, 0, 0));
+    merged.vertices.forEach((vertex) => {
+      merged.skinIndices.push(new Vector4(vertex.bone, 0, 0, 0));
+      merged.skinWeights.push(new Vector4(1, 0, 0, 0));
     });
-    return (new BufferGeometry()).fromGeometry(geometry);
+    const geometry = (new BufferGeometry()).fromGeometry(merged);
+    geometry.computeVertexNormals();
+    geometry.computeBoundingSphere();
+    geometry.boundingSphere.center.y = geometry.boundingSphere.radius;
+    return geometry;
   }
 
   constructor({
