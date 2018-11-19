@@ -34,7 +34,7 @@ export default ({ input, scene }) => {
         torso: 0x999999 * Math.random(),
       },
       position: new Vector3(
-        Math.random() * 19 - 9.5,
+        (Math.random() * 9 - 4.5) * 2,
         Math.floor(Math.random() * 3) * 3,
         0
       ),

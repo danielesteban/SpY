@@ -59,6 +59,11 @@ class Building extends Object3D {
       return mesh;
     }));
   }
+
+  onAnimationTick(animation) {
+    const { dudes } = this;
+    dudes.forEach(dude => dude.onAnimationTick(animation));
+  }
 }
 
 export default Building;
