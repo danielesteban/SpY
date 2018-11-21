@@ -3,7 +3,7 @@ TO DO
 
 > This is just a random (non-binding) brain dump
 
- * [ ] Two fingers === Secondary button
+ * [X] Two fingers === Secondary button
  * [X] Enable/Disable input (for credits/UI/etc...)
  * [X] Controls help on credits
  * [X] [Fresher](https://github.com/tholman/github-corners) "Fork me on github" ribbon

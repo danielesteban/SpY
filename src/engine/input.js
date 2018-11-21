@@ -16,7 +16,6 @@ class Input {
       wheel: 0,
     };
     this.touches = Touches(window, {
-      filtered: true,
       preventSimulated: false,
       target: mount,
     })
@@ -41,9 +40,26 @@ class Input {
     return frame;
   }
 
-  onPointerDown({ button }) {
+  onPointerDown(e) {
     const { isEnabled, pointer } = this;
     if (!isEnabled) return;
+    const { button, touches } = e;
+    if (touches) {
+      if (touches.length > 1) {
+        e.preventDefault();
+      }
+      if (!pointer.secondary) {
+        if (touches.length === 1) {
+          pointer.primary = true;
+          pointer.primaryDown = true;
+        } else {
+          pointer.secondary = true;
+          pointer.secondaryDown = true;
+          pointer.primary = false;
+        }
+      }
+      return;
+    }
     switch (button) {
       case 0:
         pointer.primary = true;
@@ -57,9 +73,22 @@ class Input {
     }
   }
 
-  onPointerMove(e, [x, y]) {
-    const { isEnabled, pointer, size: { width, height } } = this;
+  onPointerMove({ touches }, [x, y]) {
+    const { isEnabled, pointer, rect } = this;
     if (!isEnabled) return;
+    if (touches) {
+      const { top, left } = rect;
+      x = 0;
+      y = 0;
+      for (let i = 0; i < touches.length; i += 1) {
+        const { clientX, clientY } = touches[i];
+        x += (clientX - left);
+        y += (clientY - top);
+      }
+      x /= touches.length;
+      y /= touches.length;
+    }
+    const { width, height } = rect;
     pointer.current.x = x;
     pointer.current.y = y;
     pointer.normalized.x = ((x / width) * 2) - 1;
@@ -71,9 +100,20 @@ class Input {
     pointer.last.copy(pointer.current);
   }
 
-  onPointerUp({ button }) {
+  onPointerUp({ button, touches }) {
     const { isEnabled, pointer } = this;
     if (!isEnabled) return;
+    if (touches) {
+      if (pointer.primary) {
+        pointer.primary = false;
+        pointer.primaryUp = true;
+      }
+      if (pointer.secondary) {
+        pointer.secondary = false;
+        pointer.secondaryUp = true;
+      }
+      return;
+    }
     switch (button) {
       case 0:
         pointer.primary = false;
@@ -95,7 +135,7 @@ class Input {
 
   onResize() {
     const { mount } = this;
-    this.size = mount.getBoundingClientRect();
+    this.rect = mount.getBoundingClientRect();
   }
 }
 

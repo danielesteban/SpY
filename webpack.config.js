@@ -123,6 +123,7 @@ module.exports = {
   devtool: false,
   devServer: {
     hot: true,
+    host: '0.0.0.0',
     stats: 'minimal',
   },
   optimization: {
