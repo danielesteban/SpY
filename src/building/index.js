@@ -26,6 +26,7 @@ class Building extends Object3D {
     }) => {
       const elevator = new Elevator({ floors, origin });
       const shaft = new Shaft({ elevator });
+      elevator.doors = shaft.doors;
       this.add(shaft);
       return elevator;
     });
@@ -62,7 +63,10 @@ class Building extends Object3D {
   onAnimationTick(animation) {
     const { dudes, elevators } = this;
     dudes.forEach(dude => dude.onAnimationTick(animation));
-    elevators.forEach(elevator => elevator.onAnimationTick(animation));
+    elevators.forEach((elevator) => {
+      elevator.onAnimationTick(animation);
+      elevator.doors.forEach(door => door.onAnimationTick(animation));
+    });
   }
 }
 

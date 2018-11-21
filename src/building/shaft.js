@@ -7,6 +7,7 @@ import {
   PlaneGeometry,
   Vector3,
 } from 'three';
+import Doors from './doors';
 
 class Shaft extends Mesh {
   constructor({
@@ -40,6 +41,11 @@ class Shaft extends Mesh {
         side: DoubleSide,
       })
     );
+    this.doors = [...Array(floors)].map((v, floor) => {
+      const doors = new Doors({ floor });
+      this.add(doors);
+      return doors;
+    });
     this.position.x = origin.x * 4;
     this.position.y = origin.y * 3;
     this.position.z = -1.5 * Shaft.scale.z;

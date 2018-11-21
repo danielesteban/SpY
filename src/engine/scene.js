@@ -38,7 +38,7 @@ class Scene {
     const light = new DirectionalLight(0xffffff, 0.8);
     light.position.set(1, 0.5, 1);
     this.root.add(light);
-    const secondaryLight = new DirectionalLight(0xffffff, 0.2);
+    const secondaryLight = new DirectionalLight(0xffffff, 0.4);
     secondaryLight.position.set(-1, -0.5, 1);
     this.root.add(secondaryLight);
     this.root.add(this.camera.root);
