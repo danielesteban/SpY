@@ -5,6 +5,18 @@
     <meta http-equiv="Content-Security-Policy" content="<%= htmlWebpackPlugin.options.csp %>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
     <title><%= htmlWebpackPlugin.options.title %></title>
+    <meta property="og:url" content="https://spygame.tk/">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="SpY">
+    <meta property="og:description" content="WIP prototype of a new game idea">
+    <meta property="og:site_name" content="SpY">
+    <meta property="og:image" content="https://spygame.tk<%= require.context("./images/", true,  /^\.\/.*\.png$/)('./screenshot.png') %>">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:creator" content="@DaniGatunes">
+    <meta name="twitter:url" content="https://spygame.tk/">
+    <meta name="twitter:title" content="SpY">
+    <meta name="twitter:description" content="WIP prototype of a new game idea">
+    <meta name="twitter:image" content="https://spygame.tk<%= require.context("./images/", true,  /^\.\/.*\.png$/)('./screenshot.png') %>">
   </head>
   <body>
     <div id="mount"></div>
