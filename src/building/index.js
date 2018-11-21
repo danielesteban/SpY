@@ -1,5 +1,6 @@
 import { Object3D } from 'three';
 import Dude from '@/actors/dude';
+import Elevator from './elevator';
 import Hallway from './hallway';
 import Shaft from './shaft';
 
@@ -23,13 +24,10 @@ class Building extends Object3D {
       floors,
       origin,
     }) => {
-      const shaft = new Shaft({ floors, origin });
+      const elevator = new Elevator({ floors, origin });
+      const shaft = new Shaft({ elevator });
       this.add(shaft);
-      return {
-        floors,
-        origin,
-        shaft,
-      };
+      return elevator;
     });
     this.floors = floors.map((rooms, floor) => rooms.map(({ type }, room) => {
       let isEdge = false;
@@ -62,8 +60,9 @@ class Building extends Object3D {
   }
 
   onAnimationTick(animation) {
-    const { dudes } = this;
+    const { dudes, elevators } = this;
     dudes.forEach(dude => dude.onAnimationTick(animation));
+    elevators.forEach(elevator => elevator.onAnimationTick(animation));
   }
 }
 

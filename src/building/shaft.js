@@ -10,9 +10,9 @@ import {
 
 class Shaft extends Mesh {
   constructor({
-    floors,
-    origin,
+    elevator,
   }) {
+    const { floors, origin } = elevator;
     const merged = new Geometry();
     for (let i = 0; i <= floors; i += 1) {
       if (i === 0 || i === floors) {
@@ -32,7 +32,7 @@ class Shaft extends Mesh {
       side.translate(1, 0, 0);
       merged.merge(side);
     }
-    merged.translate(0, 0, -1.5);
+    merged.scale(Shaft.scale.x, Shaft.scale.y, Shaft.scale.z);
     super(
       (new BufferGeometry()).fromGeometry(merged),
       new MeshPhongMaterial({
@@ -42,7 +42,8 @@ class Shaft extends Mesh {
     );
     this.position.x = origin.x * 4;
     this.position.y = origin.y * 3;
-    this.scale.copy(Shaft.scale);
+    this.position.z = -1.5 * Shaft.scale.z;
+    this.add(elevator);
   }
 }
 
