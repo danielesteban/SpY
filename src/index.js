@@ -7,7 +7,7 @@ const input = new Input({ mount });
 const scene = new Scene({ mount });
 
 input.touches.once('end', () => {
-  document.getElementById('credits').style.display = 'none';
+  document.getElementById('splash').style.display = 'none';
   input.isEnabled = true;
 });
 

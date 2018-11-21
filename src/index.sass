@@ -25,7 +25,7 @@ canvas
   width: 100vw
   height: 100vh
 
-#credits
+#splash
   position: fixed
   top: 0
   left: 0
@@ -36,13 +36,25 @@ canvas
     position: absolute
     top: 50%
     left: 50%
-    transform: translate(-50%, -60%)
-    h1
-      font-size: 3em;
-    p
-      font-size: 1em;
-    small
-      font-size: 0.75em;
+    transform: translate(-50%, -50%)
+    display: flex
+    align-items: center
+
+#credits
+  margin-right: 3rem
+  h1
+    font-size: 3em
+  p
+    font-size: 1em
+  small
+    font-size: 0.75em
+
+#help
+  margin-left: 3rem
+  text-align: center
+  > div
+    display: inline-block
+    margin: 1rem
 
 #github > svg
   position: absolute

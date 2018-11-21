@@ -5,7 +5,7 @@ TO DO
 
  * [ ] Two fingers === Secondary button
  * [X] Enable/Disable input (for credits/UI/etc...)
- * [ ] Controls help on credits
+ * [X] Controls help on credits
  * [X] [Fresher](https://github.com/tholman/github-corners) "Fork me on github" ribbon
  * [X] Background starfield
  * [ ] Bindable 3D buttons
