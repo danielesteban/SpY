@@ -51,6 +51,7 @@ class Building extends Object3D {
           mesh = new Hallway({
             hasElevator,
             isEdge,
+            isLobby: floor === 0,
           });
           break;
       }

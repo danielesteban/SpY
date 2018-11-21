@@ -41,6 +41,7 @@ class Hallway extends Mesh {
   constructor({
     hasElevator = false,
     isEdge = false,
+    isLobby = false,
   } = {}) {
     const merged = new Geometry();
     const floor = Hallway.generateWall({
@@ -65,21 +66,23 @@ class Hallway extends Mesh {
       wall.translate(0, 0.5, -0.5);
       merged.merge(wall);
     }
-    const wall = Hallway.generateWall({
-      height: 1 / 3,
-      material: 1,
-    });
-    wall.rotateY(Math.PI);
-    wall.translate(0, 1 / 3 / 2, 0.5);
-    merged.merge(wall);
-    if (isEdge) {
+    if (!isLobby) {
       const wall = Hallway.generateWall({
         height: 1 / 3,
         material: 1,
       });
-      wall.rotateY(Math.PI * 0.5 * (isEdge === 'left' ? 1 : -1));
-      wall.translate(isEdge === 'left' ? -0.5 : 0.5, 1 / 3 / 2, 0);
+      wall.rotateY(Math.PI);
+      wall.translate(0, 1 / 3 / 2, 0.5);
       merged.merge(wall);
+      if (isEdge) {
+        const wall = Hallway.generateWall({
+          height: 1 / 3,
+          material: 1,
+        });
+        wall.rotateY(Math.PI * 0.5 * (isEdge === 'left' ? 1 : -1));
+        wall.translate(isEdge === 'left' ? -0.5 : 0.5, 1 / 3 / 2, 0);
+        merged.merge(wall);
+      }
     }
     super(
       (new BufferGeometry()).fromGeometry(merged),
