@@ -15,9 +15,14 @@ export default ({ input, scene }) => {
   dude.position.set(2, 3, 0);
   dude.destinationMarker = new Marker();
   const positionAux = new Vector3();
+  let timer;
   dude.onDestinationCallback = () => {
-    scene.camera.getWorldPosition(positionAux);
-    dude.faceTo(positionAux);
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      if (dude.destination) return;
+      scene.camera.getWorldPosition(positionAux);
+      dude.faceTo(positionAux);
+    }, 5000);
   };
   scene.root.add(dude);
   scene.root.add(dude.destinationMarker);
@@ -64,7 +69,7 @@ export default ({ input, scene }) => {
   scene.onAnimationTick = () => {
     const { camera } = scene;
     const pointer = input.getPointerFrame();
-    if (camera.processInput(pointer) && !dude.destination) {
+    if (camera.processInput(pointer)) {
       dude.onDestinationCallback();
     }
     if (pointer.primaryUp) {
