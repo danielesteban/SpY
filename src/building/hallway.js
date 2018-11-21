@@ -30,7 +30,7 @@ class Hallway extends Mesh {
     const color = new Color();
     wall.faces.forEach((face, i) => {
       if (i % 2 === 0) {
-        color.setHSL(Math.random(), 0.0125, 0.25 + (Math.random() * 0.125));
+        color.setHSL(Math.random(), 0.05, 0.25 + (Math.random() * 0.125));
       }
       face.materialIndex = material;
       face.color.copy(color);
