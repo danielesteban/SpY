@@ -1,7 +1,7 @@
 SpY
 ===
 
-> WIP prototype of a new game idea
+> WIP prototype for a new game idea
 
 [![screenshot](src/images/screenshot.png)](https://spygame.tk/)
 
