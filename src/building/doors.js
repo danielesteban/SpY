@@ -1,10 +1,13 @@
 import {
-  PlaneBufferGeometry,
+  BufferGeometry,
+  Color,
   DoubleSide,
   Mesh,
   MeshPhongMaterial,
   Object3D,
+  PlaneGeometry,
   Vector3,
+  VertexColors,
 } from 'three';
 
 class Doors extends Object3D {
@@ -12,14 +15,23 @@ class Doors extends Object3D {
     floor,
   }) {
     super();
-    const geometry = new PlaneBufferGeometry(0.5, 1, Doors.scale.x * 0.5, Doors.scale.y);
-    geometry.scale(Doors.scale.x, Doors.scale.y, Doors.scale.z);
+    const plane = new PlaneGeometry(0.5, 1, Doors.scale.x * 0.5, Doors.scale.y);
+    const color = new Color();
+    plane.faces.forEach((face, i) => {
+      if (i % 2 === 0) {
+        color.setHSL(Math.random(), 0.05, 0.25 + (Math.random() * 0.125));
+      }
+      face.color.copy(color);
+    });
+    plane.scale(Doors.scale.x, Doors.scale.y, Doors.scale.z);
+    const geometry = (new BufferGeometry()).fromGeometry(plane);
     for (let i = 0; i < 2; i += 1) {
       const door = new Mesh(
         geometry,
         new MeshPhongMaterial({
           color: Doors.color,
           side: DoubleSide,
+          vertexColors: VertexColors,
         })
       );
       door.position.set(
@@ -42,7 +54,7 @@ class Doors extends Object3D {
   }
 }
 
-Doors.color = 0x111111;
+Doors.color = 0x333333;
 Doors.scale = new Vector3(2, 3, 2);
 
 export default Doors;
