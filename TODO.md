@@ -4,10 +4,10 @@ TO DO
 > This is just a random (non-binding) brain dump
 
  * [ ] Two fingers === Secondary button
- * [ ] Enable/Disable input (for credits/UI/etc...)
+ * [X] Enable/Disable input (for credits/UI/etc...)
  * [ ] Controls help on credits
- * [ ] [Fresher](https://github.com/tholman/github-corners) "Fork me on github" ribbon
- * [ ] Background starfield
+ * [X] [Fresher](https://github.com/tholman/github-corners) "Fork me on github" ribbon
+ * [X] Background starfield
  * [ ] Bindable 3D buttons
  * [ ] Improve orbit camera constraints
  * [ ] Elevators

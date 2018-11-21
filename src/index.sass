@@ -17,6 +17,9 @@ body
   font-weight: 400
   -webkit-font-smoothing: antialiased
   -moz-osx-font-smoothing: grayscale
+  
+canvas
+  vertical-align: middle
 
 #mount
   width: 100vw
@@ -41,5 +44,25 @@ body
     small
       font-size: 0.75em;
 
-canvas
-  vertical-align: middle
+#github > svg
+  position: absolute
+  top: 0
+  right: 0
+  .octo-arm
+    transform-origin: 130px 106px
+  &:hover .octo-arm
+    animation: octocat-wave 560ms ease-in-out
+
+@keyframes octocat-wave
+  0%
+    transform: rotate(0deg)
+  20%
+    transform: rotate(-25deg)
+  40%
+    transform: rotate(10deg)
+  60%
+    transform: rotate(-25deg)
+  80%
+    transform: rotate(10deg)
+  100%
+    transform: rotate(0deg)

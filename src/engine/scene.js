@@ -14,6 +14,7 @@ import {
 } from 'three';
 import Camera from './camera';
 import Grid from './grid';
+import Starfield from './starfield';
 
 class Scene {
   constructor({
@@ -28,27 +29,31 @@ class Scene {
     });
     this.renderer.setAnimationLoop(this.onAnimate.bind(this));
     this.renderer.setPixelRatio(window.devicePixelRatio || 1);
-    const sky = new Color(0x336699);
+    const sky = new Color(0x334455);
     this.renderer.setClearColor(sky);
     mount.appendChild(this.renderer.domElement);
     this.root = new Root();
     this.root.fog = new FogExp2(sky, 0.025);
-    this.root.add(new AmbientLight(0x454545));
+    this.root.add(new AmbientLight(0x333333));
     const light = new DirectionalLight(0xffffff, 0.8);
-    light.position.set(1, 1, 1);
+    light.position.set(1, 0.5, 1);
     this.root.add(light);
     const secondaryLight = new DirectionalLight(0xffffff, 0.2);
-    secondaryLight.position.set(-1, -1, 1);
+    secondaryLight.position.set(-1, -0.5, 1);
     this.root.add(secondaryLight);
     this.root.add(this.camera.root);
-    this.grid = new Grid({ background: new Color(0x335555) });
+    this.grid = new Grid({ background: new Color(0x333344) });
     this.root.add(this.grid);
+    this.starfield = new Starfield();
+    this.root.add(this.starfield);
     window.addEventListener('resize', this.onResize.bind(this), false);
     this.onResize();
     if (!__PRODUCTION__) {
       this.stats = new Stats();
       this.stats.dom.style.position = 'absolute';
+      this.stats.dom.style.top = 'auto';
       this.stats.dom.style.left = 'auto';
+      this.stats.dom.style.bottom = '0';
       this.stats.dom.style.right = '0';
       mount.style.position = 'relative';
       mount.appendChild(this.stats.dom);
@@ -62,6 +67,7 @@ class Scene {
       grid,
       renderer,
       root,
+      starfield,
       stats,
     } = this;
     if (stats) stats.begin();
@@ -77,7 +83,8 @@ class Scene {
     if (camera.onAnimationTick) {
       camera.onAnimationTick(animation);
     }
-    grid.position.set(Math.floor(camera.root.position.x), 0, Math.floor(camera.root.position.z));
+    grid.position.set(camera.root.position.x, 0, camera.root.position.z);
+    starfield.position.copy(grid.position);
     renderer.render(root, camera);
     if (stats) stats.end();
   }

@@ -42,7 +42,8 @@ class Input {
   }
 
   onPointerDown({ button }) {
-    const { pointer } = this;
+    const { isEnabled, pointer } = this;
+    if (!isEnabled) return;
     switch (button) {
       case 0:
         pointer.primary = true;
@@ -57,7 +58,8 @@ class Input {
   }
 
   onPointerMove(e, [x, y]) {
-    const { pointer, size: { width, height } } = this;
+    const { isEnabled, pointer, size: { width, height } } = this;
+    if (!isEnabled) return;
     pointer.current.x = x;
     pointer.current.y = y;
     pointer.normalized.x = ((x / width) * 2) - 1;
@@ -70,7 +72,8 @@ class Input {
   }
 
   onPointerUp({ button }) {
-    const { pointer } = this;
+    const { isEnabled, pointer } = this;
+    if (!isEnabled) return;
     switch (button) {
       case 0:
         pointer.primary = false;
@@ -85,7 +88,8 @@ class Input {
   }
 
   onPointerWheel({ deltaY }) {
-    const { pointer } = this;
+    const { isEnabled, pointer } = this;
+    if (!isEnabled) return;
     pointer.wheel = deltaY;
   }
 

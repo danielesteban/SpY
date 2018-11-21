@@ -6,8 +6,9 @@ const mount = document.getElementById('mount');
 const input = new Input({ mount });
 const scene = new Scene({ mount });
 
-input.touches.once('start', () => {
+input.touches.once('end', () => {
   document.getElementById('credits').style.display = 'none';
+  input.isEnabled = true;
 });
 
 let route = window.location.hash.split('/').slice(1)[0];
