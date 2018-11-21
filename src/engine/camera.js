@@ -8,7 +8,8 @@ class Camera extends PerspectiveCamera {
   constructor() {
     super(60, 1, 0.01, 2048);
     this.distance = 4;
-    this.offset = new Vector3(0, 1.2, 0);
+    this.maxHeight = Infinity;
+    this.offset = 1.2;
     this.tilt = Math.PI * -0.65;
     this.pitch = Math.PI * 0.1;
     this.speed = 1.25;
@@ -44,7 +45,7 @@ class Camera extends PerspectiveCamera {
       const sensitivity = 0.003;
       this.tilt -= movement.x * sensitivity;
       this.pitch += movement.y * sensitivity;
-      this.pitch = Math.min(Math.max(this.pitch, 0), Math.PI * 0.5);
+      this.pitch = Math.min(Math.max(this.pitch, Math.PI * -0.45), Math.PI * 0.45);
       hasUpdated = true;
     }
     if (wheel) {
@@ -59,6 +60,7 @@ class Camera extends PerspectiveCamera {
   updateOrbit() {
     const {
       distance,
+      maxHeight,
       offset,
       pitch,
       position,
@@ -72,8 +74,9 @@ class Camera extends PerspectiveCamera {
     )
       .normalize()
       .multiplyScalar(distance);
+    position.y = Math.min(Math.max(position.y, 0.1 - offset), maxHeight - offset);
     this.lookAt(root.position);
-    position.add(offset);
+    position.y += offset;
   }
 }
 
