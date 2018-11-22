@@ -1,9 +1,11 @@
 import Input from '@/engine/input';
+import Music from '@/engine/music';
 import Scene from '@/engine/scene';
 import * as Scenes from '@/scenes';
 
 const mount = document.getElementById('mount');
 const input = new Input({ mount });
+const music = new Music({ toggle: document.getElementById('sound') });
 const scene = new Scene({ mount });
 
 let route = window.location.hash.split('/').slice(1)[0];
@@ -19,6 +21,7 @@ function onLoad() {
   input.touches.once('end', () => {
     document.getElementById('splash').style.display = 'none';
     input.isEnabled = true;
+    music.play();
   });
 }
 

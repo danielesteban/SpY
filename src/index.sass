@@ -37,6 +37,9 @@ canvas
   right: 0
   bottom: 0
   background: rgba(0, 0, 0, .5)
+  text-shadow: 0 0 10px #f00
+  svg
+    filter: drop-shadow(0 0 10px #f00)
   > div
     position: absolute
     top: 50%
@@ -68,13 +71,16 @@ canvas
   background: none
   border: 0
   outline: 0
+  cursor: pointer
   > svg
     width: 28x
     height: 28px
     fill: #fff
+    filter: drop-shadow(0 0 10px #f00)
     &:last-child
       display: none
-  &.active > svg
+      filter: none
+  &.muted > svg
     &:first-child
       display: none
     &:last-child

@@ -9,11 +9,12 @@ TO DO
  * [X] [Fresher](https://github.com/tholman/github-corners) "Fork me on github" ribbon
  * [X] Background starfield
  * [ ] Bindable 3D buttons
- * [ ] Improve orbit camera constraints
  * [ ] Elevators
+ * [ ] Rain
+ * [ ] Add more detail to the hallway mesh
  * [ ] Another dude model
  * [ ] 2D pathfinding
- * [ ] Add more detail to the hallway mesh
- * [ ] Some noir background music like [this](https://www.youtube.com/watch?v=bSLF0Q8B0f0)
+ * [ ] Improve orbit camera constraints
+ * [X] Some noir background music like [this](https://www.youtube.com/watch?v=bSLF0Q8B0f0)
  * [ ] Make a short video
  * [ ] Take it from there

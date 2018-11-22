@@ -164,7 +164,7 @@ module.exports = {
     }),
     new HtmlWebpackPlugin({
       csp: (
-        `default-src 'self'${mode !== 'production' ? " ws: 'unsafe-eval'" : ''};`
+        `default-src 'self' https://*.soundcloud.com/ https://*.sndcdn.com${mode !== 'production' ? " blob: ws: 'unsafe-eval'" : ''};`
       ),
       minify: { collapseWhitespace: true },
       template: path.join(srcPath, 'index.ejs'),
