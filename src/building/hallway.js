@@ -13,6 +13,8 @@ import GridMaterial from '@/materials/grid';
 
 class Hallway extends Mesh {
   static generateWall({
+    aoTop = true,
+    aoBottom = true,
     width = 1,
     height = 1,
     material,
@@ -24,17 +26,31 @@ class Hallway extends Mesh {
       Math.ceil(width * Hallway.scale.x),
       Math.ceil(height * (orientation === 'horizontal' ? Hallway.scale.x : Hallway.scale.y))
     );
-    if (orientation === 'horizontal') {
-      wall.rotateX(Math.PI * -0.5);
-    }
     const color = new Color();
     wall.faces.forEach((face, i) => {
       if (i % 2 === 0) {
         color.setHSL(Math.random(), 0.05, 0.25 + (Math.random() * 0.125));
       }
       face.materialIndex = material;
-      face.color.copy(color);
+      const vertices = [
+        wall.vertices[face.a],
+        wall.vertices[face.b],
+        wall.vertices[face.c],
+      ];
+      face.vertexColors = [...Array(3)].map((v, j) => {
+        const c = color.clone();
+        if (
+          (aoTop && Math.abs(vertices[j].y - height * 0.5) < 0.0001)
+          || (aoBottom && Math.abs(vertices[j].y - height * -0.5) < 0.0001)
+        ) {
+          c.offsetHSL(0, 0, -0.1);
+        }
+        return c;
+      });
     });
+    if (orientation === 'horizontal') {
+      wall.rotateX(Math.PI * -0.5);
+    }
     return wall;
   }
 
@@ -45,6 +61,7 @@ class Hallway extends Mesh {
   } = {}) {
     const merged = new Geometry();
     const floor = Hallway.generateWall({
+      aoBottom: !isLobby,
       material: 0,
       orientation: 'horizontal',
     });
@@ -68,6 +85,7 @@ class Hallway extends Mesh {
     }
     if (!isLobby) {
       const wall = Hallway.generateWall({
+        aoTop: false,
         height: 1 / 3,
         material: 1,
       });
@@ -76,6 +94,7 @@ class Hallway extends Mesh {
       merged.merge(wall);
       if (isEdge) {
         const wall = Hallway.generateWall({
+          aoTop: false,
           height: 1 / 3,
           material: 1,
         });
