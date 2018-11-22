@@ -26,7 +26,7 @@ export default ({ input, scene }) => {
   };
   scene.root.add(dude);
   scene.root.add(dude.destinationMarker);
-  scene.camera.maxHeight = 3;
+  scene.camera.maxHeight = 2.9;
   scene.camera.target = dude.position;
 
   /* Spawn test building */
