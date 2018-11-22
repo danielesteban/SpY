@@ -2,7 +2,6 @@ import { Object3D } from 'three';
 import Dude from '@/actors/dude';
 import Elevator from './elevator';
 import Hallway from './hallway';
-import Shaft from './shaft';
 
 class Building extends Object3D {
   constructor({
@@ -11,6 +10,7 @@ class Building extends Object3D {
     floors,
   }) {
     super();
+    this.buttons = [];
     this.dudes = dudes.map(({
       pallete,
       position,
@@ -25,9 +25,11 @@ class Building extends Object3D {
       origin,
     }) => {
       const elevator = new Elevator({ floors, origin });
-      const shaft = new Shaft({ elevator });
-      elevator.doors = shaft.doors;
-      this.add(shaft);
+      this.buttons = [
+        ...this.buttons,
+        ...elevator.buttons,
+      ];
+      this.add(elevator);
       return elevator;
     });
     this.floors = floors.map((rooms, floor) => rooms.map(({ type }, room) => {
@@ -63,10 +65,7 @@ class Building extends Object3D {
   onAnimationTick(animation) {
     const { dudes, elevators } = this;
     dudes.forEach(dude => dude.onAnimationTick(animation));
-    elevators.forEach((elevator) => {
-      elevator.onAnimationTick(animation);
-      elevator.doors.forEach(door => door.onAnimationTick(animation));
-    });
+    elevators.forEach(elevator => elevator.onAnimationTick(animation));
   }
 }
 

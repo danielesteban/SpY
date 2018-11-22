@@ -126,6 +126,7 @@ class Actor extends SkinnedMesh {
       }
       if (this.onDestinationCallback) {
         this.onDestinationCallback();
+        delete this.onDestinationCallback;
       }
     }
   }
@@ -141,13 +142,22 @@ class Actor extends SkinnedMesh {
       .play();
   }
 
-  walkTo(point) {
-    const { destinationMarker } = this;
+  walkTo(point, callback) {
+    const { destinationMarker, position } = this;
+    const distance = position.distanceTo(point);
+    delete this.onDestinationCallback;
+    if (distance < 0.25) {
+      if (callback) callback();
+      return;
+    }
     this.setAnimation('walk');
     this.destination = point.clone();
     if (destinationMarker) {
       destinationMarker.position.copy(this.destination);
       destinationMarker.visible = true;
+    }
+    if (callback) {
+      this.onDestinationCallback = callback;
     }
     this.faceTo(point);
   }

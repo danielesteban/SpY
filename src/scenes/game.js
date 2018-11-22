@@ -14,16 +14,6 @@ export default ({ input, scene }) => {
   });
   dude.position.set(2, 3, 0);
   dude.destinationMarker = new Marker();
-  const positionAux = new Vector3();
-  let timer;
-  dude.onDestinationCallback = () => {
-    clearTimeout(timer);
-    timer = setTimeout(() => {
-      if (dude.destination) return;
-      scene.camera.getWorldPosition(positionAux);
-      dude.faceTo(positionAux);
-    }, 5000);
-  };
   scene.root.add(dude);
   scene.root.add(dude.destinationMarker);
   scene.camera.maxHeight = 2.9;
@@ -66,24 +56,36 @@ export default ({ input, scene }) => {
 
   /* Animation loop */
   const floor = 1;
+  const constraintToFloor = (point) => {
+    point.x = Math.min(Math.max(point.x, -9.5), 9.5);
+    point.y = floor * 3;
+    point.z = Math.min(Math.max(point.z, -1.5), 1.5);
+    return point;
+  };
   scene.onAnimationTick = () => {
     const { camera } = scene;
     const pointer = input.getPointerFrame();
-    if (camera.processInput(pointer)) {
-      dude.onDestinationCallback();
-    }
+    camera.processInput(pointer);
     if (pointer.primaryUp) {
       const { raycaster } = pointer;
       raycaster.setFromCamera(pointer.normalized, camera);
-      const hit = raycaster.intersectObjects([
-        // ...building.elevators,
-        ...building.floors[floor],
-      ])[0];
-      if (!hit) return;
-      hit.point.x = Math.min(Math.max(hit.point.x, -9.5), 9.5);
-      hit.point.y = hit.object.position.y;
-      hit.point.z = Math.min(Math.max(hit.point.z, -1.5), 1.5);
-      dude.walkTo(hit.point);
+      {
+        const hit = raycaster.intersectObjects(building.buttons)[0];
+        if (hit) {
+          dude.walkTo(constraintToFloor(hit.point.clone()), () => {
+            dude.faceTo(hit.point);
+            hit.object.onTap();
+          });
+          return;
+        }
+      }
+      {
+        const hit = raycaster.intersectObjects(building.floors[floor])[0];
+        if (hit) {
+          constraintToFloor(hit.point);
+          dude.walkTo(hit.point);
+        }
+      }
     }
   };
 };

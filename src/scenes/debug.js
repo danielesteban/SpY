@@ -15,6 +15,18 @@ export default ({ input, scene }) => {
       scene.root.add(dude);
       return dude;
     }),
+    onAnimationTick() {
+      const { camera, grid } = scene;
+      const pointer = input.getPointerFrame();
+      camera.processInput(pointer);
+      if (pointer.primaryUp) {
+        const { raycaster } = pointer;
+        raycaster.setFromCamera(pointer.normalized, camera);
+        const hit = raycaster.intersectObject(grid)[0];
+        if (!hit) return;
+        pack.walkTo(hit.point);
+      }
+    },
     walkTo(point) {
       const { x: mainDudeX, z: mainDudeZ } = point;
       this.dudes.forEach((dude, i) => {
@@ -39,16 +51,5 @@ export default ({ input, scene }) => {
   scene.camera.pitch = Math.PI * 0.125;
   scene.camera.updateOrbit();
 
-  scene.onAnimationTick = () => {
-    const { camera, grid } = scene;
-    const pointer = input.getPointerFrame();
-    camera.processInput(pointer);
-    if (pointer.primaryUp) {
-      const { raycaster } = pointer;
-      raycaster.setFromCamera(pointer.normalized, camera);
-      const hit = raycaster.intersectObject(grid)[0];
-      if (!hit) return;
-      pack.walkTo(hit.point);
-    }
-  };
-};
+  scene.onAnimationTick = pack.onAnimationTick.bind(pack);
+}

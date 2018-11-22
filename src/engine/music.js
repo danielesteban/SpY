@@ -1,10 +1,8 @@
 class Music {
   static shuffle(tracks) {
-    let temp;
-    let random;
     for (let index = tracks.length - 1; index >= 0; index -= 1) {
-      random = Math.floor(Math.random() * index);
-      temp = tracks[index];
+      const random = Math.floor(Math.random() * tracks.length);
+      const temp = tracks[index];
       tracks[index] = tracks[random];
       tracks[random] = temp;
     }
@@ -20,7 +18,7 @@ class Music {
     //   console.log(JSON.stringify(tracks.map(({ id }) => (id))));
     // });
     // eslint-disable-next-line
-    this.tracks = Music.shuffle([15107449,14281750,135099881,11470035,14449372,132576042,201545618,7546385,199917181,130450594,43516158,20969172,209771982,29561041,6582510,89379153,96594845,187242780,193388680,199889475,2665818,8834943,187747016,137188503,74658085,151273675,177686789,135693650,90256034,51186312,183847047,3916883,167411437]);
+    this.tracks = Music.shuffle([15107449,14281750,135099881,14449372,201545618,7546385,199917181,130450594,43516158,20969172,209771982,29561041,6582510,89379153,96594845,199889475,137188503,74658085,177686789,90256034,183847047,3916883]);
     this.track = 0;
     toggle.addEventListener('click', () => this.toggle(toggle), false);
   }
@@ -42,9 +40,12 @@ class Music {
       delete this.player;
     }
     const id = tracks[track];
+    if (!__PRODUCTION__) console.log(`playing: ${id}`);
     api.stream(`/tracks/${id}`).then((player) => {
       this.player = player;
+      player.on('audio_error', () => this.next());
       player.on('finish', () => this.next());
+      player.setVolume(0.8);
       player.play();
     }).catch(() => {
       this.next();
