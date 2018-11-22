@@ -56,6 +56,26 @@ canvas
     display: inline-block
     margin: 1rem
 
+#sound
+  position: absolute
+  top: 0.75rem
+  left: 0.5rem
+  background: none
+  border: 0
+  outline: 0
+  > svg
+    width: 32x
+    height: 32px
+    fill: #fff
+    &:last-child
+      display: none
+  &.active > svg
+    &:first-child
+      display: none
+    &:last-child
+      display: block
+  
+
 #github > svg
   position: absolute
   top: 0
