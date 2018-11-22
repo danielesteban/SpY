@@ -15,8 +15,13 @@ body
   font-size: 0.75rem
   line-height: 1.25rem
   font-weight: 400
+  opacity: 0
+  transition: opacity .15s ease-out
+  will-change: opacity
   -webkit-font-smoothing: antialiased
   -moz-osx-font-smoothing: grayscale
+  &.loaded
+    opacity: 1;
   
 canvas
   vertical-align: middle
