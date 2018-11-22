@@ -52,4 +52,4 @@ export default ({ input, scene }) => {
   scene.camera.updateOrbit();
 
   scene.onAnimationTick = pack.onAnimationTick.bind(pack);
-}
+};
