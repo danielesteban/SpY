@@ -47,7 +47,7 @@ class Doors extends Object3D {
 
   onAnimationTick({ time }) {
     const { animationStart, children } = this;
-    const step = (0.25 + (Math.sin(animationStart + time) * 0.25)) + 0.01;
+    const step = (0.25 + (Math.sin(animationStart + time) * 0.24));
     children.forEach((door, i) => {
       door.position.x = (-0.25 + (i * 0.5) + (step * (i === 0 ? -1 : 1))) * Doors.scale.x;
     });
