@@ -4,7 +4,6 @@ class Music {
     let random;
     for (let index = tracks.length - 1; index >= 0; index -= 1) {
       random = Math.floor(Math.random() * index);
-      index -= 1;
       temp = tracks[index];
       tracks[index] = tracks[random];
       tracks[random] = temp;
