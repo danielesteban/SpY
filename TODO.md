@@ -8,7 +8,7 @@ TO DO
  * [X] Controls help on credits
  * [X] [Fresher](https://github.com/tholman/github-corners) "Fork me on github" ribbon
  * [X] Background starfield
- * [ ] Bindable 3D buttons
+ * [X] Bindable 3D buttons
  * [ ] Elevators
  * [ ] Rain
  * [ ] Add more detail to the hallway mesh

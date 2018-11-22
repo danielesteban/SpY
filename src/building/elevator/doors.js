@@ -8,6 +8,7 @@ import {
   Object3D,
   PlaneGeometry,
   VertexColors,
+  Vector3,
 } from 'three';
 import Button from '@/items/button';
 
@@ -48,8 +49,10 @@ class Doors extends Object3D {
     this.animationScale = scale.x;
     this.state = Doors.states.CLOSED;
     this.targetState = this.state;
-    this.callButton = new Button({ onTap: onCall });
-    this.callButton.position.set(0.6 * scale.x, 0.5 * scale.y, 0.5 * scale.z);
+    this.callButton = new Button({
+      onTap: onCall,
+      position: new Vector3(0.6 * scale.x, 0.5 * scale.y, 0.5 * scale.z),
+    });
     this.add(this.callButton);
   }
 

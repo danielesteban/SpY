@@ -72,9 +72,10 @@ export default ({ input, scene }) => {
       {
         const hit = raycaster.intersectObjects(building.buttons)[0];
         if (hit) {
-          dude.walkTo(constraintToFloor(hit.point.clone()), () => {
-            dude.faceTo(hit.point);
-            hit.object.onTap();
+          const { point, object: button } = hit;
+          dude.walkTo(constraintToFloor(point.clone()), () => {
+            dude.faceTo(point);
+            button.tap();
           });
           return;
         }
