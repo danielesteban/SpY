@@ -44,7 +44,7 @@ class Music {
     const id = tracks[track];
     api.stream(`/tracks/${id}`).then((player) => {
       this.player = player;
-      player.on('ended', () => this.next());
+      player.on('finish', () => this.next());
       player.play();
     }).catch(() => {
       this.next();
