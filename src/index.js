@@ -11,7 +11,7 @@ if (!Scenes[route]) {
   window.location.hash = '/game';
   route = 'game';
 }
-window.addEventListener('hashchange', () => window.location.reload(), false);
+setImmediate(() => window.addEventListener('hashchange', () => window.location.reload(), false));
 
 function onLoad() {
   document.body.className = 'loaded';
