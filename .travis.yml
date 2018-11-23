@@ -5,7 +5,7 @@ cache:
   directories:
   - node_modules
 git:
-- depth: false
+  depth: false
 env:
   global:
   - secure: iVj1XejxlyS7xrxBw+teXaM7AEpO7eUdOUvI5LtvrLt/wUSurDsHXoJZ3o7wp/uRSm/40rqVyUqVhKX97tatF22lcxdL4N/E+TjqTlYiivY09J6UmqYWNHnK1fmauDr2sapV0e6xuBIkQTaEQ7/uWs9NOY+V9H0z3RA5hb9EsHraUH0nrbS+hweZr/2JxQLHzI7H2etPP0TBhXjA3yGrcwL6rb3wxKQXTJp4fjT0g7T02ThLrCjISlIDt0JfMe3FT14g1pmaJc55Y2IhZc8ODq8b6mh/bRs/u78n1UKtD19V1Lm8fHIQquq3v97/jDeQGjqhu4Va8cALLJCHr/56xAKlNSfc70J48lwncM22twBDJLkZy5evBKwyVtRyQMYGVvnPGDqQl4FTRQjSvL1xdEmmSz48/aVrXw5Jnt2afeXqxaKWlUfqGLrGfFV0OER0cryZSzk3GPFN2N7jXMfzQJNwSECSDOSmPtNfAeD3ytbPMt0K+h+EI+N7XceoxX5ooBRHLrqdvUZj5MvXZaT52KGLGroPYQrVKZbr1Aja+ubHM2J+TL/fHTXTXb/rwOcG9IDME80MVjXDxzQTSbOTySfRyFcCVX0zcMeAwyJCrfa+dkAv2pxFhLmLZUOo9mvSkBApx8ux9/+BDOnXBVCeFzr2HsEn1lBntehwj4cNSwQ=
