@@ -180,7 +180,7 @@ module.exports = {
       new RobotstxtPlugin({
         policy: [{
           userAgent: '*',
-          disallow: '/',
+          allow: '/',
         }],
       }),
       new GHPagesSPAWebpackPlugin({
