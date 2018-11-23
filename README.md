@@ -22,6 +22,11 @@ SpY
 
 ---
 
+#### Dependencies
+
+ * [Node.js](https://nodejs.org/en/download/) >= v10.13.0 LTS
+ * [Yarn](https://yarnpkg.com/en/docs/install) >= v1.12.3 Stable
+
 #### Dev environment
 
  * yarn install
