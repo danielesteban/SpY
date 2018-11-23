@@ -11,7 +11,7 @@ class Grid extends Mesh {
     size = 1,
     subdivisions = 10,
   } = {}) {
-    const geometry = new CircleBufferGeometry(1024, 8);
+    const geometry = new CircleBufferGeometry(128, 8);
     geometry.translate(0, 0, -0.01);
     geometry.rotateX(Math.PI * -0.5);
     super(

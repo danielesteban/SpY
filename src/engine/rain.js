@@ -24,6 +24,7 @@ class Rain extends Mesh {
         color: 0xBBBBEE,
       })
     );
+    this.position.x = 8;
     this.frustumCulled = false;
     this.drop = new Vector3();
     this.offsets = offsets;

@@ -9,7 +9,7 @@ import {
 class Button extends Mesh {
   constructor({ onTap, position }) {
     const geometry = new BoxBufferGeometry(0.2, 0.1, 0.1);
-    geometry.translate(0, 0, 0.05);
+    geometry.translate(0, 0, 0.049);
     super(
       geometry,
       new MeshPhongMaterial({

@@ -41,9 +41,6 @@ class Elevator extends Object3D {
       scale: Elevator.scale,
     });
     this.add(this.cabin);
-
-    this.position.x = origin.x * 4;
-    this.position.y = origin.y * 3;
     this.position.z = -1.5 * Elevator.scale.z;
   }
 

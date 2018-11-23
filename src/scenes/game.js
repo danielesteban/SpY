@@ -12,7 +12,7 @@ export default ({ input, scene }) => {
     legs: 0x222222,
     torso: 0x990000,
   });
-  dude.position.set(2, 3, 0);
+  dude.position.set(6, 3, 0);
   dude.destinationMarker = new Marker();
   scene.root.add(dude);
   scene.root.add(dude.destinationMarker);
@@ -30,7 +30,7 @@ export default ({ input, scene }) => {
         torso: 0x999999 * Math.random(),
       },
       position: new Vector3(
-        (Math.random() * 9 - 4.5) * 2,
+        (Math.random() * 20) - 1.5,
         Math.floor(Math.random() * 3) * 3,
         0
       ),
@@ -38,11 +38,11 @@ export default ({ input, scene }) => {
     elevators: [
       {
         floors: 2,
-        origin: { x: -1, y: 0 },
+        origin: { x: 1, y: 0 },
       },
       {
         floors: 2,
-        origin: { x: 1, y: 1 },
+        origin: { x: 4, y: 1 },
       },
     ],
     floors: [
@@ -57,7 +57,7 @@ export default ({ input, scene }) => {
   /* Animation loop */
   const floor = 1;
   const constraintToFloor = (point) => {
-    point.x = Math.min(Math.max(point.x, -9.5), 9.5);
+    point.x = Math.min(Math.max(point.x, -1.5), 17.5);
     point.y = floor * 3;
     point.z = Math.min(Math.max(point.z, -1.5), 1.5);
     return point;

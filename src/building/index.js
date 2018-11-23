@@ -25,6 +25,8 @@ class Building extends Object3D {
       origin,
     }) => {
       const elevator = new Elevator({ floors, origin });
+      elevator.position.x = origin.x * 4;
+      elevator.position.y = origin.y * 3;
       this.buttons = [
         ...this.buttons,
         ...elevator.buttons,
@@ -41,7 +43,7 @@ class Building extends Object3D {
           floors,
           origin,
         }) => (
-          origin.x === room - Math.floor(rooms.length / 2)
+          origin.x === room
           && origin.y <= floor
           && origin.y + floors > floor
         ))
@@ -56,7 +58,7 @@ class Building extends Object3D {
           });
           break;
       }
-      mesh.position.set(room * 4 - (Math.floor(rooms.length / 2) * 4), floor * 3, 0);
+      mesh.position.set(room * 4, floor * 3, 0);
       this.add(mesh);
       return mesh;
     }));
