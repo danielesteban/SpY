@@ -6,7 +6,7 @@ import {
 
 class Camera extends PerspectiveCamera {
   constructor() {
-    super(60, 1, 0.01, 2048);
+    super(60, 1, 0.001, 2048);
     this.distance = 4;
     this.maxHeight = Infinity;
     this.offset = 1.2;
