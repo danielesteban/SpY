@@ -91,6 +91,7 @@ class Scene {
     }
     grid.position.set(camera.root.position.x, 0, camera.root.position.z);
     starfield.position.copy(grid.position);
+    renderer.clear();
     renderer.render(root, camera);
     vignette.render(renderer);
     if (stats) stats.end();
