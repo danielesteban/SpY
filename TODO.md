@@ -11,7 +11,7 @@ TO DO
  * [X] Bindable 3D buttons
  * [ ] Elevators
  * [ ] Rain
- * [ ] Talk bubbles
+ * [X] Talk bubbles
  * [ ] Add more detail to the hallway mesh
  * [ ] Another dude model
  * [ ] 2D pathfinding
