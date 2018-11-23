@@ -75,7 +75,20 @@ export default ({ input, scene }) => {
           const { point, object: button } = hit;
           dude.walkTo(constraintToFloor(point.clone()), () => {
             dude.faceTo(point);
-            button.tap();
+            if (button.tap()) {
+              setTimeout(() => {
+                setTimeout(() => (
+                  dude.say([
+                    'Crap!',
+                    "It's Broken!",
+                    'What a night...',
+                  ])
+                ), 500);
+                const aux = camera.position.clone();
+                camera.getWorldPosition(aux);
+                dude.faceTo(aux);
+              }, 1000);
+            }
           });
           return;
         }

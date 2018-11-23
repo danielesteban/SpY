@@ -13,6 +13,7 @@ import {
   Vector3,
   Vector4,
 } from 'three';
+import Bubble from '@/items/bubble';
 
 class Actor extends SkinnedMesh {
   static geometryFromLimbs(limbs) {
@@ -176,6 +177,16 @@ class Actor extends SkinnedMesh {
       this.targetRotation += Math.PI * 2;
     }
     this.rotationSpeed = Math.abs(this.targetRotation - this.rotation.y) * 1.5;
+  }
+
+  say(lines, delay) {
+    if (!this.bubble) {
+      this.bubble = new Bubble();
+      this.bubble.position.set(0, this.geometry.boundingSphere.radius * 2.25, 0);
+      this.add(this.bubble);
+    }
+    const { bubble } = this;
+    bubble.display(lines, delay);
   }
 }
 

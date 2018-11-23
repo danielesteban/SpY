@@ -60,9 +60,10 @@ class Elevator extends Object3D {
     // Debug: Door toggle testing
     if (doors[floor].state === Doors.states.OPEN) {
       doors[floor].close();
-    } else {
-      doors[floor].open();
+      return false;
     }
+    doors[floor].open();
+    return true;
   }
 }
 

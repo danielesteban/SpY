@@ -25,12 +25,14 @@ class Button extends Mesh {
 
   tap() {
     const { onTap, tapping } = this;
-    if (tapping) return;
+    if (tapping) return false;
+    let ret;
     if (onTap) {
-      onTap();
+      ret = onTap();
     }
     this.animation = 0;
     this.tapping = true;
+    return ret;
   }
 
   onAnimationTick({ delta }) {
