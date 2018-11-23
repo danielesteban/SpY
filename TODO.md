@@ -10,7 +10,7 @@ TO DO
  * [X] Background starfield
  * [X] Bindable 3D buttons
  * [ ] Working elevators
- * [ ] Rain
+ * [X] Rain
  * [X] Talk bubbles
  * [ ] Add more detail to the hallway mesh
  * [ ] Another dude model

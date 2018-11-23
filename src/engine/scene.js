@@ -14,6 +14,7 @@ import {
 } from 'three';
 import Camera from './camera';
 import Grid from './grid';
+import Rain from './rain';
 import Starfield from './starfield';
 
 class Scene {
@@ -44,6 +45,7 @@ class Scene {
     this.root.add(this.camera.root);
     this.grid = new Grid({ background: new Color(0x333344) });
     this.root.add(this.grid);
+    this.root.add(new Rain());
     this.starfield = new Starfield();
     this.root.add(this.starfield);
     window.addEventListener('resize', this.onResize.bind(this), false);

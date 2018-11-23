@@ -44,7 +44,7 @@ class Camera extends PerspectiveCamera {
     if (secondary) {
       const sensitivity = 0.003;
       this.tilt -= movement.x * sensitivity;
-      this.tilt = Math.min(Math.max(this.tilt, Math.PI * -1), 0);
+      this.tilt = Math.min(Math.max(this.tilt, Math.PI * -1.25), Math.PI * 0.25);
       this.pitch += movement.y * sensitivity;
       this.pitch = Math.min(Math.max(this.pitch, Math.PI * -0.45), Math.PI * 0.45);
       hasUpdated = true;
