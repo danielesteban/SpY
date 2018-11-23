@@ -16,6 +16,7 @@ import Camera from './camera';
 import Grid from './grid';
 import Rain from './rain';
 import Starfield from './starfield';
+import Vignette from './vignette';
 
 class Scene {
   constructor({
@@ -28,6 +29,7 @@ class Scene {
       alpha: false,
       antialias: true,
     });
+    this.renderer.autoClear = false;
     this.renderer.setAnimationLoop(this.onAnimate.bind(this));
     this.renderer.setPixelRatio(window.devicePixelRatio || 1);
     const sky = new Color(0x334455);
@@ -48,6 +50,7 @@ class Scene {
     this.root.add(new Rain());
     this.starfield = new Starfield();
     this.root.add(this.starfield);
+    this.vignette = new Vignette();
     window.addEventListener('resize', this.onResize.bind(this), false);
     this.onResize();
     if (!__PRODUCTION__) {
@@ -71,6 +74,7 @@ class Scene {
       root,
       starfield,
       stats,
+      vignette,
     } = this;
     if (stats) stats.begin();
     const animation = { delta: Math.min(clock.getDelta(), 1), time: clock.oldTime / 1000 };
@@ -88,6 +92,7 @@ class Scene {
     grid.position.set(camera.root.position.x, 0, camera.root.position.z);
     starfield.position.copy(grid.position);
     renderer.render(root, camera);
+    vignette.render(renderer);
     if (stats) stats.end();
   }
 
@@ -96,11 +101,13 @@ class Scene {
       camera,
       mount,
       renderer,
+      vignette,
     } = this;
     const { width, height } = mount.getBoundingClientRect();
     renderer.setSize(width, height);
     camera.aspect = width / height;
     camera.updateProjectionMatrix();
+    vignette.onResize({ width, height });
   }
 
   static fixThreeJSFog() {
