@@ -14,7 +14,7 @@ class Cabin extends Mesh {
     scale,
   }) {
     const geometry = new BoxGeometry(
-      0.9985, 0.9985, 0.9985,
+      0.998, 0.999, 0.998,
       scale.x, scale.y, scale.z
     );
     const aux = new Color();
