@@ -10,17 +10,36 @@ class Music {
   }
 
   constructor({ toggle }) {
-    this.api = window.SC;
-    this.api.initialize({
-      client_id: 'eb5fcff9e107aab508431b4c3c416415',
-    });
-    // this.api.resolve('https://soundcloud.com/travis-stanley-3/sets/jazz-noir-dark-jazz').then(({ tracks }) => {
-    //   console.log(JSON.stringify(tracks.map(({ id }) => (id))));
-    // });
-    // eslint-disable-next-line
-    this.tracks = Music.shuffle([15107449,14281750,135099881,14449372,201545618,130450594,43516158,20969172,29561041,6582510,89379153,96594845,199889475,137188503,74658085,177686789,90256034,183847047,3916883]);
-    this.track = 0;
-    toggle.addEventListener('click', () => this.toggle(toggle), false);
+    const loaded = () => {
+      this.api = window.SC;
+      this.api.initialize({
+        client_id: 'eb5fcff9e107aab508431b4c3c416415',
+      });
+      // this.api.resolve('https://soundcloud.com/travis-stanley-3/sets/jazz-noir-dark-jazz').then(({ tracks }) => {
+      //   console.log(JSON.stringify(tracks.map(({ id }) => (id))));
+      // });
+      // eslint-disable-next-line
+      this.tracks = Music.shuffle([15107449,14281750,135099881,14449372,201545618,130450594,43516158,20969172,29561041,6582510,89379153,96594845,199889475,137188503,74658085,90256034,183847047,3916883]);
+      this.track = 0;
+      toggle.addEventListener('click', () => this.toggle(toggle), false);
+      if (this.wantsToPlay) {
+        delete this.wantsToPlay;
+        this.play();
+      }
+    };
+    const check = () => {
+      if (!window.SC) {
+        setTimeout(check, 10);
+        return;
+      }
+      loaded();
+    };
+    const script = document.createElement('script');
+    script.async = true;
+    script.defer = true;
+    script.src = 'https://connect.soundcloud.com/sdk/sdk-3.3.1.js';
+    document.body.appendChild(script);
+    check();
   }
 
   next() {
@@ -35,6 +54,10 @@ class Music {
       track,
       tracks,
     } = this;
+    if (!api) {
+      this.wantsToPlay = true;
+      return;
+    }
     if (player) {
       player.kill();
       delete this.player;
