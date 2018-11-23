@@ -8,6 +8,7 @@ class Bubble extends Sprite {
     super(new SpriteMaterial({
       width: 512,
       height: 64,
+      depthTest: false,
     }));
     this.scale.set(2, 0.25, 1);
     this.visible = false;

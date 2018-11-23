@@ -65,7 +65,6 @@ class Hallway extends Mesh {
       material: 0,
       orientation: 'horizontal',
     });
-    floor.translate(0, -0.0005, 0);
     merged.merge(floor);
     if (hasElevator) {
       const wall = Hallway.generateWall({
