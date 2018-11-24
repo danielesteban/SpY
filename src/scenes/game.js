@@ -26,16 +26,17 @@ export default ({ input, scene }) => {
         origin: { x: 1, y: 0 },
       },
       {
-        floors: 2,
+        floors: 3,
         origin: { x: 4, y: 1 },
       },
     ],
     floors: [
-      '.....',
-      '.....',
-      '.....',
-      '.....',
-    ],
+      '  ...',
+      ' .._..',
+      ' .._..',
+      ' .....',
+      '.......',
+    ].reverse(),
   });
   scene.root.add(building);
   scene.rain.position.x = building.heightmap[0].length * 0.5;

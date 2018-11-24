@@ -1,6 +1,7 @@
 import { Object3D } from 'three';
 import Elevator from './elevator';
 import Hallway from './hallway';
+import Wall from './wall';
 import Walkable from '@/engine/walkable';
 
 class Building extends Object3D {
@@ -30,23 +31,31 @@ class Building extends Object3D {
       const rooms = layout.split('');
       const grid = [...Array(4)].map(() => [...Array(rooms.length * 4)].map(() => (1)));
       rooms.forEach((type, room) => {
-        let isEdge = false;
-        if (room === 0) isEdge = 'left';
-        else if (room === rooms.length - 1) isEdge = 'right';
-        const hasElevator = (
-          this.elevators.findIndex(({
-            floors,
-            origin,
-          }) => (
-            origin.x === room
-            && origin.y <= floor
-            && origin.y + floors > floor
-          ))
-        ) !== -1;
         let mesh;
         switch (type) {
-          default:
+          case ' ':
+            return;
+          case '_':
+            mesh = new Wall();
+            break;
+          case '.':
+          default: {
+            let isEdge = false;
+            if (room === 0 || ~[' ', '_'].indexOf(rooms[room - 1])) isEdge = 'left';
+            else if (room === rooms.length - 1 || ~[' ', '_'].indexOf(rooms[room + 1])) isEdge = 'right';
+            const hasCeiling = floor < floors.length - 1 && [' ', '_'].indexOf(floors[floor + 1].split('')[room]) === -1;
+            const hasElevator = (
+              this.elevators.findIndex(({
+                floors,
+                origin,
+              }) => (
+                origin.x === room
+                && origin.y <= floor
+                && origin.y + floors > floor
+              ))
+            ) !== -1;
             mesh = new Hallway({
+              hasCeiling,
               hasElevator,
               isEdge,
               isLobby: floor === 0,
@@ -64,6 +73,7 @@ class Building extends Object3D {
               }
             }
             break;
+          }
         }
         mesh.position.set(room * 4, floor * 3, 0);
         this.add(mesh);

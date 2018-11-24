@@ -1,73 +1,31 @@
 import {
   BufferGeometry,
-  Color,
   DoubleSide,
   Geometry,
   Mesh,
   MeshPhongMaterial,
-  PlaneGeometry,
-  Vector3,
   VertexColors,
 } from 'three';
 import GridMaterial from '@/materials/grid';
+import Wall from './wall';
 
 class Hallway extends Mesh {
-  static generateWall({
-    aoTop = true,
-    aoBottom = true,
-    width = 1,
-    height = 1,
-    material,
-    orientation,
-  }) {
-    const wall = new PlaneGeometry(
-      width,
-      height,
-      Math.ceil(width * Hallway.scale.x),
-      Math.ceil(height * (orientation === 'horizontal' ? Hallway.scale.x : Hallway.scale.y))
-    );
-    const color = new Color();
-    wall.faces.forEach((face, i) => {
-      if (i % 2 === 0) {
-        color.setHSL(Math.random(), 0.05, 0.25 + (Math.random() * 0.125));
-      }
-      face.materialIndex = material;
-      const vertices = [
-        wall.vertices[face.a],
-        wall.vertices[face.b],
-        wall.vertices[face.c],
-      ];
-      face.vertexColors = [...Array(3)].map((v, j) => {
-        const c = color.clone();
-        if (
-          (aoTop && Math.abs(vertices[j].y - height * 0.5) < 0.0001)
-          || (aoBottom && Math.abs(vertices[j].y - height * -0.5) < 0.0001)
-        ) {
-          c.offsetHSL(0, 0, -0.1);
-        }
-        return c;
-      });
-    });
-    if (orientation === 'horizontal') {
-      wall.rotateX(Math.PI * -0.5);
-    }
-    return wall;
-  }
-
   constructor({
-    hasElevator = false,
-    isEdge = false,
-    isLobby = false,
-  } = {}) {
+    hasCeiling,
+    hasElevator,
+    isEdge,
+    isLobby,
+  }) {
     const merged = new Geometry();
-    const floor = Hallway.generateWall({
+    const floor = Wall.getGeometry({
       aoBottom: !isLobby,
       material: 0,
       orientation: 'horizontal',
     });
     merged.merge(floor);
     if (hasElevator) {
-      const wall = Hallway.generateWall({
+      const wall = Wall.getGeometry({
+        aoTop: hasCeiling,
         width: 0.25,
         material: 1,
       });
@@ -76,14 +34,15 @@ class Hallway extends Mesh {
       wall.translate(0.75, 0, 0);
       merged.merge(wall);
     } else {
-      const wall = Hallway.generateWall({
+      const wall = Wall.getGeometry({
+        aoTop: hasCeiling,
         material: 1,
       });
       wall.translate(0, 0.5, -0.5);
       merged.merge(wall);
     }
     if (!isLobby) {
-      const wall = Hallway.generateWall({
+      const wall = Wall.getGeometry({
         aoTop: false,
         height: 1 / 3,
         material: 1,
@@ -92,7 +51,7 @@ class Hallway extends Mesh {
       wall.translate(0, 1 / 3 / 2, 0.5);
       merged.merge(wall);
       if (isEdge) {
-        const wall = Hallway.generateWall({
+        const wall = Wall.getGeometry({
           aoTop: false,
           height: 1 / 3,
           material: 1,
@@ -102,6 +61,7 @@ class Hallway extends Mesh {
         merged.merge(wall);
       }
     }
+    merged.scale(Wall.scale.x, Wall.scale.y, Wall.scale.z);
     super(
       (new BufferGeometry()).fromGeometry(merged),
       [
@@ -115,10 +75,7 @@ class Hallway extends Mesh {
         }),
       ]
     );
-    this.scale.copy(Hallway.scale);
   }
 }
-
-Hallway.scale = new Vector3(4, 3, 4);
 
 export default Hallway;
