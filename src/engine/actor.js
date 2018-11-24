@@ -147,7 +147,7 @@ class Actor extends SkinnedMesh {
     const { destinationMarker, position } = this;
     const distance = position.distanceTo(path[path.length - 1]);
     delete this.onDestinationCallback;
-    if (distance < 0.25) {
+    if (distance === 0) {
       if (callback) callback();
       return;
     }
