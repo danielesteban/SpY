@@ -44,8 +44,8 @@ class Walkable extends Mesh {
     const { grid, position } = this;
     point.y = position.y;
     this.worldToLocal(point);
-    point.x = Math.min(Math.max(point.x, 0), grid.width);
-    point.z = Math.min(Math.max(point.z, 0), grid.height);
+    point.x = Math.min(Math.max(point.x, 0), grid.width - 1);
+    point.z = Math.min(Math.max(point.z, 0), grid.height - 1);
     point = {
       x: Math.floor(point.x),
       z: Math.floor(point.z),
