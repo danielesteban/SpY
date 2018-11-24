@@ -17,6 +17,7 @@
     "silent": true
   },
   "dependencies": {
+    "pathfinding": "^0.4.18",
     "stats.js": "^0.17.0",
     "three": "^0.98.0",
     "touches": "^1.2.2",

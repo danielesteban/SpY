@@ -64,14 +64,16 @@ class Doors extends Object3D {
     this.targetState = Doors.states.CLOSED;
   }
 
-  onAnimationTick({ delta }) {
+  onAnimationTick(animation) {
     const {
       animationScale,
       children,
       state,
       targetState,
     } = this;
+    this.callButton.onAnimationTick(animation);
     if (state === targetState) return;
+    const { delta } = animation;
     const animationStep = delta * 0.75;
     switch (targetState) {
       case Doors.states.OPEN:

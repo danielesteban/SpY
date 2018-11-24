@@ -37,7 +37,7 @@ export default ({ input, scene }) => {
           point.z += (Math.random() * 2) - 1;
           dude.actions.walk.timeScale = 0.8 + Math.random() * 0.4;
         }
-        dude.walkTo(point);
+        dude.walkTo([point.clone()]);
       });
     },
   };

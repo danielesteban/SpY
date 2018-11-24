@@ -143,16 +143,16 @@ class Actor extends SkinnedMesh {
       .play();
   }
 
-  walkTo(point, callback) {
+  walkTo(path, callback) {
     const { destinationMarker, position } = this;
-    const distance = position.distanceTo(point);
+    const distance = position.distanceTo(path[path.length - 1]);
     delete this.onDestinationCallback;
     if (distance < 0.25) {
       if (callback) callback();
       return;
     }
     this.setAnimation('walk');
-    this.destination = point.clone();
+    this.destination = path[path.length - 1];
     if (destinationMarker) {
       destinationMarker.position.copy(this.destination);
       destinationMarker.visible = true;
@@ -160,7 +160,7 @@ class Actor extends SkinnedMesh {
     if (callback) {
       this.onDestinationCallback = callback;
     }
-    this.faceTo(point);
+    this.faceTo(path[path.length - 1]);
   }
 
   faceTo(point) {
