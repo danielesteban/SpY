@@ -24,6 +24,8 @@ class Building extends Object3D {
       this.add(elevator);
       return elevator;
     });
+    const width = floors.reduce((width, layout) => Math.max(width, layout.split('').length * 4), 0);
+    this.heightmap = [...Array(6)].map(() => [...Array(width)].map(() => (0)));
     this.floors = floors.map((layout, floor) => {
       const rooms = layout.split('');
       const grid = [...Array(5)].map(() => [...Array(rooms.length * 4)].map(() => (1)));
@@ -49,21 +51,43 @@ class Building extends Object3D {
               isEdge,
               isLobby: floor === 0,
             });
+            for (let x = 0; x < 4; x += 1) {
+              for (let z = 0; z < 6; z += 1) {
+                if (z > 1) {
+                  this.heightmap[z][(room * 4) + x] = floor * 3;
+                } else if (hasElevator && x > 1 && x < 4) {
+                  this.heightmap[z][(room * 4) + x] = (floor + 1) * 3;
+                }
+              }
+              for (let y = 1; y < 5; y += 1) {
+                grid[y][(room * 4) + x] = 0;
+              }
+            }
             break;
         }
         mesh.position.set(room * 4, floor * 3, 0);
         this.add(mesh);
-        for (let y = 1; y < 5; y += 1) {
-          for (let x = (room * 4); x < ((room + 1) * 4); x += 1) {
-            grid[y][x] = 0;
-          }
-        }
       });
       const walkable = new Walkable(grid);
       walkable.position.set(-2, floor * 3, -3);
       this.add(walkable);
       return walkable;
     });
+  }
+
+  getHeight(x, z) {
+    const { heightmap } = this;
+    x = Math.floor(x + 2);
+    z = Math.floor(z + 4);
+    if (
+      x < 0
+      || x > heightmap[0].length - 1
+      || z < 0
+      || z > heightmap.length - 1
+    ) {
+      return 0;
+    }
+    return heightmap[z][x];
   }
 
   onAnimationTick(animation) {

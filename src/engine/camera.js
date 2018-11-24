@@ -44,14 +44,13 @@ class Camera extends PerspectiveCamera {
     if (secondary) {
       const sensitivity = 0.003;
       this.tilt -= movement.x * sensitivity;
-      this.tilt = Math.min(Math.max(this.tilt, Math.PI * -1.25), Math.PI * 0.25);
       this.pitch += movement.y * sensitivity;
       this.pitch = Math.min(Math.max(this.pitch, Math.PI * -0.45), Math.PI * 0.45);
       hasUpdated = true;
     }
     if (wheel) {
       const sensitivity = 0.006;
-      this.distance = Math.min(Math.max(this.distance + (wheel * sensitivity), 1), 8);
+      this.distance = Math.min(Math.max(this.distance + (wheel * sensitivity), 1), 16);
       hasUpdated = true;
     }
     if (hasUpdated) this.updateOrbit();

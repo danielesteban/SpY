@@ -38,6 +38,8 @@ export default ({ input, scene }) => {
     ],
   });
   scene.root.add(building);
+  scene.rain.position.x = building.heightmap[0].length * 0.5;
+  scene.rain.setHeightTest(building.getHeight.bind(building));
 
   /* Animation loop */
   const floor = 1;

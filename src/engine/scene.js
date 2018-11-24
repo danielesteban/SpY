@@ -38,7 +38,7 @@ class Scene {
     this.root = new Root();
     this.root.fog = new FogExp2(sky, 0.03);
     this.root.add(new AmbientLight(0x333333));
-    const light = new DirectionalLight(0xffffff, 0.8);
+    const light = new DirectionalLight(0xffffff, 0.6);
     light.position.set(1, 0.5, 1);
     this.root.add(light);
     const secondaryLight = new DirectionalLight(0xffffff, 0.4);
@@ -47,7 +47,8 @@ class Scene {
     this.root.add(this.camera.root);
     this.grid = new Grid({ background: new Color(0x333344) });
     this.root.add(this.grid);
-    this.root.add(new Rain());
+    this.rain = new Rain();
+    this.root.add(this.rain);
     this.starfield = new Starfield();
     this.root.add(this.starfield);
     this.vignette = new Vignette();
