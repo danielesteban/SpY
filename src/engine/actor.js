@@ -86,16 +86,16 @@ class Actor extends SkinnedMesh {
   onAnimationTick({ delta }) {
     const {
       actions: { walk: { timeScale: walkingSpeed } },
-      destination,
       destinationMarker,
       mixer,
       movementAux,
       position,
       rotationSpeed,
+      route,
       targetRotation,
     } = this;
     mixer.update(delta);
-    if (targetRotation) {
+    if (targetRotation !== undefined) {
       const rotationStep = delta * rotationSpeed;
       const rotationDelta = targetRotation - this.rotation.y;
       this.rotation.y += Math.min(
@@ -106,29 +106,36 @@ class Actor extends SkinnedMesh {
         rotationStep
       );
       if (Math.abs(rotationDelta) <= rotationStep) {
-        this.targetRotation = false;
+        delete this.targetRotation;
       }
     }
-    if (!destination) return;
-    const distance = position.distanceTo(destination);
+    if (!route) return;
+    const waypoint = route.path[route.current];
+    const distance = position.distanceTo(waypoint);
     const step = delta * 1.5 * walkingSpeed;
     position.add(
       movementAux
-        .copy(destination)
+        .copy(waypoint)
         .sub(position)
         .normalize()
         .multiplyScalar(Math.min(distance, step))
     );
-    if (distance <= step) {
-      this.setAnimation('idle');
-      this.destination = false;
-      if (destinationMarker) {
-        destinationMarker.visible = false;
-      }
-      if (this.onDestinationCallback) {
-        this.onDestinationCallback();
-        delete this.onDestinationCallback;
-      }
+    if (distance > step) {
+      return;
+    }
+    if (route.current < route.path.length - 1) {
+      route.current += 1;
+      this.faceTo(route.path[route.current]);
+      return;
+    }
+    this.setAnimation('idle');
+    delete this.route;
+    if (destinationMarker) {
+      destinationMarker.visible = false;
+    }
+    if (this.onDestinationCallback) {
+      this.onDestinationCallback();
+      delete this.onDestinationCallback;
     }
   }
 
@@ -143,7 +150,7 @@ class Actor extends SkinnedMesh {
       .play();
   }
 
-  walkTo(path, callback) {
+  walk(path, callback) {
     const { destinationMarker, position } = this;
     const distance = position.distanceTo(path[path.length - 1]);
     delete this.onDestinationCallback;
@@ -152,15 +159,18 @@ class Actor extends SkinnedMesh {
       return;
     }
     this.setAnimation('walk');
-    this.destination = path[path.length - 1];
+    this.route = {
+      current: 0,
+      path,
+    };
     if (destinationMarker) {
-      destinationMarker.position.copy(this.destination);
+      destinationMarker.position.copy(path[path.length - 1]);
       destinationMarker.visible = true;
     }
     if (callback) {
       this.onDestinationCallback = callback;
     }
-    this.faceTo(path[path.length - 1]);
+    this.faceTo(path[0]);
   }
 
   faceTo(point) {

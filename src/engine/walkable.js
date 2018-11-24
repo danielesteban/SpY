@@ -26,7 +26,9 @@ class Walkable extends Mesh {
         visible: false,
       })
     );
-    this.finder = new AStarFinder();
+    this.finder = new AStarFinder({
+      allowDiagonal: true,
+    });
     this.grid = new Grid(grid);
     this.grid.setWalkableAt(0, 1, true);
   }
@@ -35,7 +37,7 @@ class Walkable extends Mesh {
     const { grid, finder } = this;
     from = this.worldToGrid(from);
     to = this.worldToGrid(to);
-    return finder.findPath(from.x, from.z, to.x, to.z, grid.clone()).map(([x, z]) => (
+    return finder.findPath(from.x, from.z, to.x, to.z, grid.clone()).slice(1).map(([x, z]) => (
       this.localToWorld(new Vector3(x + 0.5, 0, z + 0.5))
     ));
   }

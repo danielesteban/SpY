@@ -43,12 +43,6 @@ export default ({ input, scene }) => {
 
   /* Animation loop */
   const floor = 1;
-  // const constraintToFloor = (point) => {
-  //   point.x = Math.min(Math.max(point.x, -1.5), 17.5);
-  //   point.y = floor * 3;
-  //   point.z = Math.min(Math.max(point.z, -1.5), 1.5);
-  //   return point;
-  // };
   scene.onAnimationTick = () => {
     const { camera } = scene;
     const pointer = input.getPointerFrame();
@@ -61,25 +55,28 @@ export default ({ input, scene }) => {
         const hit = raycaster.intersectObjects(building.buttons)[0];
         if (hit) {
           const { point, object: button } = hit;
-          const path = walkable.getPath(dude.position.clone(), point);
+          const onDestination = () => {
+            dude.faceTo(point);
+            if (button.tap()) {
+              setTimeout(() => {
+                setTimeout(() => (
+                  dude.say([
+                    'Crap!',
+                    "It's Broken!",
+                    'What a night...',
+                  ])
+                ), 500);
+                const aux = camera.position.clone();
+                camera.getWorldPosition(aux);
+                dude.faceTo(aux);
+              }, 1000);
+            }
+          };
+          const path = walkable.getPath(dude.position.clone(), point.clone());
           if (path.length) {
-            dude.walkTo(path, () => {
-              dude.faceTo(point);
-              if (button.tap()) {
-                setTimeout(() => {
-                  setTimeout(() => (
-                    dude.say([
-                      'Crap!',
-                      "It's Broken!",
-                      'What a night...',
-                    ])
-                  ), 500);
-                  const aux = camera.position.clone();
-                  camera.getWorldPosition(aux);
-                  dude.faceTo(aux);
-                }, 1000);
-              }
-            });
+            dude.walk(path, onDestination);
+          } else {
+            onDestination();
           }
           return;
         }
@@ -89,7 +86,7 @@ export default ({ input, scene }) => {
         if (hit) {
           const path = walkable.getPath(dude.position.clone(), hit.point);
           if (path.length) {
-            dude.walkTo(path);
+            dude.walk(path);
           }
         }
       }

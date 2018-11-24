@@ -28,7 +28,7 @@ class Building extends Object3D {
     this.heightmap = [...Array(6)].map(() => [...Array(width)].map(() => (0)));
     this.floors = floors.map((layout, floor) => {
       const rooms = layout.split('');
-      const grid = [...Array(5)].map(() => [...Array(rooms.length * 4)].map(() => (1)));
+      const grid = [...Array(4)].map(() => [...Array(rooms.length * 4)].map(() => (1)));
       rooms.forEach((type, room) => {
         let isEdge = false;
         if (room === 0) isEdge = 'left';
@@ -59,7 +59,7 @@ class Building extends Object3D {
                   this.heightmap[z][(room * 4) + x] = (floor + 1) * 3;
                 }
               }
-              for (let y = 1; y < 5; y += 1) {
+              for (let y = 0; y < 4; y += 1) {
                 grid[y][(room * 4) + x] = 0;
               }
             }
@@ -69,7 +69,7 @@ class Building extends Object3D {
         this.add(mesh);
       });
       const walkable = new Walkable(grid);
-      walkable.position.set(-2, floor * 3, -3);
+      walkable.position.set(-2, floor * 3, -2);
       this.add(walkable);
       return walkable;
     });
