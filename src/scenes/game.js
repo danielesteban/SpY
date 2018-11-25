@@ -66,7 +66,7 @@ export default ({ input, scene }) => {
     do {
       spawn = {
         x: Math.floor(Math.random() * grid.width),
-        z: Math.floor(Math.random() * grid.height - 1),
+        z: Math.floor(Math.random() * (grid.height - 1)),
       };
     } while (!grid.isWalkableAt(spawn.x, spawn.z));
     building.addToFloorGrid({
