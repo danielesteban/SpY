@@ -57,10 +57,12 @@ class Doors extends Object3D {
   }
 
   open() {
+    this.state = Doors.states.MOVING;
     this.targetState = Doors.states.OPEN;
   }
 
   close() {
+    this.state = Doors.states.MOVING;
     this.targetState = Doors.states.CLOSED;
   }
 
@@ -86,7 +88,7 @@ class Doors extends Object3D {
       targetState,
     } = this;
     this.callButton.onAnimationTick(animation);
-    if (state === targetState) return;
+    if (state !== Doors.states.MOVING) return;
     const { delta } = animation;
     const animationStep = delta * 0.75;
     switch (targetState) {
@@ -115,6 +117,7 @@ class Doors extends Object3D {
 Doors.states = {
   OPEN: 0,
   CLOSED: 1,
+  MOVING: 2,
 };
 
 export default Doors;

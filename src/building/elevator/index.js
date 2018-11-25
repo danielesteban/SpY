@@ -51,9 +51,10 @@ class Elevator extends Object3D {
     if (route) {
       route.step += animation.delta * 0.75;
       if (route.step >= 1) {
-        delete this.route;
+        route.step = 1;
+        doors[route.to].open();
         this.floor = route.to;
-        doors[this.floor].open();
+        delete this.route;
       }
       const step = ThreeMath.smoothstep(route.step, 0, 1) * route.travel;
       cabin.position.y = (route.from + step) * Elevator.scale.y;
