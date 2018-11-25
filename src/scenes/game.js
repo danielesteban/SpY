@@ -43,7 +43,7 @@ export default ({ input, scene }) => {
   scene.rain.setHeightTest(building.getHeight.bind(building));
 
   /* Spawn some dudes */
-  [...Array(6)].forEach(() => {
+  [...Array(8)].forEach(() => {
     const dude = new Dude({
       arms: 0x222222,
       eyes: 0x999999 * Math.random(),
@@ -51,7 +51,7 @@ export default ({ input, scene }) => {
       legs: 0x222222,
       torso: 0x999999 * Math.random(),
     });
-    const floor = Math.floor(Math.random() * 3);
+    const floor = Math.floor(Math.random() * 2);
     const { grid } = building.floors[floor];
     let spawn;
     do {

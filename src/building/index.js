@@ -113,8 +113,12 @@ class Building extends Object3D {
   }
 
   onAnimationTick(animation) {
-    const { elevators } = this;
-    elevators.forEach(elevator => elevator.onAnimationTick(animation));
+    const { children } = this;
+    children.forEach((child) => {
+      if (child.onAnimationTick) {
+        child.onAnimationTick(animation);
+      }
+    });
   }
 }
 
