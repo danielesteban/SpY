@@ -148,6 +148,7 @@ export default ({ input, scene }) => {
                       .copy(elevator.cabin.position)
                       .add(elevator.position);
                     cabin.z += 1;
+                    elevator.removePassenger(player);
                     player.walk([cabin], () => {
                       floor = elevator.origin.y + target;
                       input.isEnabled = true;
