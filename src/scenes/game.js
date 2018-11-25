@@ -104,7 +104,7 @@ export default ({ input, scene }) => {
         }
       }
       {
-        const hit = raycaster.intersectObjects(building.buttons)[0];
+        const hit = raycaster.intersectObjects(walkable.buttons)[0];
         if (hit) {
           const { point, object: button } = hit;
           const onDestination = () => {

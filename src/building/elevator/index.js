@@ -13,7 +13,6 @@ class Elevator extends Object3D {
     origin,
   }) {
     super();
-    this.buttons = [];
     this.floors = floors;
     this.origin = origin;
     this.animationStart = Math.random() * 512;
@@ -32,7 +31,6 @@ class Elevator extends Object3D {
         scale: Elevator.scale,
       });
       doors.position.y = floor * Elevator.scale.y;
-      this.buttons.push(doors.callButton);
       this.add(doors);
       return doors;
     });

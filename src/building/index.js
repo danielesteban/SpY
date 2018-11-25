@@ -10,7 +10,6 @@ class Building extends Object3D {
     floors,
   }) {
     super();
-    this.buttons = [];
     this.elevators = elevators.map(({
       floors,
       origin,
@@ -18,16 +17,13 @@ class Building extends Object3D {
       const elevator = new Elevator({ floors, origin });
       elevator.position.x = origin.x * 4;
       elevator.position.y = origin.y * 3;
-      this.buttons = [
-        ...this.buttons,
-        ...elevator.buttons,
-      ];
       this.add(elevator);
       return elevator;
     });
     const width = floors.reduce((width, layout) => Math.max(width, layout.split('').length * 4), 0);
     this.heightmap = [...Array(6)].map(() => [...Array(width)].map(() => (0)));
     this.floors = floors.map((layout, floor) => {
+      const buttons = [];
       const rooms = layout.split('');
       const grid = [...Array(4)].map(() => [...Array(rooms.length * 4)].map(() => (1)));
       rooms.forEach((type, room) => {
@@ -44,7 +40,7 @@ class Building extends Object3D {
             if (room === 0 || ~[' ', '_'].indexOf(rooms[room - 1])) isEdge = 'left';
             else if (room === rooms.length - 1 || ~[' ', '_'].indexOf(rooms[room + 1])) isEdge = 'right';
             const hasCeiling = floor < floors.length - 1 && [' ', '_'].indexOf(floors[floor + 1].split('')[room]) === -1;
-            const hasElevator = (
+            const elevatorIndex = (
               this.elevators.findIndex(({
                 floors,
                 origin,
@@ -53,7 +49,12 @@ class Building extends Object3D {
                 && origin.y <= floor
                 && origin.y + floors > floor
               ))
-            ) !== -1;
+            );
+            const hasElevator = ~elevatorIndex;
+            if (hasElevator) {
+              const elevator = this.elevators[elevatorIndex];
+              buttons.push(elevator.doors[floor - elevator.origin.y].callButton);
+            }
             mesh = new Hallway({
               hasCeiling,
               hasElevator,
@@ -79,6 +80,7 @@ class Building extends Object3D {
         this.add(mesh);
       });
       const walkable = new Walkable(grid);
+      walkable.buttons = buttons;
       walkable.position.set(-2, floor * 3, -2);
       this.add(walkable);
       return walkable;
