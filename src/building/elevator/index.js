@@ -68,7 +68,7 @@ class Elevator extends Object3D {
       route,
     } = this;
     if (route) {
-      route.step += animation.delta * 0.5;
+      route.step += (animation.delta * 0.5) / Math.abs(route.travel);
       if (route.step >= 1) {
         route.step = 1;
         doors[route.to].open();

@@ -22,11 +22,11 @@ export default ({ input, scene }) => {
   const building = new Building({
     elevators: [
       {
-        floors: 2,
+        floors: 4,
         origin: { x: 2, y: 0 },
       },
       {
-        floors: 3,
+        floors: 4,
         origin: { x: 4, y: 1 },
       },
     ],
