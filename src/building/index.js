@@ -65,7 +65,7 @@ class Building extends Object3D {
               for (let z = 0; z < 6; z += 1) {
                 if (z > 1) {
                   this.heightmap[z][(room * 4) + x] = floor * 3;
-                } else if (hasElevator && x > 1 && x < 4) {
+                } else if (hasElevator && x > 0 && x < 3) {
                   this.heightmap[z][(room * 4) + x] = (floor + 1) * 3;
                 }
               }
