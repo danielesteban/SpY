@@ -1,4 +1,5 @@
 import {
+  Math as ThreeMath,
   Object3D,
   Vector3,
 } from 'three';
@@ -42,25 +43,38 @@ class Elevator extends Object3D {
     });
     this.add(this.cabin);
     this.position.z = -1.5 * Elevator.scale.z;
+    this.floor = 0;
   }
 
   onAnimationTick(animation) {
-    // const { time } = animation;
-    // const { animationStart, floors, cabin: { position: cabin } } = this;
-    // const mid = (floors - 1) * Elevator.scale.y * 0.5;
-    // cabin.y = mid + (Math.sin((animationStart + time) * 0.5) * mid);
-    this.doors.forEach(door => door.onAnimationTick(animation));
+    const { cabin, doors, route } = this;
+    if (route) {
+      route.step += animation.delta * 0.75;
+      if (route.step >= 1) {
+        delete this.route;
+        this.floor = route.to;
+        doors[this.floor].open();
+      }
+      const step = ThreeMath.smoothstep(route.step, 0, 1) * route.travel;
+      cabin.position.y = (route.from + step) * Elevator.scale.y;
+    }
+    doors.forEach(door => door.onAnimationTick(animation));
   }
 
   onCall(floor) {
-    const { doors } = this;
-    // Debug: Door toggle testing
-    if (doors[floor].state === Doors.states.OPEN) {
-      doors[floor].close();
-      return false;
+    const { route, doors } = this;
+    if (route) return;
+    if (floor === this.floor) {
+      doors[floor].toggle();
+      return;
     }
-    doors[floor].open();
-    return true;
+    doors[this.floor].close();
+    this.route = {
+      from: this.floor,
+      to: floor,
+      travel: floor - this.floor,
+      step: 0,
+    };
   }
 }
 

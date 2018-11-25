@@ -109,20 +109,7 @@ export default ({ input, scene }) => {
           const { point, object: button } = hit;
           const onDestination = () => {
             player.faceTo(point);
-            if (button.tap()) {
-              setTimeout(() => {
-                setTimeout(() => (
-                  player.say([
-                    'Crap!',
-                    "It's Broken!",
-                    'What a night...',
-                  ])
-                ), 500);
-                const aux = camera.position.clone();
-                camera.getWorldPosition(aux);
-                player.faceTo(aux);
-              }, 1000);
-            }
+            button.tap();
           };
           const path = walkable.getPath(player.position.clone(), point.clone());
           if (path.length > 1) {

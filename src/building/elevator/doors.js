@@ -64,6 +64,20 @@ class Doors extends Object3D {
     this.targetState = Doors.states.CLOSED;
   }
 
+  toggle() {
+    const { state } = this;
+    switch (state) {
+      case Doors.states.OPEN:
+        this.close();
+        break;
+      case Doors.states.CLOSED:
+        this.open();
+        break;
+      default:
+        break;
+    }
+  }
+
   onAnimationTick(animation) {
     const {
       animationScale,
