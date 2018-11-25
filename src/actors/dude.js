@@ -41,6 +41,17 @@ Dude.geometry = (palette) => {
   head.faces.forEach((face) => {
     face.color.set(palette.head);
   });
+  if (palette.hat) {
+    const hat = new CylinderGeometry(0.3, 0.3, 0.05);
+    const top = new CylinderGeometry(0.2, 0.2, 0.3);
+    top.translate(0, 0.15, 0);
+    hat.merge(top);
+    hat.translate(0, 0.3, 0);
+    hat.faces.forEach((face) => {
+      face.color.set(palette.hat);
+    });
+    head.merge(hat);
+  }
   const leftEye = new SphereGeometry(0.05);
   leftEye.faces.forEach((face) => {
     face.color.set(palette.eyes);

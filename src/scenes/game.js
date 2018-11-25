@@ -47,6 +47,7 @@ export default ({ input, scene }) => {
     const dude = new Dude({
       arms: 0x222222,
       eyes: 0x999999 * Math.random(),
+      hat: Math.random() > 0.5 ? (0x999999 * Math.random()) : false,
       head: 0x999999 * Math.random(),
       legs: 0x222222,
       torso: 0x999999 * Math.random(),

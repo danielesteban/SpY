@@ -8,6 +8,7 @@ export default ({ input, scene }) => {
         arms: 0x222222,
         eyes: i === 0 ? 0x990000 : (0x999999 * Math.random()),
         head: i === 0 ? 0x333333 : (0x999999 * Math.random()),
+        hat: Math.random() > 0.5 ? (0x999999 * Math.random()) : false,
         legs: 0x222222,
         torso: i === 0 ? 0x990000 : (0x999999 * Math.random()),
       });
