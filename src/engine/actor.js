@@ -87,8 +87,10 @@ class Actor extends SkinnedMesh {
     this.collisionMesh = new Mesh(
       collisionGeometry,
       new MeshBasicMaterial({
+        opacity: 0.1,
         transparent: true,
         visible: false,
+        wireframe: true,
       })
     );
     this.add(this.collisionMesh);
