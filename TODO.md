@@ -14,7 +14,7 @@ TO DO
  * [X] Talk bubbles
  * [ ] Add more detail to the hallway mesh
  * [ ] Another dude model
- * [ ] 2D pathfinding
+ * [X] 2D pathfinding
  * [ ] Improve orbit camera constraints
  * [X] Some noir background music like [this](https://www.youtube.com/watch?v=bSLF0Q8B0f0)
  * [ ] Make a short video
