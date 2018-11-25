@@ -21,8 +21,7 @@ export default ({ input, scene }) => {
       const pointer = input.getPointerFrame();
       camera.processInput(pointer);
       if (pointer.primaryUp) {
-        const { raycaster } = pointer;
-        raycaster.setFromCamera(pointer.normalized, camera);
+        const raycaster = camera.getRaycaster(pointer.normalized);
         const hit = raycaster.intersectObject(grid)[0];
         if (!hit) return;
         pack.walkTo(hit.point);

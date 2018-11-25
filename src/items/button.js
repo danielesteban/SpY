@@ -8,8 +8,8 @@ import {
 
 class Button extends Mesh {
   constructor({ onTap, position }) {
-    const geometry = new BoxBufferGeometry(0.2, 0.1, 0.1);
-    geometry.translate(0, 0, 0.049);
+    const geometry = new BoxBufferGeometry(0.2, 0.15, 0.08);
+    geometry.translate(0, 0, 0.039);
     super(
       geometry,
       new MeshPhongMaterial({
@@ -17,7 +17,7 @@ class Button extends Mesh {
       })
     );
     this.animation = 0;
-    this.animationVector = new Vector3(0, 0, -0.05);
+    this.animationVector = new Vector3(0, 0, -0.04);
     this.onTap = onTap;
     this.position.copy(position);
     this.origin = position.clone();

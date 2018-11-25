@@ -3,7 +3,7 @@ import Building from '@/building';
 import Marker from '@/items/marker';
 
 export default ({ input, scene }) => {
-  /* Spawn player */
+  // Spawn player
   const player = new Dude({
     arms: 0x222222,
     eyes: 0x990000,
@@ -15,10 +15,9 @@ export default ({ input, scene }) => {
   player.destinationMarker = new Marker();
   scene.root.add(player);
   scene.root.add(player.destinationMarker);
-  scene.camera.maxHeight = 2.9;
   scene.camera.target = player.position;
 
-  /* Spawn test building */
+  // Spawn test building
   const building = new Building({
     elevators: [
       {
@@ -39,10 +38,14 @@ export default ({ input, scene }) => {
     ].reverse(),
   });
   scene.root.add(building);
+  scene.camera.testMeshes = building.floors.reduce((floors, { meshes }) => ([
+    ...floors,
+    ...meshes,
+  ]), []);
   scene.rain.position.x = building.heightmap[0].length * 0.5;
   scene.rain.setHeightTest(building.getHeight.bind(building));
 
-  /* Spawn some dudes */
+  // Spawn some dudes
   const dudes = [...Array(4)].map(() => {
     const dude = new Dude({
       arms: 0x222222,
@@ -53,7 +56,7 @@ export default ({ input, scene }) => {
       torso: 0x999999 * Math.random(),
     });
     const floor = Math.floor(Math.random() * 2);
-    const { grid } = building.floors[floor];
+    const { walkable: { grid } } = building.floors[floor];
     let spawn;
     do {
       spawn = {
@@ -76,64 +79,67 @@ export default ({ input, scene }) => {
     return floors;
   }, {});
 
-  /* Animation loop */
+  // Animation loop
   const floor = 1;
   scene.onAnimationTick = () => {
     const { camera } = scene;
+    const { buttons, walkable } = building.floors[floor];
     const pointer = input.getPointerFrame();
     camera.processInput(pointer);
-    if (pointer.primaryUp) {
-      const { raycaster } = pointer;
-      raycaster.setFromCamera(pointer.normalized, camera);
-      const walkable = building.floors[floor];
-      {
-        const hit = raycaster.intersectObjects(dudes[floor])[0];
-        if (hit) {
-          const { object: { parent: dude } } = hit;
-          const lines = [
-            'Fuck You',
-            'Go away',
-            'Leave me alone',
-          ];
-          const onDestination = () => {
-            player.faceTo(dude.position);
-            setTimeout(() => (
-              dude.say([lines[Math.floor(Math.random() * lines.length)]])
-            ), 500);
-          };
-          const path = walkable.getPath(player.position.clone(), dude.position.clone());
-          if (path.length > 1) {
-            player.walk(path.slice(1), onDestination);
-          } else if (path.length) {
-            onDestination();
-          }
-          return;
+    if (!pointer.primaryUp) {
+      return;
+    }
+    const raycaster = camera.getRaycaster(pointer.normalized);
+    {
+      // Dudes interaction
+      const hit = raycaster.intersectObjects(dudes[floor])[0];
+      if (hit) {
+        const { object: { parent: dude } } = hit;
+        const lines = [
+          'Fuck You',
+          'Go away',
+          'Leave me alone',
+        ];
+        const onDestination = () => {
+          player.faceTo(dude.position);
+          setTimeout(() => (
+            dude.say([lines[Math.floor(Math.random() * lines.length)]])
+          ), 500);
+        };
+        const path = walkable.getPath(player.position.clone(), dude.position.clone());
+        if (path.length > 1) {
+          player.walk(path.slice(1), onDestination);
+        } else if (path.length) {
+          onDestination();
         }
+        return;
       }
-      {
-        const hit = raycaster.intersectObjects(walkable.buttons)[0];
-        if (hit) {
-          const { point, object: button } = hit;
-          const onDestination = () => {
-            player.faceTo(point);
-            button.tap();
-          };
-          const path = walkable.getPath(player.position.clone(), point.clone());
-          if (path.length > 1) {
-            player.walk(path.slice(1), onDestination);
-          } else if (path.length) {
-            onDestination();
-          }
-          return;
+    }
+    {
+      // Button tapping
+      const hit = raycaster.intersectObjects(buttons)[0];
+      if (hit) {
+        const { point, object: button } = hit;
+        const onDestination = () => {
+          player.faceTo(point);
+          button.tap();
+        };
+        const path = walkable.getPath(player.position.clone(), point.clone());
+        if (path.length > 1) {
+          player.walk(path.slice(1), onDestination);
+        } else if (path.length) {
+          onDestination();
         }
+        return;
       }
-      {
-        const hit = raycaster.intersectObject(walkable)[0];
-        if (hit) {
-          const path = walkable.getPath(player.position.clone(), hit.point);
-          if (path.length > 1) {
-            player.walk(path.slice(1));
-          }
+    }
+    {
+      // Walk
+      const hit = raycaster.intersectObject(walkable)[0];
+      if (hit) {
+        const path = walkable.getPath(player.position.clone(), hit.point);
+        if (path.length > 1) {
+          player.walk(path.slice(1));
         }
       }
     }

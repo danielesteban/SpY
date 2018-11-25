@@ -1,6 +1,7 @@
 import {
   Object3D,
   PerspectiveCamera,
+  Raycaster,
   Vector3,
 } from 'three';
 
@@ -8,15 +9,21 @@ class Camera extends PerspectiveCamera {
   constructor() {
     super(60, 1, 0.1, 2048);
     this.distance = 5;
-    this.maxHeight = Infinity;
-    this.offset = 1.2;
+    this.offset = new Vector3(0, 1.2, 0);
     this.tilt = Math.PI * -0.45;
     this.pitch = Math.PI * 0.1;
     this.speed = 1.25;
     this.step = new Vector3();
+    this.raycaster = new Raycaster();
     this.root = new Object3D();
     this.root.add(this);
     this.updateOrbit();
+  }
+
+  getRaycaster(pointer) {
+    const { raycaster } = this;
+    raycaster.setFromCamera(pointer, this);
+    return raycaster;
   }
 
   onAnimationTick({ delta }) {
@@ -59,24 +66,35 @@ class Camera extends PerspectiveCamera {
 
   updateOrbit() {
     const {
-      distance,
-      maxHeight,
       offset,
       pitch,
       position,
+      raycaster,
       root,
+      testMeshes,
       tilt,
     } = this;
+    let { distance } = this;
     position.set(
       Math.cos(tilt) * Math.cos(pitch),
       Math.sin(pitch),
       Math.sin(-tilt) * Math.cos(pitch)
-    )
-      .normalize()
-      .multiplyScalar(distance);
-    position.y = Math.min(Math.max(position.y, 0.1 - offset), maxHeight - offset);
-    this.lookAt(root.position);
-    position.y += offset;
+    ).normalize();
+    raycaster.ray.origin
+      .copy(root.position)
+      .add(offset);
+    if (testMeshes) {
+      raycaster.ray.direction
+        .copy(position);
+      const hit = raycaster.intersectObjects(testMeshes)[0];
+      if (hit) {
+        distance = hit.distance - 0.25;
+      }
+    }
+    position
+      .multiplyScalar(distance)
+      .add(offset);
+    this.lookAt(raycaster.ray.origin);
   }
 }
 

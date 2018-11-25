@@ -1,4 +1,4 @@
-import { Raycaster, Vector2 } from 'three';
+import { Vector2 } from 'three';
 import Touches from 'touches';
 import { addWheelListener } from 'wheel';
 
@@ -12,7 +12,6 @@ class Input {
       movement: { x: 0, y: 0 },
       normalized: new Vector2(0, 0),
       last: new Vector2(0, 0),
-      raycaster: new Raycaster(),
       wheel: 0,
     };
     this.touches = Touches(window, {

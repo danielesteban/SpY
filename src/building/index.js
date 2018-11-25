@@ -24,6 +24,7 @@ class Building extends Object3D {
     this.heightmap = [...Array(6)].map(() => [...Array(width)].map(() => (0)));
     this.floors = floors.map((layout, floor) => {
       const buttons = [];
+      const meshes = [];
       const rooms = layout.split('');
       const grid = [...Array(4)].map(() => [...Array(rooms.length * 4)].map(() => (1)));
       rooms.forEach((type, room) => {
@@ -53,7 +54,9 @@ class Building extends Object3D {
             const hasElevator = ~elevatorIndex;
             if (hasElevator) {
               const elevator = this.elevators[elevatorIndex];
-              buttons.push(elevator.doors[floor - elevator.origin.y].callButton);
+              const doors = elevator.doors[floor - elevator.origin.y];
+              buttons.push(doors.callButton);
+              meshes.push(...doors.children, elevator.cabin, elevator.shaft);
             }
             mesh = new Hallway({
               hasCeiling,
@@ -78,12 +81,16 @@ class Building extends Object3D {
         }
         mesh.position.set(room * 4, floor * 3, 0);
         this.add(mesh);
+        meshes.push(mesh);
       });
       const walkable = new Walkable(grid);
-      walkable.buttons = buttons;
       walkable.position.set(-2, floor * 3, -2);
       this.add(walkable);
-      return walkable;
+      return {
+        buttons,
+        meshes,
+        walkable,
+      };
     });
   }
 
@@ -93,7 +100,7 @@ class Building extends Object3D {
     x,
     z,
   }) {
-    const { floors: { [floor]: walkable } } = this;
+    const { floors: { [floor]: { walkable } } } = this;
     walkable.grid.setWalkableAt(x, z, false);
     mesh.position.set(x + 0.5, 0, z + 0.5).add(walkable.position);
     this.add(mesh);
