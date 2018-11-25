@@ -34,8 +34,8 @@ export default ({ input, scene }) => {
       '  ...',
       ' .._..',
       ' .._..',
-      ' .....',
-      '.......',
+      '......',
+      '......',
     ].reverse(),
   });
   scene.root.add(building);
