@@ -92,7 +92,7 @@ export default ({ input, scene }) => {
             player.faceTo(dude.position);
             setTimeout(() => (
               dude.say([lines[Math.floor(Math.random() * lines.length)]])
-            ), 1000);
+            ), 500);
           };
           const path = walkable.getPath(player.position.clone(), dude.position.clone());
           if (path.length > 1) {

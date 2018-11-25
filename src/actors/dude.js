@@ -28,7 +28,7 @@ class Dude extends Actor {
 Dude.bones = {
   hip: new Vector3(0, 0.5, 0),
   torso: new Vector3(0, 0, 0),
-  head: new Vector3(0, 0.5, 0),
+  head: new Vector3(0, 0.49, 0),
   leftArm: new Vector3(-0.15, 0.475, 0),
   rightArm: new Vector3(0.15, 0.475, 0),
   leftLeg: new Vector3(-0.075, 0, 0),
