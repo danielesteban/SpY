@@ -11,7 +11,7 @@ class GridMaterial extends ShaderMaterial {
     subdivisions = 10,
     ...rest
   } = {}) {
-    const vertexShader = ShaderLib.phong.vertexShader.replace(
+    const vertexShader = ShaderLib.lambert.vertexShader.replace(
       '#include <clipping_planes_pars_vertex>',
       [
         '#include <clipping_planes_pars_vertex>',
@@ -26,7 +26,7 @@ class GridMaterial extends ShaderMaterial {
     );
     const primaryGrid = 1 / size;
     const secondaryGrid = primaryGrid * subdivisions;
-    const fragmentShader = ShaderLib.phong.fragmentShader.replace(
+    const fragmentShader = ShaderLib.lambert.fragmentShader.replace(
       '#include <clipping_planes_pars_fragment>',
       [
         '#include <clipping_planes_pars_fragment>',
@@ -48,7 +48,7 @@ class GridMaterial extends ShaderMaterial {
     );
     super({
       name: `grid-material-${size}-${subdivisions}`,
-      uniforms: UniformsUtils.clone(ShaderLib.phong.uniforms),
+      uniforms: UniformsUtils.clone(ShaderLib.lambert.uniforms),
       fragmentShader,
       vertexShader,
       extensions: { derivatives: true },
