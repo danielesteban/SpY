@@ -1,6 +1,7 @@
 import { Object3D } from 'three';
 import Elevator from './elevator';
 import Hallway from './hallway';
+import Road from './road';
 import Wall from './wall';
 import Walkable from '@/engine/walkable';
 
@@ -95,6 +96,8 @@ class Building extends Object3D {
         walkable,
       };
     });
+    this.road = new Road();
+    this.add(this.road);
   }
 
   addToFloorGrid({

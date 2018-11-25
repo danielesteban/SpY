@@ -31,7 +31,6 @@ class Walkable extends Mesh {
       dontCrossCorners: true,
     });
     this.grid = new Grid(grid);
-    this.grid.setWalkableAt(0, 1, true);
   }
 
   getPath(from, to) {
