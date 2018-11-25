@@ -43,6 +43,7 @@ class Actor extends SkinnedMesh {
   }
 
   constructor({
+    bonesOrigin,
     collisionGeometry,
     geometry,
     material,
@@ -74,6 +75,9 @@ class Actor extends SkinnedMesh {
       leftLeg,
       rightLeg,
     ]));
+    Object.keys(bonesOrigin).forEach((bone) => {
+      this.skeleton.bones[Actor.Bones[bone]].position.copy(bonesOrigin[bone]);
+    });
     this.mixer = new AnimationMixer(this);
     this.actions = Object.keys(Actor.animations).reduce((actions, action) => ({
       ...actions,

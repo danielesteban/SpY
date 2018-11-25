@@ -1,4 +1,5 @@
 import Dude from '@/actors/dude';
+import ThiccBoi from '@/actors/thiccboi';
 import Building from '@/building';
 import ElevatorUI from '@/ui/elevator';
 import Marker from '@/items/marker';
@@ -48,8 +49,10 @@ export default ({ input, scene }) => {
   scene.rain.setHeightTest(building.getHeight.bind(building));
 
   // Spawn some dudes
-  const dudes = [...Array(4)].map(() => {
-    const dude = new Dude({
+  const actors = [Dude, ThiccBoi, ThiccBoi];
+  const dudes = [...Array(building.floors.length * actors.length)].map(() => {
+    const Actor = actors[Math.floor(Math.random() * actors.length)];
+    const dude = new Actor({
       arms: 0x222222,
       eyes: 0x999999 * Math.random(),
       hat: Math.random() > 0.5 ? (0x999999 * Math.random()) : false,
@@ -57,7 +60,7 @@ export default ({ input, scene }) => {
       legs: 0x222222,
       torso: 0x999999 * Math.random(),
     });
-    const floor = Math.floor(Math.random() * 2);
+    const floor = Math.floor(Math.random() * building.floors.length);
     const { walkable: { grid } } = building.floors[floor];
     let spawn;
     do {
