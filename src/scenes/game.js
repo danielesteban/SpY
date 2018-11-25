@@ -23,7 +23,7 @@ export default ({ input, scene }) => {
     elevators: [
       {
         floors: 2,
-        origin: { x: 1, y: 0 },
+        origin: { x: 2, y: 0 },
       },
       {
         floors: 3,
@@ -33,9 +33,9 @@ export default ({ input, scene }) => {
     floors: [
       '  ...',
       ' .._..',
-      ' .._..',
+      '..._..',
       '......',
-      '......',
+      ' ....',
     ].reverse(),
   });
   scene.root.add(building);
