@@ -85,6 +85,18 @@ class Building extends Object3D {
     });
   }
 
+  addToFloorGrid({
+    floor,
+    mesh,
+    x,
+    z,
+  }) {
+    const { floors: { [floor]: walkable } } = this;
+    walkable.grid.setWalkableAt(x, z, false);
+    mesh.position.set(x + 0.5, 0, z + 0.5).add(walkable.position);
+    this.add(mesh);
+  }
+
   getHeight(x, z) {
     const { heightmap } = this;
     x = Math.floor(x + 2);

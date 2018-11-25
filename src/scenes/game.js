@@ -42,6 +42,31 @@ export default ({ input, scene }) => {
   scene.rain.position.x = building.heightmap[0].length * 0.5;
   scene.rain.setHeightTest(building.getHeight.bind(building));
 
+  /* Spawn some dudes */
+  [...Array(6)].forEach(() => {
+    const dude = new Dude({
+      arms: 0x222222,
+      eyes: 0x999999 * Math.random(),
+      head: 0x999999 * Math.random(),
+      legs: 0x222222,
+      torso: 0x999999 * Math.random(),
+    });
+    const floor = Math.floor(Math.random() * 3);
+    const { grid } = building.floors[floor];
+    let spawn;
+    do {
+      spawn = {
+        x: Math.floor(Math.random() * building.floors[floor].grid.width),
+        z: Math.floor(Math.random() * building.floors[floor].grid.height),
+      };
+    } while (!grid.isWalkableAt(spawn.x, spawn.z));
+    building.addToFloorGrid({
+      floor,
+      mesh: dude,
+      ...spawn,
+    });
+  });
+
   /* Animation loop */
   const floor = 1;
   scene.onAnimationTick = () => {

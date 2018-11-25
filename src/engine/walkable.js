@@ -28,6 +28,7 @@ class Walkable extends Mesh {
     );
     this.finder = new AStarFinder({
       allowDiagonal: true,
+      dontCrossCorners: true,
     });
     this.grid = new Grid(grid);
     this.grid.setWalkableAt(0, 1, true);
