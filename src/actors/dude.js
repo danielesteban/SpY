@@ -1,5 +1,6 @@
 import {
   CylinderGeometry,
+  CylinderBufferGeometry,
   MeshPhongMaterial,
   SphereGeometry,
   Vector3,
@@ -10,6 +11,10 @@ import Actor from '@/engine/actor';
 class Dude extends Actor {
   constructor(palette) {
     super({
+      collisionGeometry: (
+        (new CylinderBufferGeometry(0.25, 0.25, 1.4))
+          .translate(0, 0.7, 0)
+      ),
       geometry: Dude.geometry(palette),
       material: Dude.material,
     });

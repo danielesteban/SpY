@@ -5,6 +5,8 @@ import {
   BufferGeometry,
   Euler,
   Geometry,
+  Mesh,
+  MeshBasicMaterial,
   QuaternionKeyframeTrack,
   Quaternion,
   SkinnedMesh,
@@ -41,6 +43,7 @@ class Actor extends SkinnedMesh {
   }
 
   constructor({
+    collisionGeometry,
     geometry,
     material,
   }) {
@@ -81,6 +84,14 @@ class Actor extends SkinnedMesh {
     this.actions.idle.play();
     this.rotationAux = new Vector2();
     this.movementAux = new Vector3();
+    this.collisionMesh = new Mesh(
+      collisionGeometry,
+      new MeshBasicMaterial({
+        transparent: true,
+        visible: false,
+      })
+    );
+    this.add(this.collisionMesh);
   }
 
   onAnimationTick({ delta }) {
