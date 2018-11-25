@@ -24,6 +24,7 @@ class Camera extends PerspectiveCamera {
   getRaycaster(pointer) {
     const { raycaster } = this;
     raycaster.setFromCamera(pointer, this);
+    raycaster.far = Infinity;
     return raycaster;
   }
 
@@ -88,6 +89,7 @@ class Camera extends PerspectiveCamera {
     if (testMeshes) {
       raycaster.ray.direction
         .copy(position);
+      raycaster.far = distance;
       const hit = raycaster.intersectObjects(testMeshes)[0];
       if (hit) {
         distance = hit.distance - 0.25;
