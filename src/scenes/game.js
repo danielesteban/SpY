@@ -1,5 +1,6 @@
 import Dude from '@/actors/dude';
 import Building from '@/building';
+import ElevatorUI from '@/ui/elevator';
 import Marker from '@/items/marker';
 
 export default ({ input, scene }) => {
@@ -11,7 +12,7 @@ export default ({ input, scene }) => {
     legs: 0x222222,
     torso: 0x990000,
   });
-  player.position.set(6, 3, 0);
+  player.position.set(6, 0, 0);
   player.destinationMarker = new Marker();
   scene.root.add(player);
   scene.root.add(player.destinationMarker);
@@ -80,11 +81,13 @@ export default ({ input, scene }) => {
     return floors;
   }, {});
 
+  const elevatorUI = new ElevatorUI();
+
   // Animation loop
-  const floor = 1;
+  const floor = 0;
   scene.onAnimationTick = () => {
     const { camera } = scene;
-    const { buttons, walkable } = building.floors[floor];
+    const { buttons, elevators, walkable } = building.floors[floor];
     const pointer = input.getPointerFrame();
     camera.processInput(pointer);
     if (!pointer.primaryUp) {
@@ -93,7 +96,7 @@ export default ({ input, scene }) => {
     const raycaster = camera.getRaycaster(pointer.normalized);
     {
       // Dudes interaction
-      const hit = raycaster.intersectObjects(dudes[floor])[0];
+      const hit = raycaster.intersectObjects(dudes[floor] || [])[0];
       if (hit) {
         const { object: { parent: dude } } = hit;
         const lines = [
@@ -114,6 +117,52 @@ export default ({ input, scene }) => {
           onDestination();
         }
         return;
+      }
+    }
+    {
+      // Elevators interaction
+      const hit = raycaster.intersectObjects(elevators)[0];
+      if (hit) {
+        const { point, object: { elevator } } = hit;
+        const elevatorFloor = floor - elevator.origin.y;
+        if (
+          elevator.floor === elevatorFloor
+          && elevator.doors[elevatorFloor].state === 0
+        ) {
+          const onDestination = () => {
+            input.isEnabled = false;
+            const cabin = elevator.cabin.position
+              .clone()
+              .add(elevator.position);
+            player.walk([cabin], () => {
+              elevator.doors[elevatorFloor].close();
+              elevatorUI.show(elevator, {
+                onFloor(floor) {
+                  console.log(floor);
+                  elevator.doors[elevatorFloor].open();
+                  cabin.z += 1;
+                  player.walk([cabin], () => {
+                    input.isEnabled = true;
+                  });
+                },
+                onExit() {
+                  elevator.doors[elevatorFloor].open();
+                  cabin.z += 1;
+                  player.walk([cabin], () => {
+                    input.isEnabled = true;
+                  });
+                },
+              });
+            });
+          };
+          const path = walkable.getPath(player.position.clone(), point.clone());
+          if (path.length > 1) {
+            player.walk(path.slice(1), onDestination);
+          } else if (path.length) {
+            onDestination();
+          }
+          return;
+        }
       }
     }
     {

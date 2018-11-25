@@ -19,7 +19,7 @@ class Music {
       //   console.log(JSON.stringify(tracks.map(({ id }) => (id))));
       // });
       // eslint-disable-next-line
-      this.tracks = Music.shuffle([14281750,135099881,14449372,201545618,130450594,43516158,20969172,29561041,6582510,89379153,96594845,199889475,137188503,74658085,90256034,183847047,3916883]);
+      this.tracks = Music.shuffle([14281750,14449372,201545618,130450594,43516158,20969172,6582510,89379153,96594845,199889475,137188503,74658085,90256034,183847047,3916883]);
       this.track = 0;
       toggle.addEventListener('click', () => this.toggle(toggle), false);
       if (this.wantsToPlay) {

@@ -4,9 +4,11 @@ import {
   DoubleSide,
   Math as ThreeMath,
   Mesh,
+  MeshBasicMaterial,
   MeshPhongMaterial,
   Object3D,
   PlaneGeometry,
+  PlaneBufferGeometry,
   VertexColors,
   Vector3,
 } from 'three';
@@ -54,6 +56,18 @@ class Doors extends Object3D {
       position: new Vector3(0.6 * scale.x, (1 / 3) * scale.y, 0.5 * scale.z),
     });
     this.add(this.callButton);
+    this.collisionMesh = new Mesh(
+      new PlaneBufferGeometry(1, 1)
+        .scale(scale.x, scale.y, 1)
+        .translate(0, scale.y * 0.5, scale.z * 0.5),
+      new MeshBasicMaterial({
+        opacity: 0.1,
+        transparent: true,
+        visible: false,
+        wireframe: true,
+      })
+    );
+    this.add(this.collisionMesh);
   }
 
   open() {

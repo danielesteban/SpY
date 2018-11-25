@@ -102,6 +102,7 @@ class Actor extends SkinnedMesh {
       destinationMarker,
       mixer,
       movementAux,
+      onDestinationCallback: callback,
       position,
       rotationSpeed,
       route,
@@ -146,9 +147,9 @@ class Actor extends SkinnedMesh {
     if (destinationMarker) {
       destinationMarker.visible = false;
     }
-    if (this.onDestinationCallback) {
-      this.onDestinationCallback();
+    if (callback) {
       delete this.onDestinationCallback;
+      callback();
     }
   }
 

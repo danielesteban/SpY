@@ -30,16 +30,13 @@ canvas
   width: 100vw
   height: 100vh
 
-#splash
+#splash, .dialog
   position: fixed
   top: 0
   left: 0
   right: 0
   bottom: 0
   background: rgba(0, 0, 0, .5)
-  text-shadow: 0 0 10px #f00
-  svg
-    filter: drop-shadow(0 0 5px #f00)
   > div
     position: absolute
     top: 50%
@@ -47,6 +44,30 @@ canvas
     transform: translate(-50%, -50%)
     display: flex
     align-items: center
+
+#splash
+  text-shadow: 0 0 10px #f00
+  svg
+    filter: drop-shadow(0 0 5px #f00)
+
+.dialog > div
+  flex-direction: column
+  > button
+    width: 200px
+    padding: 1rem 0
+    border: 0
+    outline: 0
+    background: #aaa
+    font-family: inherit
+    font-size: inherit
+    font-weight: inherit
+    cursor: pointer
+    &.active
+      background: #333
+      color: #933
+      cursor: default
+    &.exit
+      margin-top: 1.5rem
 
 #credits
   margin-right: 3rem

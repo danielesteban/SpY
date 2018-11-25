@@ -24,6 +24,7 @@ class Building extends Object3D {
     this.heightmap = [...Array(6)].map(() => [...Array(width)].map(() => (0)));
     this.floors = floors.map((layout, floor) => {
       const buttons = [];
+      const elevators = [];
       const meshes = [];
       const rooms = layout.split('');
       const grid = [...Array(4)].map(() => [...Array(rooms.length * 4)].map(() => (1)));
@@ -56,7 +57,8 @@ class Building extends Object3D {
               const elevator = this.elevators[elevatorIndex];
               const doors = elevator.doors[floor - elevator.origin.y];
               buttons.push(doors.callButton);
-              meshes.push(...doors.children, elevator.cabin, elevator.shaft);
+              elevators.push(doors.collisionMesh);
+              meshes.push(doors.collisionMesh);
             }
             mesh = new Hallway({
               hasCeiling,
@@ -88,6 +90,7 @@ class Building extends Object3D {
       this.add(walkable);
       return {
         buttons,
+        elevators,
         meshes,
         walkable,
       };

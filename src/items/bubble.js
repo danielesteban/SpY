@@ -10,7 +10,7 @@ class Bubble extends Sprite {
       height: 64,
       depthTest: false,
     }));
-    this.scale.set(2, 0.25, 1);
+    this.scale.set(3, 0.375, 1);
     this.visible = false;
   }
 

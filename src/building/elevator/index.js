@@ -30,6 +30,7 @@ class Elevator extends Object3D {
         onCall: () => this.onCall(floor),
         scale: Elevator.scale,
       });
+      doors.collisionMesh.elevator = this;
       doors.position.y = floor * Elevator.scale.y;
       this.add(doors);
       return doors;
