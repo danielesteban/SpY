@@ -9,7 +9,7 @@ TO DO
  * [X] [Fresher](https://github.com/tholman/github-corners) "Fork me on github" ribbon
  * [X] Background starfield
  * [X] Bindable 3D buttons
- * [ ] Working elevators
+ * [X] Working elevators
  * [X] Rain
  * [X] Talk bubbles
  * [ ] Add more detail to the hallway mesh

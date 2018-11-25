@@ -84,7 +84,7 @@ export default ({ input, scene }) => {
   const elevatorUI = new ElevatorUI();
 
   // Animation loop
-  const floor = 0;
+  let floor = 0;
   scene.onAnimationTick = () => {
     const { camera } = scene;
     const { buttons, elevators, walkable } = building.floors[floor];
@@ -137,12 +137,17 @@ export default ({ input, scene }) => {
             player.walk([cabin], () => {
               elevator.doors[elevatorFloor].close();
               elevatorUI.show(elevator, {
-                onFloor(floor) {
-                  console.log(floor);
-                  elevator.doors[elevatorFloor].open();
-                  cabin.z += 1;
-                  player.walk([cabin], () => {
-                    input.isEnabled = true;
+                onFloor(target) {
+                  elevator.addPassenger(player);
+                  elevator.onCall(target, () => {
+                    cabin
+                      .copy(elevator.cabin.position)
+                      .add(elevator.position);
+                    cabin.z += 1;
+                    player.walk([cabin], () => {
+                      floor = elevator.origin.y + target;
+                      input.isEnabled = true;
+                    });
                   });
                 },
                 onExit() {
