@@ -10,7 +10,7 @@ class Camera extends PerspectiveCamera {
     this.distance = 5.5;
     this.maxHeight = Infinity;
     this.offset = 1.2;
-    this.tilt = Math.PI * -0.333;
+    this.tilt = Math.PI * -0.5;
     this.pitch = Math.PI * 0.05;
     this.speed = 1.25;
     this.step = new Vector3();

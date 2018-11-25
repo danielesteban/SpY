@@ -51,7 +51,7 @@ class Doors extends Object3D {
     this.targetState = this.state;
     this.callButton = new Button({
       onTap: onCall,
-      position: new Vector3(0.7 * scale.x, (1 / 3) * scale.y, 0.5 * scale.z),
+      position: new Vector3(0.6 * scale.x, (1 / 3) * scale.y, 0.5 * scale.z),
     });
     this.add(this.callButton);
   }
