@@ -74,6 +74,7 @@ export default ({ input, scene }) => {
       mesh: dude,
       ...spawn,
     });
+    dude.position.y += 0.001;
     dude.collisionMesh.floor = floor;
     return dude.collisionMesh;
   }).reduce((floors, dude) => {
