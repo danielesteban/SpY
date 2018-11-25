@@ -66,8 +66,15 @@ export default ({ input, scene }) => {
       mesh: dude,
       ...spawn,
     });
+    dude.collisionMesh.floor = floor;
     return dude.collisionMesh;
-  });
+  }).reduce((floors, dude) => {
+    if (!floors[dude.floor]) {
+      floors[dude.floor] = [];
+    }
+    floors[dude.floor].push(dude);
+    return floors;
+  }, {});
 
   /* Animation loop */
   const floor = 1;
@@ -80,7 +87,7 @@ export default ({ input, scene }) => {
       raycaster.setFromCamera(pointer.normalized, camera);
       const walkable = building.floors[floor];
       {
-        const hit = raycaster.intersectObjects(dudes)[0];
+        const hit = raycaster.intersectObjects(dudes[floor])[0];
         if (hit) {
           const { object: { parent: dude } } = hit;
           const lines = [
