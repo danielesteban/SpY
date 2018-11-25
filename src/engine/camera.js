@@ -9,6 +9,7 @@ class Camera extends PerspectiveCamera {
   constructor() {
     super(60, 1, 0.1, 2048);
     this.distance = 5;
+    this.maxHeight = Infinity;
     this.offset = new Vector3(0, 1.2, 0);
     this.tilt = Math.PI * -0.45;
     this.pitch = Math.PI * 0.1;
@@ -66,6 +67,7 @@ class Camera extends PerspectiveCamera {
 
   updateOrbit() {
     const {
+      maxHeight,
       offset,
       pitch,
       position,
@@ -94,6 +96,7 @@ class Camera extends PerspectiveCamera {
     position
       .multiplyScalar(distance)
       .add(offset);
+    position.y = Math.min(Math.max(position.y, 0.1), maxHeight);
     this.lookAt(raycaster.ray.origin);
   }
 }
