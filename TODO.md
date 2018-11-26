@@ -11,7 +11,7 @@ TO DO
  * [X] Bindable 3D buttons
  * [X] Working elevators
  * [X] Rain
- * [ ] Rain ripples
+ * [X] Rain ripples
  * [X] Talk bubbles
  * [ ] Add more detail to the hallway mesh
  * [ ] Another dude model
