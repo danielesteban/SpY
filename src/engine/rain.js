@@ -25,7 +25,7 @@ class Rain extends Object3D {
           color: 0xAAAADD,
           fog: true,
           size: 0.01,
-          sizeAttenuation: false,
+          sizeAttenuation: true,
           transparent: true,
           opacity: 1 / 3,
         })

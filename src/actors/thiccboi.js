@@ -73,13 +73,13 @@ ThiccBoi.geometry = (palette) => {
   const rightArm = leftArm.clone();
   leftArm.translate(0, -0.15, 0);
   rightArm.translate(0, -0.15, 0);
-  const leftLeg = new CylinderGeometry(0.05, 0.1, 0.4, 4);
+  const leftLeg = new CylinderGeometry(0.05, 0.1, 0.5, 4);
   leftLeg.faces.forEach((face) => {
     face.color.set(palette.legs);
   });
   const rightLeg = leftLeg.clone();
-  leftLeg.translate(0, -0.2, 0);
-  rightLeg.translate(0, -0.2, 0);
+  leftLeg.translate(0, -0.25, 0);
+  rightLeg.translate(0, -0.25, 0);
   const geometry = Actor.geometryFromLimbs({
     torso,
     head,
