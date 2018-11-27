@@ -1,3 +1,4 @@
 dist/
+electron/packages/
 node_modules/
 .eslintcache

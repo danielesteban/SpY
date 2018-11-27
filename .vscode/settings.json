@@ -6,12 +6,14 @@
     ".vscode/": true,
     "dist/": true,
     "node_modules/": true,
+    "electron/packages/": true,
     "yarn.lock": true
   },
   "files.exclude": {
     ".eslintcache": true,
     ".vscode/": true,
     "dist/": true,
+    "electron/packages/": true,
     "node_modules/": true,
     "yarn.lock": true
   }
