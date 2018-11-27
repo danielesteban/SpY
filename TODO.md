@@ -18,5 +18,7 @@ TO DO
  * [X] 2D pathfinding
  * [X] Improve orbit camera constraints
  * [X] Some noir background music like [this](https://www.youtube.com/watch?v=bSLF0Q8B0f0)
+ * [ ] Make the dudes navigate around the building
+ * [ ] Taxi (Jump to other scene)
  * [ ] Make a short video
  * [ ] Take it from there
