@@ -4,6 +4,7 @@ import Hallway from './hallway';
 import Road from './road';
 import Wall from './wall';
 import Walkable from '@/engine/walkable';
+import AI from './ai';
 
 class Building extends Object3D {
   constructor({
@@ -11,6 +12,7 @@ class Building extends Object3D {
     floors,
   }) {
     super();
+    this.ai = new AI(this);
     this.elevators = elevators.map(({
       floors,
       origin,
@@ -100,15 +102,23 @@ class Building extends Object3D {
     this.add(this.road);
   }
 
-  addToFloorGrid({
+  addActor({
+    actor,
+    floor,
+    position,
+  }) {
+    this.addToGrid({ floor, mesh: actor, position });
+    this.ai.addActor({ actor, floor, position });
+  }
+
+  addToGrid({
     floor,
     mesh,
-    x,
-    z,
+    position,
   }) {
     const { floors: { [floor]: { walkable } } } = this;
-    walkable.grid.setWalkableAt(x, z, false);
-    mesh.position.set(x + 0.5, 0, z + 0.5).add(walkable.position);
+    walkable.grid.setWalkableAt(position.x, position.z, false);
+    mesh.position.set(position.x + 0.5, 0, position.z + 0.5).add(walkable.position);
     this.add(mesh);
   }
 
@@ -128,7 +138,8 @@ class Building extends Object3D {
   }
 
   onAnimationTick(animation) {
-    const { children } = this;
+    const { ai, children } = this;
+    ai.onAnimationTick(animation);
     children.forEach((child) => {
       if (child.onAnimationTick) {
         child.onAnimationTick(animation);

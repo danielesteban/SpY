@@ -69,10 +69,10 @@ export default ({ input, scene }) => {
         z: Math.floor(Math.random() * (grid.height - 1)),
       };
     } while (!grid.isWalkableAt(spawn.x, spawn.z));
-    building.addToFloorGrid({
+    building.addActor({
       floor,
-      mesh: dude,
-      ...spawn,
+      actor: dude,
+      position: spawn,
     });
     dude.position.y += 0.001;
     dude.collisionMesh.floor = floor;
@@ -114,9 +114,16 @@ export default ({ input, scene }) => {
             dude.say([lines[Math.floor(Math.random() * lines.length)]])
           ), 500);
         };
-        const path = walkable.getPath(player.position.clone(), dude.position.clone());
+        const from = player.position.clone();
+        const to = dude.position.clone();
+        to.z += 1;
+        const path = walkable.getPath(from, to);
         if (path.length > 1) {
-          player.walk(path.slice(1), onDestination);
+          walkable.grid.setWalkableAt(from.x, from.z, true);
+          player.walk(path.slice(1), () => {
+            walkable.grid.setWalkableAt(to.x, to.z, false);
+            onDestination();
+          });
         } else if (path.length) {
           onDestination();
         }
@@ -165,11 +172,16 @@ export default ({ input, scene }) => {
               });
             });
           };
-          const path = walkable.getPath(player.position.clone(), point.clone());
-          if (path.length > 1) {
-            player.walk(path.slice(1), onDestination);
-          } else if (path.length) {
-            onDestination();
+          const from = player.position.clone();
+          const to = point.clone();
+          const path = walkable.getPath(from, to);
+          if (path.length) {
+            walkable.grid.setWalkableAt(from.x, from.z, true);
+            if (path.length > 1) {
+              player.walk(path.slice(1), onDestination);
+            } else {
+              onDestination();
+            }
           }
           return;
         }
@@ -184,9 +196,15 @@ export default ({ input, scene }) => {
           player.faceTo(point);
           button.tap();
         };
-        const path = walkable.getPath(player.position.clone(), point.clone());
+        const from = player.position.clone();
+        const to = point.clone();
+        const path = walkable.getPath(from, to);
         if (path.length > 1) {
-          player.walk(path.slice(1), onDestination);
+          walkable.grid.setWalkableAt(from.x, from.z, true);
+          player.walk(path.slice(1), () => {
+            walkable.grid.setWalkableAt(to.x, to.z, false);
+            onDestination();
+          });
         } else if (path.length) {
           onDestination();
         }
@@ -197,9 +215,14 @@ export default ({ input, scene }) => {
       // Walk
       const hit = raycaster.intersectObject(walkable)[0];
       if (hit) {
-        const path = walkable.getPath(player.position.clone(), hit.point);
+        const from = player.position.clone();
+        const to = hit.point.clone();
+        const path = walkable.getPath(from, to);
         if (path.length > 1) {
-          player.walk(path.slice(1));
+          walkable.grid.setWalkableAt(from.x, from.z, true);
+          player.walk(path.slice(1), () => {
+            walkable.grid.setWalkableAt(to.x, to.z, false);
+          });
         }
       }
     }
