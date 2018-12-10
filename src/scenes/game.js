@@ -1,10 +1,18 @@
 import Dude from '@/actors/dude';
 import ThiccBoi from '@/actors/thiccboi';
-import Building from '@/building';
+import Building from '@/meshes/building';
 import ElevatorUI from '@/ui/elevator';
-import Marker from '@/items/marker';
+import Marker from '@/meshes/marker';
+import Rain from '@/meshes/rain';
+import Starfield from '@/meshes/starfield';
 
 export default ({ input, scene }) => {
+  // Scenery
+  const rain = new Rain();
+  scene.root.add(rain);
+  const starfield = new Starfield();
+  scene.root.add(starfield);
+
   // Spawn player
   const player = new Dude({
     arms: 0x222222,
@@ -45,8 +53,8 @@ export default ({ input, scene }) => {
     ...floors,
     ...meshes,
   ]), []);
-  scene.rain.position.x = building.heightmap[0].length * 0.5;
-  scene.rain.setHeightTest(building.getHeight.bind(building));
+  rain.position.x = building.heightmap[0].length * 0.5;
+  rain.setHeightTest(building.getHeight.bind(building));
 
   // Spawn some dudes
   const actors = [Dude, ThiccBoi, ThiccBoi];

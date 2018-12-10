@@ -3,7 +3,7 @@ import Elevator from './elevator';
 import Hallway from './hallway';
 import Road from './road';
 import Wall from './wall';
-import Walkable from '@/engine/walkable';
+import Walkable from './walkable';
 import AI from './ai';
 
 class Building extends Object3D {

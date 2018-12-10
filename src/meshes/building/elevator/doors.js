@@ -12,7 +12,7 @@ import {
   VertexColors,
   Vector3,
 } from 'three';
-import Button from '@/items/button';
+import Button from '@/meshes/button';
 
 class Doors extends Object3D {
   constructor({

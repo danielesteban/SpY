@@ -1,5 +1,5 @@
 import Dude from '@/actors/dude';
-import Marker from '@/items/marker';
+import Marker from '@/meshes/marker';
 
 export default ({ input, scene }) => {
   const pack = {

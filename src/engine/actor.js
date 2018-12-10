@@ -15,7 +15,7 @@ import {
   Vector3,
   Vector4,
 } from 'three';
-import Bubble from '@/items/bubble';
+import Bubble from '@/meshes/bubble';
 
 class Actor extends SkinnedMesh {
   static geometryFromLimbs(limbs) {

@@ -13,9 +13,7 @@ import {
   WebGLRenderer,
 } from 'three';
 import Camera from './camera';
-import Grid from './grid';
-import Rain from './rain';
-import Starfield from './starfield';
+import Grid from '@/meshes/grid';
 import Vignette from './vignette';
 
 class Scene {
@@ -47,10 +45,6 @@ class Scene {
     this.root.add(this.camera.root);
     this.grid = new Grid({ background: new Color(0x333344) });
     this.root.add(this.grid);
-    this.rain = new Rain();
-    this.root.add(this.rain);
-    this.starfield = new Starfield();
-    this.root.add(this.starfield);
     this.vignette = new Vignette();
     window.addEventListener('resize', this.onResize.bind(this), false);
     this.onResize();
@@ -73,7 +67,6 @@ class Scene {
       grid,
       renderer,
       root,
-      starfield,
       stats,
       vignette,
     } = this;
@@ -91,7 +84,6 @@ class Scene {
       camera.onAnimationTick(animation);
     }
     grid.position.set(camera.root.position.x, 0, camera.root.position.z);
-    starfield.position.copy(grid.position);
     renderer.clear();
     renderer.render(root, camera);
     vignette.render(renderer);
