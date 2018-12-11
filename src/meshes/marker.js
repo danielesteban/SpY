@@ -6,7 +6,7 @@ import {
 
 class Marker extends Mesh {
   constructor() {
-    const geometry = new CircleBufferGeometry(0.25, 16);
+    const geometry = new CircleBufferGeometry(0.25, 24);
     geometry.rotateX(Math.PI * -0.5);
     geometry.translate(0, 0.001, 0);
     super(
