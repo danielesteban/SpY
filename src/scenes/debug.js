@@ -19,7 +19,7 @@ export default ({ input, scene }) => {
     onAnimationTick() {
       const { camera, grid } = scene;
       const pointer = input.getPointerFrame();
-      camera.processInput(pointer);
+      camera.processPointer(pointer);
       if (pointer.primaryUp) {
         const raycaster = camera.getRaycaster(pointer.normalized);
         const hit = raycaster.intersectObject(grid)[0];

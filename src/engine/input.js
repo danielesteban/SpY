@@ -7,6 +7,12 @@ class Input {
     mount = document.body,
   }) {
     this.mount = mount;
+    this.keyboard = {
+      backwards: false,
+      forwards: false,
+      leftwards: false,
+      rightwards: false,
+    };
     this.pointer = {
       current: new Vector2(0, 0),
       movement: { x: 0, y: 0 },
@@ -23,6 +29,8 @@ class Input {
       .on('end', this.onPointerUp.bind(this));
     addWheelListener(window, this.onPointerWheel.bind(this));
     window.addEventListener('contextmenu', e => e.preventDefault(), false);
+    window.addEventListener('keydown', this.onKeydown.bind(this), false);
+    window.addEventListener('keyup', this.onKeyup.bind(this), false);
     window.addEventListener('resize', this.onResize.bind(this), false);
     this.onResize();
   }
@@ -37,6 +45,55 @@ class Input {
     pointer.movement = { x: 0, y: 0 };
     pointer.wheel = 0;
     return frame;
+  }
+
+  onKeydown({ keyCode, repeat, target }) {
+    const { keyboard } = this;
+    if (
+      repeat
+      || ~['INPUT', 'TEXTAREA'].indexOf(target.tagName)
+    ) {
+      return;
+    }
+    switch (keyCode) {
+      case 87:
+        keyboard.forwards = true;
+        break;
+      case 83:
+        keyboard.backwards = true;
+        break;
+      case 65:
+        keyboard.leftwards = true;
+        break;
+      case 68:
+        keyboard.rightwards = true;
+        break;
+      default:
+        break;
+    }
+  }
+
+  onKeyup({ keyCode, repeat }) {
+    const { keyboard } = this;
+    if (repeat) {
+      return;
+    }
+    switch (keyCode) {
+      case 87:
+        keyboard.forwards = false;
+        break;
+      case 83:
+        keyboard.backwards = false;
+        break;
+      case 65:
+        keyboard.leftwards = false;
+        break;
+      case 68:
+        keyboard.rightwards = false;
+        break;
+      default:
+        break;
+    }
   }
 
   onPointerDown(e) {

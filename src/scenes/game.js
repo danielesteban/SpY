@@ -101,7 +101,7 @@ export default ({ input, scene }) => {
     const { camera } = scene;
     const { buttons, elevators, walkable } = building.floors[floor];
     const pointer = input.getPointerFrame();
-    camera.processInput(pointer);
+    camera.processPointer(pointer);
     if (!pointer.primaryUp) {
       return;
     }

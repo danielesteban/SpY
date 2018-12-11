@@ -18,6 +18,9 @@ class Camera extends PerspectiveCamera {
     this.raycaster = new Raycaster();
     this.root = new Object3D();
     this.root.add(this);
+    this.forward = new Vector3();
+    this.right = new Vector3();
+    this.worldUp = new Vector3(0, 1, 0);
     this.updateOrbit();
   }
 
@@ -44,7 +47,7 @@ class Camera extends PerspectiveCamera {
     position.add(step);
   }
 
-  processInput({
+  processPointer({
     movement,
     secondary,
     wheel,
@@ -64,6 +67,42 @@ class Camera extends PerspectiveCamera {
     }
     if (hasUpdated) this.updateOrbit();
     return hasUpdated;
+  }
+
+  processKeyboard({
+    backwards,
+    delta,
+    forwards,
+    leftwards,
+    rightwards,
+  }) {
+    const {
+      forward,
+      right,
+      tilt,
+      pitch,
+      root: { position },
+      worldUp,
+    } = this;
+    const step = delta * 4;
+    forward.set(
+      Math.cos(tilt) * Math.cos(pitch),
+      0,
+      Math.sin(-tilt) * Math.cos(pitch)
+    ).normalize().negate();
+    right.crossVectors(forward, worldUp);
+    if (forwards) {
+      position.addScaledVector(forward, step);
+    }
+    if (backwards) {
+      position.addScaledVector(forward, -step);
+    }
+    if (leftwards) {
+      position.addScaledVector(right, -step);
+    }
+    if (rightwards) {
+      position.addScaledVector(right, step);
+    }
   }
 
   updateOrbit() {
