@@ -3,22 +3,9 @@ TO DO
 
 > This is just a random (non-binding) brain dump
 
- * [X] Two fingers === Secondary button
- * [X] Enable/Disable input (for credits/UI/etc...)
- * [X] Controls help on credits
- * [X] [Fresher](https://github.com/tholman/github-corners) "Fork me on github" ribbon
- * [X] Background starfield
- * [X] Bindable 3D buttons
- * [X] Working elevators
- * [X] Rain
- * [X] Rain ripples
- * [X] Talk bubbles
- * [ ] Add more detail to the hallway mesh
- * [ ] Another dude model
- * [X] 2D pathfinding
- * [X] Improve orbit camera constraints
- * [X] Some noir background music like [this](https://www.youtube.com/watch?v=bSLF0Q8B0f0)
- * [ ] Make the dudes navigate around the building
- * [ ] Taxi (Jump to other scene)
- * [ ] Make a short video
- * [ ] Take it from there
+ * [X] Editor: place walls
+ * [X] Editor: place dudes
+ * [X] Editor: paint floors
+ * [X] Editor: add/remove floors
+ * [X] Editor: add/remove elevators
+ 
