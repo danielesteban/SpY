@@ -1,6 +1,6 @@
-import Input from '@/engine/input';
-import Music from '@/engine/music';
-import Scene from '@/engine/scene';
+import Input from '@/core/input';
+import Music from '@/core/music';
+import Scene from '@/core/scene';
 import * as Scenes from '@/scenes';
 
 const mount = document.getElementById('mount');

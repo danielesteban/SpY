@@ -6,7 +6,7 @@ import {
   Vector3,
   VertexColors,
 } from 'three';
-import Actor from '@/engine/actor';
+import Actor from '@/core/actor';
 
 class ThiccBoi extends Actor {
   constructor(palette) {
