@@ -1,6 +1,6 @@
 import Dude from '@/actors/dude';
 import ThiccBoi from '@/actors/thiccboi';
-import Building from '@/meshes/building';
+import Building from '@/meshes/legacy_building';
 import ElevatorUI from '@/ui/elevator';
 import Marker from '@/meshes/marker';
 import Rain from '@/meshes/rain';

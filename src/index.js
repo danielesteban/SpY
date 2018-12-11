@@ -22,7 +22,7 @@ function onLoad() {
   input.touches.once('end', () => {
     splash.style.display = 'none';
     input.isEnabled = true;
-    music.play();
+    if (__PRODUCTION__) music.play();
   });
 }
 
