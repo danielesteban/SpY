@@ -114,7 +114,7 @@ class Floor extends Object3D {
   }
 
   updateTiles() {
-    const { grid, tiles } = this;
+    const { grid, number, tiles } = this;
     const indices = [];
     const vertices = [];
     const colors = [];
@@ -129,53 +129,8 @@ class Floor extends Object3D {
         offset + 2, offset + 3, offset
       );
     };
-    const isWall = (x, y) => {
-      if (x < 0 || x > grid.width - 1 || y < 0 || y > grid.height - 1) {
-        return false;
-      }
-      return grid.getNodeAt(x, y).type === Floor.tiles.wall;
-    };
-    const wallAO = (x, y, s = 0.2) => (isWall(x, y) ? s : 0);
-    const pushTile = (x, y, { r, g, b }) => {
-      const ao = [
-        1 - Math.min(wallAO(x, y + 1) + wallAO(x - 1, y) + wallAO(x - 1, y + 1, 0.1), 0.4),
-        1 - Math.min(wallAO(x, y + 1) + wallAO(x + 1, y) + wallAO(x + 1, y + 1, 0.1), 0.4),
-        1 - Math.min(wallAO(x, y - 1) + wallAO(x + 1, y) + wallAO(x + 1, y - 1, 0.1), 0.4),
-        1 - Math.min(wallAO(x, y - 1) + wallAO(x - 1, y) + wallAO(x - 1, y - 1, 0.1), 0.4),
-      ];
-      const vertices = [
-        x, 0.001, y + 1,
-        x + 1, 0.001, y + 1,
-        x + 1, 0.001, y,
-        x, 0.001, y,
-      ];
-      if (
-        ao[0] + ao[2] < ao[1] + ao[3]
-      ) {
-        const lastV = vertices.splice(9, 3);
-        const lastAO = ao.splice(3, 1);
-        vertices.unshift(...lastV);
-        ao.unshift(...lastAO);
-      }
-      pushFace(
-        vertices,
-        [
-          r * ao[0], g * ao[0], b * ao[0],
-          r * ao[1], g * ao[1], b * ao[1],
-          r * ao[2], g * ao[2], b * ao[2],
-          r * ao[3], g * ao[3], b * ao[3],
-        ],
-        [
-          0, 1, 0,
-          0, 1, 0,
-          0, 1, 0,
-          0, 1, 0,
-        ]
-      );
-    };
-    const pushWall = (x, y, { r, g, b }) => {
-      const { height } = Floor;
-      if (!isWall(x, y + 1)) {
+    const pushBox = (x, y, { r, g, b }, height, testNeighbor, topAO) => {
+      if (!testNeighbor(x, y + 1)) {
         pushFace(
           [
             x, 0, y + 1,
@@ -197,7 +152,7 @@ class Floor extends Object3D {
           ]
         );
       }
-      if (!isWall(x, y - 1)) {
+      if (!testNeighbor(x, y - 1)) {
         pushFace(
           [
             x + 1, 0, y,
@@ -219,7 +174,7 @@ class Floor extends Object3D {
           ]
         );
       }
-      if (!isWall(x - 1, y)) {
+      if (!testNeighbor(x - 1, y)) {
         pushFace(
           [
             x, 0, y,
@@ -241,7 +196,7 @@ class Floor extends Object3D {
           ]
         );
       }
-      if (!isWall(x + 1, y)) {
+      if (!testNeighbor(x + 1, y)) {
         pushFace(
           [
             x + 1, 0, y + 1,
@@ -260,6 +215,28 @@ class Floor extends Object3D {
             -1, 0, 0,
             -1, 0, 0,
             -1, 0, 0,
+          ]
+        );
+      }
+      if (number > 0) {
+        pushFace(
+          [
+            x, 0.001, y,
+            x + 1, 0.001, y,
+            x + 1, 0.001, y + 1,
+            x, 0.001, y + 1,
+          ],
+          [
+            r * 0.6, g * 0.6, b * 0.6,
+            r * 0.6, g * 0.6, b * 0.6,
+            r * 0.6, g * 0.6, b * 0.6,
+            r * 0.6, g * 0.6, b * 0.6,
+          ],
+          [
+            0, -1, 0,
+            0, -1, 0,
+            0, -1, 0,
+            0, -1, 0,
           ]
         );
       }
@@ -271,10 +248,10 @@ class Floor extends Object3D {
           x, height, y,
         ],
         [
-          r, g, b,
-          r, g, b,
-          r, g, b,
-          r, g, b,
+          r * topAO[0], g * topAO[0], b * topAO[0],
+          r * topAO[1], g * topAO[1], b * topAO[1],
+          r * topAO[2], g * topAO[2], b * topAO[2],
+          r * topAO[3], g * topAO[3], b * topAO[3],
         ],
         [
           0, 1, 0,
@@ -284,6 +261,26 @@ class Floor extends Object3D {
         ]
       );
     };
+    const testType = (x, y, type) => {
+      if (x < 0 || x > grid.width - 1 || y < 0 || y > grid.height - 1) {
+        return false;
+      }
+      return grid.getNodeAt(x, y).type === type;
+    };
+    const isTile = (x, y) => testType(x, y, Floor.tiles.tile);
+    const isWall = (x, y) => testType(x, y, Floor.tiles.wall);
+    const wallAO = (x, y, s = 0.2) => (isWall(x, y) ? s : 0);
+    const pushTile = (x, y, color) => (
+      pushBox(x, y, color, 0.1, isTile, [
+        1 - Math.min(wallAO(x, y + 1) + wallAO(x - 1, y) + wallAO(x - 1, y + 1, 0.1), 0.4),
+        1 - Math.min(wallAO(x, y + 1) + wallAO(x + 1, y) + wallAO(x + 1, y + 1, 0.1), 0.4),
+        1 - Math.min(wallAO(x, y - 1) + wallAO(x + 1, y) + wallAO(x + 1, y - 1, 0.1), 0.4),
+        1 - Math.min(wallAO(x, y - 1) + wallAO(x - 1, y) + wallAO(x - 1, y - 1, 0.1), 0.4),
+      ])
+    );
+    const pushWall = (x, y, color) => (
+      pushBox(x, y, color, Floor.height, isWall, [1, 1, 1, 1])
+    );
     for (let y = 0; y < grid.height; y += 1) {
       for (let x = 0; x < grid.width; x += 1) {
         const tile = grid.getNodeAt(x, y);
