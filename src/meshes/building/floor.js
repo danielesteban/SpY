@@ -25,7 +25,7 @@ class Floor extends Object3D {
       const tile = this.nodes[y][x];
       tile.color = color;
       tile.type = type;
-      tile.walkable = type !== Floor.tiles.floor;
+      tile.walkable = type !== Floor.tiles.tile;
     };
     for (let y = 0; y < height; y += 1) {
       for (let x = 0; x < width; x += 1) {
@@ -281,7 +281,6 @@ class Floor extends Object3D {
         ]
       );
     };
-    const { geometry } = tiles;
     for (let y = 0; y < grid.height; y += 1) {
       for (let x = 0; x < grid.width; x += 1) {
         const tile = grid.getNodeAt(x, y);
@@ -297,6 +296,7 @@ class Floor extends Object3D {
         }
       }
     }
+    const { geometry } = tiles;
     const index = geometry.getIndex();
     const position = geometry.getAttribute('position');
     const color = geometry.getAttribute('color');
@@ -318,7 +318,7 @@ class Floor extends Object3D {
 
 Floor.tiles = {
   air: 0,
-  floor: 1,
+  tile: 1,
   wall: 2,
 };
 

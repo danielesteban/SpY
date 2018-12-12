@@ -59,7 +59,7 @@ module.exports = {
     rules: [
       ...(mode === 'development' ? [
         {
-          test: /\.(js|jsx)$/,
+          test: /\.js$/,
           enforce: 'pre',
           loader: 'eslint-loader',
           options: {
@@ -70,7 +70,7 @@ module.exports = {
         },
       ] : []),
       {
-        test: /\.(js|jsx)$/,
+        test: /\.js$/,
         loader: 'babel-loader',
         options: {
           presets: [

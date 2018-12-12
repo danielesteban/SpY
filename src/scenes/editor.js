@@ -48,7 +48,7 @@ export default ({ input, scene }) => {
       const { tool } = input.keyboard;
       hit.point.addScaledVector(
         hit.face.normal,
-        ~[tiles.air, tiles.floor].indexOf(tool) ? -0.5 : 0.5
+        ~[tiles.air, tiles.tile].indexOf(tool) ? -0.5 : 0.5
       );
       const x = Math.floor(hit.point.x);
       const y = Math.floor(hit.point.z);
@@ -56,8 +56,8 @@ export default ({ input, scene }) => {
       if (
         pointer.primaryDown
         || (
-          ~[tiles.air, tiles.floor].indexOf(tool)
-          && ~[tiles.air, tiles.floor].indexOf(tile.type)
+          ~[tiles.air, tiles.tile].indexOf(tool)
+          && ~[tiles.air, tiles.tile].indexOf(tile.type)
           && (x !== lastTile.x || y !== lastTile.y)
         )
       ) {
@@ -66,7 +66,7 @@ export default ({ input, scene }) => {
         lastTile.tool = tool;
         switch (tool) {
           case tiles.air:
-          case tiles.floor:
+          case tiles.tile:
           case tiles.wall:
             floor.setTile({
               type: tool,
