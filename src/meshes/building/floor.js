@@ -3,6 +3,7 @@ import {
   BufferAttribute,
   BufferGeometry,
   Color,
+  DoubleSide,
   Mesh,
   MeshBasicMaterial,
   PlaneBufferGeometry,
@@ -50,6 +51,7 @@ class Floor extends Object3D {
     this.intersect = new Mesh(
       plane,
       new MeshBasicMaterial({
+        side: DoubleSide,
         transparent: true,
         visible: false,
       })
