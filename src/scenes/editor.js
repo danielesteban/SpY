@@ -23,7 +23,7 @@ export default ({ input, scene }) => {
     0,
     height * 0.5 + 0.5
   );
-  // scene.camera.maxHeight = 2.9;
+  scene.camera.maxDistance = 32;
 
   // History
   const history = new History();

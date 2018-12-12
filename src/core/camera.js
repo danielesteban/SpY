@@ -9,6 +9,7 @@ class Camera extends PerspectiveCamera {
   constructor() {
     super(60, 1, 0.1, 2048);
     this.distance = 5;
+    this.maxDistance = 16;
     this.minHeight = -Infinity;
     this.maxHeight = Infinity;
     this.offset = new Vector3(0, 1.2, 0);
@@ -63,7 +64,8 @@ class Camera extends PerspectiveCamera {
     }
     if (wheel) {
       const sensitivity = 0.006;
-      this.distance = Math.min(Math.max(this.distance + (wheel * sensitivity), 1), 16);
+      const { maxDistance } = this;
+      this.distance = Math.min(Math.max(this.distance + (wheel * sensitivity), 1), maxDistance);
       hasUpdated = true;
     }
     if (hasUpdated) this.updateOrbit();
