@@ -62,6 +62,7 @@ export default ({ input, scene }) => {
       building.activeFloor = floor;
       const { height } = building.floors[building.activeFloor].constructor;
       scene.camera.root.position.y = height * floor;
+      scene.camera.minHeight = floor > 0 ? -Infinity : 0.1;
     },
   });
 

@@ -48,6 +48,7 @@ export default ({ input, scene }) => {
     ].reverse(),
   });
   scene.root.add(building);
+  scene.camera.minHeight = 0.1;
   scene.camera.maxHeight = 2.9;
   scene.camera.testMeshes = building.floors.reduce((floors, { meshes }) => ([
     ...floors,

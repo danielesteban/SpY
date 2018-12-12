@@ -47,6 +47,7 @@ export default ({ input, scene }) => {
   scene.root.add(mainDude.destinationMarker);
   scene.camera.target = mainDude.position;
 
+  scene.camera.minHeight = 0.1;
   scene.camera.distance = 6;
   scene.camera.pitch = Math.PI * 0.125;
   scene.camera.updateOrbit();
