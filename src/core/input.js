@@ -12,7 +12,6 @@ class Input {
       forwards: false,
       leftwards: false,
       rightwards: false,
-      tool: 1,
     };
     this.pointer = {
       current: new Vector2(0, 0),
@@ -102,9 +101,6 @@ class Input {
         keyboard.rightwards = false;
         break;
       default:
-        if (keyCode >= 49 && keyCode <= 57) {
-          keyboard.tool = keyCode - 49;
-        }
         break;
     }
   }
