@@ -35,11 +35,11 @@ class Scene {
     mount.appendChild(this.renderer.domElement);
     this.root = new Root();
     this.root.fog = new FogExp2(sky, 0.03);
-    this.root.add(new AmbientLight(0x333333));
-    const light = new DirectionalLight(0xffffff, 0.6);
+    this.root.add(new AmbientLight(0x666666));
+    const light = new DirectionalLight(0xffffff, 0.3);
     light.position.set(1, 0.5, 1);
     this.root.add(light);
-    const secondaryLight = new DirectionalLight(0xffffff, 0.4);
+    const secondaryLight = new DirectionalLight(0xffffff, 0.2);
     secondaryLight.position.set(-1, -0.5, 1);
     this.root.add(secondaryLight);
     this.root.add(this.camera.root);
