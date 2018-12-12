@@ -7,10 +7,17 @@ class Building extends Object3D {
   constructor(meta = {}) {
     super();
     this.floors = meta.floors ? (
-      meta.floors.map(grid => new Floor(grid))
+      meta.floors.map((grid, number) => new Floor({ grid, number }))
     ) : [new Floor()];
     this.floors.forEach(floor => this.add(floor));
     this.activeFloor = 0;
+  }
+
+  addFloor() {
+    const { floors, activeFloor } = this;
+    const floor = new Floor({ number: activeFloor + 1 });
+    floors.splice(activeFloor + 1, 0, floor);
+    this.add(floor);
   }
 
   get activeFloor() {

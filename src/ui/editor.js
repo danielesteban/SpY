@@ -1,9 +1,15 @@
 import UI from '@/core/ui';
 
 class EditorUI extends UI {
-  constructor() {
+  constructor({
+    floorCount,
+    onAddFloor,
+    onRemoveFloor,
+    onSetFloor,
+  }) {
     super('toolbar');
     this.onKeyup = this.onKeyup.bind(this);
+    this.onSetFloor = onSetFloor;
     // Color
     const color = this.add('label');
     color.innerText = 'Color';
@@ -38,18 +44,17 @@ class EditorUI extends UI {
     this.floorInput.addEventListener('change', ({ target: { value: floor } }) => {
       this.setFloor(floor);
     }, false);
+    this.floorInput.min = 0;
+    this.floorInput.step = 1;
+    this.setFloorCount(floorCount);
     this.setFloor(0);
     {
       const add = this.add('button');
       add.innerText = '+';
-      add.addEventListener('click', () => {
-        console.log('add new floor');
-      }, false);
+      add.addEventListener('click', onAddFloor, false);
       const remove = this.add('button');
       remove.innerText = '-';
-      remove.addEventListener('click', () => {
-        console.log('remove current floor');
-      }, false);
+      remove.addEventListener('click', onRemoveFloor, false);
       const wrapper = this.add('div');
       wrapper.appendChild(add);
       wrapper.appendChild(remove);
@@ -82,10 +87,17 @@ class EditorUI extends UI {
     this.color = value;
   }
 
+  setFloorCount(count) {
+    const { floorInput } = this;
+    floorInput.max = count - 1;
+    this.floorCount = count;
+  }
+
   setFloor(value) {
     const { floorInput } = this;
     floorInput.value = value;
     this.floor = value;
+    this.onSetFloor(value);
   }
 
   setTile(value) {

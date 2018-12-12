@@ -25,9 +25,6 @@ export default ({ input, scene }) => {
   );
   // scene.camera.maxHeight = 2.9;
 
-  // UI
-  const ui = new EditorUI();
-
   // History
   const history = new History();
   window.addEventListener('keydown', (e) => {
@@ -48,6 +45,24 @@ export default ({ input, scene }) => {
     e.stopPropagation();
     if (shiftKey) history.redo();
     else history.undo();
+  });
+
+  // UI
+  const ui = new EditorUI({
+    floorCount: building.floors.length,
+    onAddFloor() {
+      building.addFloor();
+      ui.setFloorCount(building.floors.length);
+      ui.setFloor(building.activeFloor + 1);
+    },
+    onRemoveFloor() {
+      console.log('This will remove the current floor but it\'s not yet implemented.');
+    },
+    onSetFloor(floor) {
+      building.activeFloor = floor;
+      const { height } = building.floors[building.activeFloor].constructor;
+      scene.camera.root.position.y = height * floor;
+    },
   });
 
   const lastTile = { x: -1, y: -1 };

@@ -12,8 +12,10 @@ import {
 import GridMaterial from '@/materials/grid';
 
 class Floor extends Object3D {
-  constructor(grid) {
+  constructor({ grid, number } = { number: 0 }) {
     super();
+    this.number = number;
+    this.position.set(0, Floor.height * number, 0);
     const { width, height } = Floor.defaultGridSize;
     this.grid = new Grid(width, height);
     this.grid.setTile = function setTile({
@@ -107,7 +109,7 @@ class Floor extends Object3D {
   set isActive(active) {
     const { intersect, tiles } = this;
     intersect.visible = active;
-    tiles.visible = !!(tiles.geometry.getAttribute('position').array.length && active);
+    tiles.visible = !!tiles.geometry.getAttribute('position').array.length;
     this._isActive = active;
   }
 
@@ -142,10 +144,10 @@ class Floor extends Object3D {
         1 - Math.min(wallAO(x, y - 1) + wallAO(x - 1, y) + wallAO(x - 1, y - 1, 0.1), 0.4),
       ];
       const vertices = [
-        x, 0, y + 1,
-        x + 1, 0, y + 1,
-        x + 1, 0, y,
-        x, 0, y,
+        x, 0.001, y + 1,
+        x + 1, 0.001, y + 1,
+        x + 1, 0.001, y,
+        x, 0.001, y,
       ];
       if (
         ao[0] + ao[2] < ao[1] + ao[3]
@@ -172,7 +174,7 @@ class Floor extends Object3D {
       );
     };
     const pushWall = (x, y, { r, g, b }) => {
-      const height = 3;
+      const { height } = Floor;
       if (!isWall(x, y + 1)) {
         pushFace(
           [
@@ -311,11 +313,11 @@ class Floor extends Object3D {
     normal.setArray(new Float32Array(normals));
     normal.needsUpdate = true;
     geometry.computeBoundingSphere();
-    if (this.isActive) {
-      tiles.visible = true;
-    }
+    tiles.visible = true;
   }
 }
+
+Floor.height = 3;
 
 Floor.tiles = {
   air: 0,
