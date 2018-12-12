@@ -8,7 +8,7 @@ class EditorUI extends UI {
     this.color.addEventListener('change', ({ target: { value: color } }) => {
       this.setColor(color);
     }, false);
-    this.setColor('#bebebe');
+    this.setColor('#aaaaaa');
     this.buttons = [
       {
         label: 'Floor',
