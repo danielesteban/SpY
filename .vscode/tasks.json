@@ -27,7 +27,7 @@
       "options": {
         "cwd": "${workspaceFolder}"
       },
-      "command": "yarn",
+      "command": "npm",
       "args": ["start"],
       "isBackground": true,
       "problemMatcher": {
