@@ -37,6 +37,7 @@ class Floor extends Object3D {
             x,
             y,
             type: Floor.tiles.air,
+            color: new Color(),
           });
         }
       }

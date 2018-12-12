@@ -4,6 +4,7 @@ class EditorUI extends UI {
   constructor() {
     super('toolbar');
     this.onKeyup = this.onKeyup.bind(this);
+    // Color
     const color = this.add('label');
     color.innerText = 'Color';
     this.colorInput = this.add('input');
@@ -12,6 +13,7 @@ class EditorUI extends UI {
       this.setColor(color);
     }, false);
     this.setColor('#aaaaaa');
+    // Tiles
     const tiles = this.add('label');
     tiles.innerText = 'Tiles';
     this.tiles = [
@@ -28,6 +30,7 @@ class EditorUI extends UI {
       return button;
     });
     this.setTile(1);
+    // Floors
     const floors = this.add('label');
     floors.innerText = 'Floors';
     this.floorInput = this.add('input');

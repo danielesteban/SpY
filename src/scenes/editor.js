@@ -1,5 +1,6 @@
 import Building from '@/meshes/building';
 import EditorUI from '@/ui/editor';
+import History from '@/core/history';
 import Starfield from '@/meshes/starfield';
 
 export default ({ input, scene }) => {
@@ -27,6 +28,28 @@ export default ({ input, scene }) => {
   // UI
   const ui = new EditorUI();
 
+  // History
+  const history = new History();
+  window.addEventListener('keydown', (e) => {
+    const {
+      ctrlKey,
+      keyCode,
+      shiftKey,
+      target,
+    } = e;
+    if (
+      !ctrlKey
+      || keyCode !== 90
+      || ~['INPUT', 'TEXTAREA'].indexOf(target.tagName)
+    ) {
+      return;
+    }
+    e.preventDefault();
+    e.stopPropagation();
+    if (shiftKey) history.redo();
+    else history.undo();
+  });
+
   const lastTile = { x: -1, y: -1 };
   scene.onAnimationTick = ({ delta }) => {
     const { camera } = scene;
@@ -39,32 +62,41 @@ export default ({ input, scene }) => {
     const raycaster = camera.getRaycaster(pointer.normalized);
     const floor = building.floors[building.activeFloor];
     const hit = raycaster.intersectObjects([floor.intersect, floor.tiles])[0];
-    if (hit) {
-      hit.point.addScaledVector(hit.face.normal, -0.5);
-      const { tiles } = floor.constructor;
-      const { color, tile } = ui;
-      const x = Math.floor(hit.point.x);
-      const y = Math.floor(hit.point.z);
-      if (
-        pointer.primaryDown || x !== lastTile.x || y !== lastTile.y
-      ) {
-        lastTile.x = x;
-        lastTile.y = y;
-        switch (tile) {
-          case tiles.air:
-          case tiles.tile:
-          case tiles.wall:
-            floor.setTile({
-              type: tile,
-              color,
-              x,
-              y,
-            });
-            break;
-          default:
-            break;
-        }
-      }
+    if (!hit) {
+      return;
+    }
+    hit.point.addScaledVector(hit.face.normal, -0.5);
+    const { color, tile } = ui;
+    const x = Math.floor(hit.point.x);
+    const y = Math.floor(hit.point.z);
+    if (
+      pointer.primaryDown || x !== lastTile.x || y !== lastTile.y
+    ) {
+      lastTile.x = x;
+      lastTile.y = y;
+      const current = floor.grid.getNodeAt(x, y);
+      const currentType = current.type;
+      const currentColor = `#${current.color.getHexString()}`;
+      const action = {
+        undo() {
+          floor.setTile({
+            type: currentType,
+            color: currentColor,
+            x,
+            y,
+          });
+        },
+        redo() {
+          floor.setTile({
+            type: tile,
+            color,
+            x,
+            y,
+          });
+        },
+      };
+      action.redo();
+      history.push(action);
     }
   };
 };
