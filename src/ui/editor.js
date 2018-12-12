@@ -42,7 +42,7 @@ class EditorUI extends UI {
     this.floorInput = this.add('input');
     this.floorInput.type = 'number';
     this.floorInput.addEventListener('change', ({ target: { value: floor } }) => {
-      this.setFloor(floor);
+      this.setFloor(parseInt(floor, 10));
     }, false);
     this.floorInput.min = 0;
     this.floorInput.step = 1;
