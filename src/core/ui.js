@@ -1,7 +1,7 @@
-class Dialog {
-  constructor() {
+class UI {
+  constructor(className) {
     this.wrapper = document.createElement('div');
-    this.wrapper.className = 'dialog';
+    this.wrapper.className = className;
     this.content = document.createElement('div');
     this.wrapper.appendChild(this.content);
   }
@@ -34,4 +34,4 @@ class Dialog {
   }
 }
 
-export default Dialog;
+export default UI;

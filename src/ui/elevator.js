@@ -1,6 +1,10 @@
-import Dialog from './dialog';
+import UI from '@/core/ui';
 
-class ElevatorUI extends Dialog {
+class ElevatorUI extends UI {
+  constructor() {
+    super('dialog');
+  }
+
   show(
     {
       floor,

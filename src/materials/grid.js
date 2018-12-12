@@ -16,12 +16,14 @@ class GridMaterial extends ShaderMaterial {
       [
         '#include <clipping_planes_pars_vertex>',
         'varying vec3 vPosition;',
+        'varying float vOrientation;',
       ].join('\n')
     ).replace(
       '#include <fog_vertex>',
       [
         '#include <fog_vertex>',
         'vPosition = (modelMatrix * vec4( transformed, 1.0 )).xyz;',
+        'vOrientation = normal.y != 0.0 ? 1.0 : (normal.x != 0.0 ? 2.0 : 0.0);',
       ].join('\n')
     );
     const primaryGrid = 1 / size;
@@ -31,8 +33,9 @@ class GridMaterial extends ShaderMaterial {
       [
         '#include <clipping_planes_pars_fragment>',
         'varying vec3 vPosition;',
+        'varying float vOrientation;',
         'float getGrid(float scale) {',
-        ' vec2 coord = vPosition.xz * scale;',
+        ' vec2 coord = (vOrientation > 1.5 ? vPosition.zy : (vOrientation > 0.5 ? vPosition.xz : vPosition.xy)) * scale;',
         ' vec2 grid = abs(fract(coord - 0.5) - 0.5) / fwidth(coord);',
         ' return 1.0 - min(min(grid.x, grid.y), 1.0);',
         '}',

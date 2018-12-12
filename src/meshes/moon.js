@@ -9,7 +9,7 @@ class Moon extends Mesh {
     super(
       new SphereBufferGeometry(100, 32, 32),
       new MeshBasicMaterial({
-        color: 0xAAAAAA,
+        color: 0xBEBEBE,
         fog: false,
       })
     );

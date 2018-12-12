@@ -12,6 +12,7 @@ class Input {
       forwards: false,
       leftwards: false,
       rightwards: false,
+      tool: 1,
     };
     this.pointer = {
       current: new Vector2(0, 0),
@@ -28,6 +29,7 @@ class Input {
       .on('move', this.onPointerMove.bind(this))
       .on('end', this.onPointerUp.bind(this));
     addWheelListener(window, this.onPointerWheel.bind(this));
+    window.addEventListener('blur', this.onBlur.bind(this), false);
     window.addEventListener('contextmenu', e => e.preventDefault(), false);
     window.addEventListener('keydown', this.onKeydown.bind(this), false);
     window.addEventListener('keyup', this.onKeyup.bind(this), false);
@@ -45,6 +47,14 @@ class Input {
     pointer.movement = { x: 0, y: 0 };
     pointer.wheel = 0;
     return frame;
+  }
+
+  onBlur() {
+    const { keyboard } = this;
+    keyboard.forwards = false;
+    keyboard.backwards = false;
+    keyboard.leftwards = false;
+    keyboard.rightwards = false;
   }
 
   onKeydown({ keyCode, repeat, target }) {
@@ -92,13 +102,16 @@ class Input {
         keyboard.rightwards = false;
         break;
       default:
+        if (keyCode >= 49 && keyCode <= 57) {
+          keyboard.tool = keyCode - 49;
+        }
         break;
     }
   }
 
   onPointerDown(e) {
     const { isEnabled, pointer } = this;
-    if (!isEnabled) return;
+    if (!isEnabled || e.target.tagName !== 'CANVAS') return;
     const { button, touches } = e;
     if (touches) {
       if (touches.length > 1) {

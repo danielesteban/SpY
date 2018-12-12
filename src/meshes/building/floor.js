@@ -25,6 +25,7 @@ class Floor extends Object3D {
       const tile = this.nodes[y][x];
       tile.color = color;
       tile.type = type;
+      tile.walkable = type !== Floor.tiles.floor;
     };
     for (let y = 0; y < height; y += 1) {
       for (let x = 0; x < width; x += 1) {
@@ -51,8 +52,13 @@ class Floor extends Object3D {
       })
     );
     this.add(this.intersect);
+    const tile = new BufferGeometry();
+    tile.setIndex(new BufferAttribute(new Uint16Array(), 1));
+    tile.addAttribute('position', new BufferAttribute(new Float32Array(), 3));
+    tile.addAttribute('color', new BufferAttribute(new Float32Array(), 3));
+    tile.addAttribute('normal', new BufferAttribute(new Float32Array(), 3));
     this.tiles = new Mesh(
-      new BufferGeometry(),
+      tile,
       new GridMaterial({
         vertexColors: VertexColors,
       })
@@ -62,7 +68,12 @@ class Floor extends Object3D {
     this.isActive = false;
   }
 
-  setTile({ color, x, y }) {
+  setTile({
+    color,
+    type,
+    x,
+    y,
+  }) {
     const { grid } = this;
     if (
       x < 0
@@ -80,10 +91,10 @@ class Floor extends Object3D {
       Math.random() * (avg * 2) - avg
     );
     grid.setTile({
+      color,
+      type,
       x,
       y,
-      color,
-      type: Floor.tiles.floor,
     });
     this.updateTiles();
   }
@@ -95,69 +106,146 @@ class Floor extends Object3D {
   set isActive(active) {
     const { intersect, tiles } = this;
     intersect.visible = active;
-    tiles.visible = !!(tiles.geometry.getAttribute('position') && active);
+    tiles.visible = !!(tiles.geometry.getAttribute('position').array.length && active);
     this._isActive = active;
   }
 
   updateTiles() {
-    const { grid, tiles } = this;
     const indices = [];
     const vertices = [];
     const colors = [];
     const normals = [];
+    const pushFace = (v, n, { r, g, b }) => {
+      const offset = vertices.length / 3;
+      vertices.push(...v);
+      colors.push(
+        r, g, b,
+        r, g, b,
+        r, g, b,
+        r, g, b
+      );
+      normals.push(...n);
+      indices.push(
+        offset, offset + 1, offset + 2,
+        offset + 2, offset + 3, offset
+      );
+    };
+    const pushTile = (x, y, color) => {
+      pushFace(
+        [
+          x, 0, y + 1,
+          x + 1, 0, y + 1,
+          x + 1, 0, y,
+          x, 0, y,
+        ],
+        [
+          0, 1, 0,
+          0, 1, 0,
+          0, 1, 0,
+          0, 1, 0,
+        ],
+        color
+      );
+    };
+    const pushWall = (x, y, color) => {
+      const height = 3;
+      pushFace(
+        [
+          x, 0, y + 1,
+          x + 1, 0, y + 1,
+          x + 1, height, y + 1,
+          x, height, y + 1,
+        ],
+        [
+          0, 0, 1,
+          0, 0, 1,
+          0, 0, 1,
+          0, 0, 1,
+        ],
+        color
+      );
+      pushFace(
+        [
+          x + 1, 0, y,
+          x, 0, y,
+          x, height, y,
+          x + 1, height, y,
+        ],
+        [
+          0, 0, -1,
+          0, 0, -1,
+          0, 0, -1,
+          0, 0, -1,
+        ],
+        color
+      );
+      pushFace(
+        [
+          x, 0, y,
+          x, 0, y + 1,
+          x, height, y + 1,
+          x, height, y,
+        ],
+        [
+          1, 0, 0,
+          1, 0, 0,
+          1, 0, 0,
+          1, 0, 0,
+        ],
+        color
+      );
+      pushFace(
+        [
+          x + 1, 0, y + 1,
+          x + 1, 0, y,
+          x + 1, height, y,
+          x + 1, height, y + 1,
+        ],
+        [
+          -1, 0, 0,
+          -1, 0, 0,
+          -1, 0, 0,
+          -1, 0, 0,
+        ],
+        color
+      );
+      pushFace(
+        [
+          x, height, y + 1,
+          x + 1, height, y + 1,
+          x + 1, height, y,
+          x, height, y,
+        ],
+        [
+          0, 1, 0,
+          0, 1, 0,
+          0, 1, 0,
+          0, 1, 0,
+        ],
+        color
+      );
+    };
+    const { grid, tiles } = this;
+    const { geometry } = tiles;
     for (let y = 0; y < grid.height; y += 1) {
       for (let x = 0; x < grid.width; x += 1) {
         const tile = grid.getNodeAt(x, y);
         if (tile.type !== Floor.tiles.air) {
-          const offset = vertices.length / 3;
-          vertices.push(
-            x, 0, y + 1,
-            x + 1, 0, y + 1,
-            x + 1, 0, y,
-            x, 0, y
-          );
-          const { r, g, b } = tile.color;
-          colors.push(
-            r, g, b,
-            r, g, b,
-            r, g, b,
-            r, g, b
-          );
-          normals.push(
-            0, 1, 0,
-            0, 1, 0,
-            0, 1, 0,
-            0, 1, 0
-          );
-          indices.push(
-            offset, offset + 1, offset + 2,
-            offset + 2, offset + 3, offset
-          );
+          switch (tile.type) {
+            case Floor.tiles.wall:
+              pushWall(x, y, tile.color);
+              break;
+            default:
+              pushTile(x, y, tile.color);
+              break;
+          }
         }
       }
     }
-    if (!vertices.length) return;
-    const { geometry } = tiles;
-    let index = geometry.getIndex();
-    if (!index) {
-      geometry.setIndex(new BufferAttribute(new Uint16Array(), 1));
-      index = geometry.getIndex();
-    }
-    let position = geometry.getAttribute('position');
-    if (!position) {
-      geometry.addAttribute('position', new BufferAttribute(new Float32Array(), 3));
-      position = geometry.getAttribute('position');
-    }
-    let color = geometry.getAttribute('color');
-    if (!color) {
-      geometry.addAttribute('color', new BufferAttribute(new Float32Array(), 3));
-      color = geometry.getAttribute('color');
-    }
-    let normal = geometry.getAttribute('normal');
-    if (!normal) {
-      geometry.addAttribute('normal', new BufferAttribute(new Float32Array(), 3));
-      normal = geometry.getAttribute('normal');
-    }
+    const index = geometry.getIndex();
+    const position = geometry.getAttribute('position');
+    const color = geometry.getAttribute('color');
+    const normal = geometry.getAttribute('normal');
     index.setArray(new Uint16Array(indices));
     index.needsUpdate = true;
     position.setArray(new Float32Array(vertices));
@@ -166,6 +254,7 @@ class Floor extends Object3D {
     color.needsUpdate = true;
     normal.setArray(new Float32Array(normals));
     normal.needsUpdate = true;
+    geometry.computeBoundingSphere();
     if (this.isActive) {
       tiles.visible = true;
     }
@@ -175,6 +264,7 @@ class Floor extends Object3D {
 Floor.tiles = {
   air: 0,
   floor: 1,
+  wall: 2,
 };
 
 Floor.defaultGridSize = {
