@@ -15,8 +15,7 @@ import GridMaterial from '@/materials/grid';
 class Floor extends Object3D {
   constructor({ grid, number } = { number: 0 }) {
     super();
-    this.number = number;
-    this.position.set(0, Floor.height * number, 0);
+    this.setNumber(number);
     const { width, height } = Floor.defaultGridSize;
     this.grid = new Grid(width, height);
     this.grid.setTile = function setTile({
@@ -113,6 +112,11 @@ class Floor extends Object3D {
     intersect.visible = active;
     tiles.visible = !!tiles.geometry.getAttribute('position').array.length;
     this._isActive = active;
+  }
+
+  setNumber(number) {
+    this.number = number;
+    this.position.set(0, Floor.height * number, 0);
   }
 
   updateTiles() {

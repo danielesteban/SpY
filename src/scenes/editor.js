@@ -56,7 +56,14 @@ export default ({ input, scene }) => {
       ui.setFloor(building.activeFloor + 1);
     },
     onRemoveFloor() {
-      console.log('This will remove the current floor but it\'s not yet implemented.');
+      // eslint-disable-next-line no-alert
+      if (!window.confirm('Remove the current floor?')) {
+        return;
+      }
+      building.removeFloor();
+      ui.setFloorCount(building.floors.length);
+      ui.setFloor(building.activeFloor);
+      history.empty();
     },
     onSetFloor(floor) {
       building.activeFloor = floor;

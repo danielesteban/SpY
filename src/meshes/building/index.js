@@ -20,6 +20,17 @@ class Building extends Object3D {
     this.add(floor);
   }
 
+  removeFloor() {
+    const { floors, activeFloor } = this;
+    const [floor] = floors.splice(activeFloor, 1);
+    this.remove(floor);
+    if (!floors.length) this.addFloor();
+    if (!floors[activeFloor]) {
+      this._activeFloor = this._activeFloor - 1;
+    }
+    floors[this._activeFloor].setNumber(this._activeFloor);
+  }
+
   get activeFloor() {
     return this._activeFloor;
   }

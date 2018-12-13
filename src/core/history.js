@@ -4,6 +4,12 @@ class History {
     this.future = [];
   }
 
+  empty() {
+    const { past, future } = this;
+    past.length = 0;
+    future.length = 0;
+  }
+
   undo() {
     const { past, future } = this;
     const prev = past.pop();

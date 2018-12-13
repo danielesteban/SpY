@@ -53,7 +53,7 @@ class EditorUI extends UI {
       add.innerText = '+';
       add.addEventListener('click', onAddFloor, false);
       const remove = this.add('button');
-      remove.innerText = '-';
+      remove.innerText = '×';
       remove.addEventListener('click', onRemoveFloor, false);
       const wrapper = this.add('div');
       wrapper.appendChild(add);
