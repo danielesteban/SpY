@@ -263,17 +263,17 @@ class Floor extends Object3D {
         ]
       );
     };
-    const testType = (x, y, type) => {
+    const testType = (x, y, types) => {
       if (x < 0 || x > grid.width - 1 || y < 0 || y > grid.height - 1) {
         return false;
       }
-      return grid.getNodeAt(x, y).type === type;
+      return types.indexOf(grid.getNodeAt(x, y).type) !== -1;
     };
-    const isTile = (x, y) => testType(x, y, Floor.tiles.tile);
-    const isWall = (x, y) => testType(x, y, Floor.tiles.wall);
-    const wallAO = (x, y, s = 0.2) => (isWall(x, y) ? s : 0);
+    const testTileNeighbor = (x, y) => testType(x, y, [Floor.tiles.tile, Floor.tiles.wall]);
+    const testWallNeighbor = (x, y) => testType(x, y, [Floor.tiles.wall]);
+    const wallAO = (x, y, s = 0.2) => (testWallNeighbor(x, y) ? s : 0);
     const pushTile = (x, y, color) => (
-      pushBox(x, y, color, 0.1, isTile, [
+      pushBox(x, y, color, 0.1, testTileNeighbor, [
         1 - Math.min(wallAO(x, y + 1) + wallAO(x - 1, y) + wallAO(x - 1, y + 1, 0.1), 0.4),
         1 - Math.min(wallAO(x, y + 1) + wallAO(x + 1, y) + wallAO(x + 1, y + 1, 0.1), 0.4),
         1 - Math.min(wallAO(x, y - 1) + wallAO(x + 1, y) + wallAO(x + 1, y - 1, 0.1), 0.4),
@@ -281,7 +281,7 @@ class Floor extends Object3D {
       ])
     );
     const pushWall = (x, y, color) => (
-      pushBox(x, y, color, Floor.height, isWall, [1, 1, 1, 1])
+      pushBox(x, y, color, Floor.height, testWallNeighbor, [1, 1, 1, 1])
     );
     for (let y = 0; y < grid.height; y += 1) {
       for (let x = 0; x < grid.width; x += 1) {
