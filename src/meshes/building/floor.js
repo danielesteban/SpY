@@ -62,19 +62,30 @@ class Floor extends Object3D {
       })
     );
     this.add(this.intersect);
-    const tile = new BufferGeometry();
-    tile.setIndex(new BufferAttribute(new Uint16Array(), 1));
-    tile.addAttribute('position', new BufferAttribute(new Float32Array(), 3));
-    tile.addAttribute('color', new BufferAttribute(new Float32Array(), 3));
-    tile.addAttribute('normal', new BufferAttribute(new Float32Array(), 3));
-    this.tiles = new Mesh(
-      tile,
-      new GridMaterial({
-        vertexColors: VertexColors,
+    const material = new GridMaterial({
+      vertexColors: VertexColors,
+    });
+    this.chunks = [...Array(Math.ceil(this.grid.height / Floor.chunkSize.height))].map(() => (
+      [...Array(Math.ceil(this.grid.width / Floor.chunkSize.width))].map(() => {
+        const geometry = new BufferGeometry();
+        geometry.setIndex(new BufferAttribute(new Uint16Array(), 1));
+        geometry.addAttribute('position', new BufferAttribute(new Float32Array(), 3));
+        geometry.addAttribute('color', new BufferAttribute(new Float32Array(), 3));
+        geometry.addAttribute('normal', new BufferAttribute(new Float32Array(), 3));
+        const chunk = new Mesh(
+          geometry,
+          material
+        );
+        chunk.visible = false;
+        this.add(chunk);
+        return chunk;
       })
-    );
-    this.updateTiles();
-    this.add(this.tiles);
+    ));
+    for (let y = 0; y < this.chunks.length; y += 1) {
+      for (let x = 0; x < this.chunks[0].length; x += 1) {
+        this.updateChunk(x, y);
+      }
+    }
     this.isActive = false;
   }
 
@@ -84,7 +95,7 @@ class Floor extends Object3D {
     x,
     y,
   }) {
-    const { grid } = this;
+    const { chunks, grid } = this;
     if (
       x < 0
       || x > grid.width - 1
@@ -106,7 +117,23 @@ class Floor extends Object3D {
       x,
       y,
     });
-    this.updateTiles();
+    const chunk = {
+      x: Math.floor(x / Floor.chunkSize.width),
+      y: Math.floor(y / Floor.chunkSize.height),
+    };
+    for (
+      let cy = Math.max(chunk.y - 1, 0);
+      cy <= Math.min(y + 1, chunks.length - 1);
+      cy += 1
+    ) {
+      for (
+        let cx = Math.max(chunk.x - 1, 0);
+        cx <= Math.min(x + 1, chunks[0].length - 1);
+        cx += 1
+      ) {
+        this.updateChunk(cx, cy);
+      }
+    }
   }
 
   get isActive() {
@@ -114,9 +141,8 @@ class Floor extends Object3D {
   }
 
   set isActive(active) {
-    const { intersect, tiles } = this;
+    const { intersect } = this;
     intersect.visible = active;
-    tiles.visible = !!tiles.geometry.getAttribute('position').array.length;
     this._isActive = active;
   }
 
@@ -125,8 +151,8 @@ class Floor extends Object3D {
     this.position.set(0, Floor.height * number, 0);
   }
 
-  updateTiles() {
-    const { grid, number, tiles } = this;
+  updateChunk(cx, cy) {
+    const { chunks, grid, number } = this;
     const indices = [];
     const vertices = [];
     const colors = [];
@@ -320,8 +346,16 @@ class Floor extends Object3D {
         Floor.height * (1 / 3) * 2
       );
     };
-    for (let y = 0; y < grid.height; y += 1) {
-      for (let x = 0; x < grid.width; x += 1) {
+    for (
+      let y = cy * Floor.chunkSize.height;
+      y < Math.min((cy + 1) * Floor.chunkSize.height, grid.height);
+      y += 1
+    ) {
+      for (
+        let x = cx * Floor.chunkSize.width;
+        x < Math.min((cx + 1) * Floor.chunkSize.width, grid.width);
+        x += 1
+      ) {
         const tile = grid.getNodeAt(x, y);
         if (tile.type !== Floor.tiles.air) {
           switch (tile.type) {
@@ -338,7 +372,8 @@ class Floor extends Object3D {
         }
       }
     }
-    const { geometry } = tiles;
+    const mesh = chunks[cy][cx];
+    const { geometry } = mesh;
     const index = geometry.getIndex();
     const position = geometry.getAttribute('position');
     const color = geometry.getAttribute('color');
@@ -352,7 +387,7 @@ class Floor extends Object3D {
     normal.setArray(new Float32Array(normals));
     normal.needsUpdate = true;
     geometry.computeBoundingSphere();
-    tiles.visible = true;
+    mesh.visible = !!position.count;
   }
 }
 
@@ -368,6 +403,11 @@ Floor.tiles = {
 Floor.defaultGridSize = {
   width: 48,
   height: 48,
+};
+
+Floor.chunkSize = {
+  width: 16,
+  height: 16,
 };
 
 export default Floor;

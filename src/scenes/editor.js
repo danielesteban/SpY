@@ -23,8 +23,6 @@ export default ({ input, scene }) => {
 
   // Setup camera
   scene.camera.distance = 10;
-  scene.camera.pitch = Math.PI * (1 / 3);
-  scene.camera.tilt = Math.PI * -0.5;
   scene.camera.updateOrbit();
   const { width, height } = building.floors[building.activeFloor].grid;
   scene.camera.root.position.set(
