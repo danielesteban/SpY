@@ -1,10 +1,13 @@
 import Building from '@/meshes/building';
 import EditorUI from '@/ui/editor';
 import History from '@/core/history';
+import Rain from '@/meshes/rain';
 import Starfield from '@/meshes/starfield';
 
 export default ({ input, scene }) => {
   // Scenery
+  const rain = new Rain();
+  scene.root.add(rain);
   const starfield = new Starfield();
   scene.root.add(starfield);
 
@@ -14,6 +17,9 @@ export default ({ input, scene }) => {
     stored ? JSON.parse(stored) : {}
   );
   scene.root.add(building);
+  rain.position.x = building.heightmap[0].length * 0.5;
+  rain.position.z = building.heightmap.length * 0.5;
+  rain.setHeightTest(building.getHeight.bind(building));
 
   // Setup camera
   scene.camera.distance = 10;
@@ -116,6 +122,7 @@ export default ({ input, scene }) => {
             x,
             y,
           });
+          building.computeHeightmap();
           ui.setModified(true);
         },
         redo() {
@@ -125,6 +132,7 @@ export default ({ input, scene }) => {
             x,
             y,
           });
+          building.computeHeightmap();
           ui.setModified(true);
         },
       };

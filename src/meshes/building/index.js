@@ -11,6 +11,48 @@ class Building extends Object3D {
     ) : [new Floor()];
     this.floors.forEach(floor => this.add(floor));
     this.activeFloor = 0;
+    this.computeHeightmap();
+  }
+
+  computeHeightmap() {
+    const { floors } = this;
+    const heightmap = [];
+    floors.forEach(({ grid: { nodes: row } }, floor) => (
+      row.forEach(nodes => (
+        nodes.forEach(({ x, y, type }) => {
+          if (!heightmap[y]) heightmap[y] = [];
+          let height;
+          switch (type) {
+            case Floor.tiles.tile:
+              height = (floor * 3) + 0.1;
+              break;
+            case Floor.tiles.wall:
+              height = (floor + 1) * 3;
+              break;
+            default:
+              height = 0;
+              break;
+          }
+          heightmap[y][x] = Math.max(heightmap[y][x] || 0, height);
+        })
+      ))
+    ));
+    this.heightmap = heightmap;
+  }
+
+  getHeight(x, y) {
+    const { heightmap } = this;
+    x = Math.floor(x);
+    y = Math.floor(y);
+    if (
+      x < 0
+      || x > heightmap[0].length - 1
+      || y < 0
+      || y > heightmap.length - 1
+    ) {
+      return 0;
+    }
+    return heightmap[y][x];
   }
 
   export() {
