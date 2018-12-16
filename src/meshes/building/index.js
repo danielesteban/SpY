@@ -27,6 +27,7 @@ class Building extends Object3D {
               height = (floor * 3) + 0.1;
               break;
             case Floor.tiles.wall:
+            case Floor.tiles.window:
               height = (floor + 1) * 3;
               break;
             default:
