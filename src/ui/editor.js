@@ -5,6 +5,7 @@ class EditorUI extends UI {
     floorCount,
     onAddFloor,
     onRemoveFloor,
+    onSave,
     onSetFloor,
   }) {
     super('toolbar');
@@ -59,6 +60,12 @@ class EditorUI extends UI {
       wrapper.appendChild(add);
       wrapper.appendChild(remove);
     }
+    // Save
+    const save = this.add('button');
+    save.className = 'save';
+    save.innerText = 'Save';
+    save.addEventListener('click', onSave, false);
+    this.saveButton = save;
     this.mount();
   }
 
@@ -98,6 +105,11 @@ class EditorUI extends UI {
     floorInput.value = value;
     this.floor = value;
     this.onSetFloor(value);
+  }
+
+  setModified(value) {
+    const { saveButton } = this;
+    saveButton.className = `save${value ? ' modified' : ''}`;
   }
 
   setTile(value) {

@@ -13,6 +13,22 @@ class Building extends Object3D {
     this.activeFloor = 0;
   }
 
+  export() {
+    const { floors } = this;
+    return {
+      floors: floors.map(({ grid: { nodes: row } }) => (
+        row.map(nodes => (
+          nodes.map(({ type, color }) => [
+            type & 0xFF,
+            Math.floor(color.r * 0xFF) & 0xFF,
+            Math.floor(color.g * 0xFF) & 0xFF,
+            Math.floor(color.b * 0xFF) & 0xFF,
+          ])
+        ))
+      )),
+    };
+  }
+
   addFloor() {
     const { floors, activeFloor } = this;
     const floor = new Floor({ number: activeFloor + 1 });

@@ -32,14 +32,20 @@ class Floor extends Object3D {
     for (let y = 0; y < height; y += 1) {
       for (let x = 0; x < width; x += 1) {
         if (grid) {
-          // TODO !!!
-          console.error('Slow down! Grid loading is not yet implemented!!');
+          const [type, r, g, b] = grid[y][x];
+          this.grid.setTile({
+            x,
+            y,
+            type,
+            color: (new Color())
+              .setRGB(r / 0xFF, g / 0xFF, b / 0xFF),
+          });
         } else {
           this.grid.setTile({
             x,
             y,
             type: Floor.tiles.air,
-            color: new Color(),
+            color: new Color(0),
           });
         }
       }
@@ -87,7 +93,7 @@ class Floor extends Object3D {
     ) {
       return;
     }
-    color = new Color(color);
+    color = new Color(color || 0);
     const avg = (color.r + color.g + color.b) / 3 * 0.1;
     color.offsetHSL(
       Math.random() * (avg * 2) - avg,

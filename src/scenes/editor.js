@@ -9,7 +9,10 @@ export default ({ input, scene }) => {
   scene.root.add(starfield);
 
   // Spawn building
-  const building = new Building();
+  const stored = localStorage.getItem('SpY::EditorTestLevel');
+  const building = new Building(
+    stored ? JSON.parse(stored) : {}
+  );
   scene.root.add(building);
 
   // Setup camera
@@ -65,6 +68,11 @@ export default ({ input, scene }) => {
       ui.setFloor(building.activeFloor);
       history.empty();
     },
+    onSave() {
+      const meta = building.export();
+      localStorage.setItem('SpY::EditorTestLevel', JSON.stringify(meta));
+      ui.setModified(false);
+    },
     onSetFloor(floor) {
       building.activeFloor = floor;
       const { height } = building.floors[building.activeFloor].constructor;
@@ -108,6 +116,7 @@ export default ({ input, scene }) => {
             x,
             y,
           });
+          ui.setModified(true);
         },
         redo() {
           floor.setTile({
@@ -116,6 +125,7 @@ export default ({ input, scene }) => {
             x,
             y,
           });
+          ui.setModified(true);
         },
       };
       action.redo();
