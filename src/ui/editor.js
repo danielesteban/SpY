@@ -20,6 +20,13 @@ class EditorUI extends UI {
       this.setColor(color);
     }, false);
     this.setColor('#aaaaaa');
+    const pick = this.add('button');
+    pick.innerText = 'Pick';
+    pick.addEventListener('click', () => {
+      const { tool, modifier } = this.tool;
+      this.setTool('pick', tool === 'paint' ? modifier : 1);
+    }, false);
+    this.pickButton = pick;
     // Tiles
     const tiles = this.add('label');
     tiles.innerText = 'Tiles';
@@ -30,13 +37,12 @@ class EditorUI extends UI {
     ].map((label, tile) => {
       const button = this.add('button');
       button.innerText = label;
-      button.tile = tile;
       button.addEventListener('click', () => {
-        this.setTile(tile);
+        this.setTool('paint', tile);
       }, false);
       return button;
     });
-    this.setTile(1);
+    this.setTool('paint', 1);
     // Floors
     const floors = this.add('label');
     floors.innerText = 'Floors';
@@ -84,7 +90,7 @@ class EditorUI extends UI {
       return;
     }
     if (keyCode >= 49 && keyCode <= 57) {
-      this.setTile(keyCode - 49);
+      this.setTool('paint', keyCode - 49);
     }
   }
 
@@ -112,12 +118,21 @@ class EditorUI extends UI {
     saveButton.className = `save${value ? ' modified' : ''}`;
   }
 
-  setTile(value) {
-    const { tiles } = this;
-    tiles.forEach((button) => {
-      button.className = button.tile === value ? 'active' : '';
-    });
-    this.tile = value;
+  setTool(tool, modifier) {
+    const { pickButton, tiles } = this;
+    this.tool = { tool, modifier };
+    tiles.forEach((button) => { button.className = ''; });
+    pickButton.className = '';
+    switch (tool) {
+      case 'paint':
+        tiles[modifier].className = 'active';
+        break;
+      case 'pick':
+        pickButton.className = 'active';
+        break;
+      default:
+        break;
+    }
   }
 }
 

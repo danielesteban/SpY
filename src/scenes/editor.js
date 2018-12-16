@@ -103,7 +103,7 @@ export default ({ input, scene }) => {
       return;
     }
     hit.point.addScaledVector(hit.face.normal, -0.5);
-    const { color, tile } = ui;
+    const { color, tool: { tool, modifier } } = ui;
     const x = Math.floor(hit.point.x);
     const y = Math.floor(hit.point.z);
     if (
@@ -114,30 +114,41 @@ export default ({ input, scene }) => {
       const current = floor.grid.getNodeAt(x, y);
       const currentType = current.type;
       const currentColor = `#${current.color.getHexString()}`;
-      const action = {
-        undo() {
-          floor.setTile({
-            type: currentType,
-            color: currentColor,
-            x,
-            y,
-          });
-          building.computeHeightmap();
-          ui.setModified(true);
-        },
-        redo() {
-          floor.setTile({
-            type: tile,
-            color,
-            x,
-            y,
-          });
-          building.computeHeightmap();
-          ui.setModified(true);
-        },
-      };
-      action.redo();
-      history.push(action);
+      switch (tool) {
+        case 'paint': {
+          const action = {
+            undo() {
+              floor.setTile({
+                type: currentType,
+                color: currentColor,
+                x,
+                y,
+              });
+              building.computeHeightmap();
+              ui.setModified(true);
+            },
+            redo() {
+              floor.setTile({
+                type: modifier,
+                color,
+                x,
+                y,
+              });
+              building.computeHeightmap();
+              ui.setModified(true);
+            },
+          };
+          action.redo();
+          history.push(action);
+          break;
+        }
+        case 'pick':
+          ui.setColor(currentColor);
+          ui.setTool('paint', modifier);
+          break;
+        default:
+          break;
+      }
     }
   };
 };
