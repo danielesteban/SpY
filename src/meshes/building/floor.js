@@ -88,7 +88,6 @@ class Floor extends Object3D {
         this.updateChunk(x, y);
       }
     }
-    this.isActive = false;
   }
 
   setTile({
@@ -136,16 +135,6 @@ class Floor extends Object3D {
         this.updateChunk(cx, cy);
       }
     }
-  }
-
-  get isActive() {
-    return this._isActive;
-  }
-
-  set isActive(active) {
-    const { intersect } = this;
-    intersect.visible = active;
-    this._isActive = active;
   }
 
   setNumber(number) {

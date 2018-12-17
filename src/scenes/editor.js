@@ -60,7 +60,7 @@ export default ({ input, scene }) => {
     onAddFloor() {
       building.addFloor();
       ui.setFloorCount(building.floors.length);
-      ui.setFloor(building.activeFloor + 1);
+      ui.setFloor(building.activeFloor);
     },
     onRemoveFloor() {
       // eslint-disable-next-line no-alert
