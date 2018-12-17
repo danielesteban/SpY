@@ -35,6 +35,7 @@ class EditorUI extends UI {
       'Tile',
       'Wall',
       'Window',
+      'Door',
     ].map((label, tile) => {
       const button = this.add('button');
       button.innerText = label;
