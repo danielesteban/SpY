@@ -53,7 +53,7 @@ class Floor extends Object3D {
     const plane = new PlaneBufferGeometry(width, height, 2, 2);
     plane.rotateX(Math.PI * -0.5);
     plane.translate(width * 0.5, 0, height * 0.5);
-    this.intersect = new Mesh(
+    const intersect = new Mesh(
       plane,
       new MeshBasicMaterial({
         side: DoubleSide,
@@ -61,7 +61,8 @@ class Floor extends Object3D {
         visible: false,
       })
     );
-    this.add(this.intersect);
+    this.add(intersect);
+    this.intersect = [intersect];
     const material = new GridMaterial({
       vertexColors: VertexColors,
     });
@@ -78,6 +79,7 @@ class Floor extends Object3D {
         );
         chunk.visible = false;
         this.add(chunk);
+        this.intersect.push(chunk);
         return chunk;
       })
     ));

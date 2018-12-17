@@ -96,7 +96,7 @@ export default ({ input, scene }) => {
     }
     const raycaster = camera.getRaycaster(pointer.normalized);
     const floor = building.floors[building.activeFloor];
-    const hit = raycaster.intersectObjects([floor.intersect, floor.tiles])[0];
+    const hit = raycaster.intersectObjects(floor.intersect)[0];
     if (!hit) {
       return;
     }
