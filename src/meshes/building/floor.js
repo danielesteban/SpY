@@ -360,19 +360,34 @@ class Floor extends Object3D {
     const pushDoor = (x, y, color) => {
       pushTile(x, y, color);
       const size = 0.2;
+      const height = Floor.height * (1 / 3) * 2;
       const yAxis = (
         testType(x, y + 1, [Floor.tiles.wall, Floor.tiles.door])
         && testType(x, y - 1, [Floor.tiles.wall, Floor.tiles.door])
       );
+      const { r, g, b } = color;
+      const avg = (r + g + b) / 3;
       pushBox(
         x,
         y,
         yAxis ? size : 1,
         yAxis ? 1 : size,
-        Floor.height,
-        color,
+        height - 0.1,
+        { r: r - avg * 0.5, g: g - avg * 0.5, b: b - avg * 0.5 },
         testWallNeighbor,
-        [1, 1, 1, 1]
+        [1, 1, 1, 1],
+        0.1
+      );
+      pushBox(
+        x,
+        y,
+        1,
+        1,
+        Floor.height * (1 / 3),
+        color,
+        testWindowNeighbor,
+        [1, 1, 1, 1],
+        height
       );
     };
     const pushWall = (x, y, color) => (
