@@ -23,6 +23,7 @@ function onLoad() {
     splash.style.display = 'none';
     input.isEnabled = true;
     if (__PRODUCTION__) music.play();
+    music.play();
   });
 }
 
