@@ -21,6 +21,7 @@ class Floor extends Object3D {
     super();
     this.setNumber(number);
     this.entities = new Object3D();
+    this.entities.position.set(0, 0.1, 0);
     this.add(this.entities);
     const { width, height } = Floor.defaultGridSize;
     this.grid = new Grid(width, height);
@@ -54,7 +55,7 @@ class Floor extends Object3D {
           torso: 0x999999 * Math.random(),
         });
         actor.spawn = { x, y };
-        actor.position.set(x + 0.5, 0.1, y + 0.5);
+        actor.position.set(x + 0.5, 0, y + 0.5);
         entities.add(actor);
       }
     };
