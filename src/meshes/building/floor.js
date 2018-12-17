@@ -34,13 +34,11 @@ class Floor extends Object3D {
     }) => {
       const { entities, grid } = this;
       const tile = grid.nodes[y][x];
-      if (~[tile.type, type].indexOf(Floor.tiles.actor)) {
-        const already = entities.children.findIndex(({ spawn }) => (
-          x === spawn.x && y === spawn.y
-        ));
-        if (~already) {
-          entities.remove(entities.children[already]);
-        }
+      const entity = entities.children.findIndex(({ spawn }) => (
+        x === spawn.x && y === spawn.y
+      ));
+      if (~entity) {
+        entities.remove(entities.children[entity]);
       }
       tile.color = color;
       tile.type = type;
