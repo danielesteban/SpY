@@ -23,6 +23,7 @@ export default ({ input, scene }) => {
 
   // Setup camera
   scene.camera.distance = 10;
+  scene.camera.minHeight = 0.2;
   scene.camera.updateOrbit();
   const { width, height } = building.floors[building.activeFloor].grid;
   scene.camera.root.position.set(
@@ -81,7 +82,6 @@ export default ({ input, scene }) => {
       building.activeFloor = floor;
       const { height } = building.floors[building.activeFloor].constructor;
       scene.camera.root.position.y = height * floor;
-      scene.camera.minHeight = floor > 0 ? -Infinity : 0.1;
     },
   });
 

@@ -11,62 +11,76 @@ class EditorUI extends UI {
     super('toolbar');
     this.onKeyup = this.onKeyup.bind(this);
     this.onSetFloor = onSetFloor;
-    // Color
-    const color = this.add('label');
-    color.innerText = 'Color';
-    this.colorInput = this.add('input');
-    this.colorInput.type = 'color';
-    this.colorInput.addEventListener('change', ({ target: { value: color } }) => {
-      this.setColor(color);
-    }, false);
-    this.setColor('#aaaaaa');
-    const pick = this.add('button');
-    pick.innerText = 'Pick';
-    pick.addEventListener('click', () => {
-      const { tool, modifier } = this.tool;
-      this.setTool('pick', tool === 'paint' ? modifier : 1);
-    }, false);
-    this.pickButton = pick;
-    // Tiles
-    const tiles = this.add('label');
-    tiles.innerText = 'Tiles';
-    this.tiles = [
-      'Air',
-      'Tile',
-      'Wall',
-      'Window',
-      'Door',
-    ].map((label, tile) => {
-      const button = this.add('button');
-      button.innerText = label;
-      button.addEventListener('click', () => {
-        this.setTool('paint', tile);
-      }, false);
-      return button;
-    });
-    this.setTool('paint', 1);
-    // Floors
-    const floors = this.add('label');
-    floors.innerText = 'Floors';
-    this.floorInput = this.add('input');
-    this.floorInput.type = 'number';
-    this.floorInput.addEventListener('change', ({ target: { value: floor } }) => {
-      this.setFloor(parseInt(floor, 10));
-    }, false);
-    this.floorInput.min = 0;
-    this.floorInput.step = 1;
-    this.setFloorCount(floorCount);
-    this.setFloor(0);
+    // Floor
     {
-      const add = this.add('button');
-      add.innerText = '+';
-      add.addEventListener('click', onAddFloor, false);
-      const remove = this.add('button');
-      remove.innerText = '×';
-      remove.addEventListener('click', onRemoveFloor, false);
+      const label = this.add('label');
+      label.innerText = 'Floor';
+      const input = this.add('input');
+      input.type = 'number';
+      input.addEventListener('change', ({ target: { value: floor } }) => {
+        this.setFloor(parseInt(floor, 10));
+      }, false);
+      input.min = 0;
+      input.step = 1;
+      this.floorInput = input;
+      const buttons = this.add('div');
+      {
+        const add = this.add('button');
+        add.innerText = '+';
+        add.addEventListener('click', onAddFloor, false);
+        const remove = this.add('button');
+        remove.innerText = '×';
+        remove.addEventListener('click', onRemoveFloor, false);
+        buttons.appendChild(add);
+        buttons.appendChild(remove);
+      }
       const wrapper = this.add('div');
-      wrapper.appendChild(add);
-      wrapper.appendChild(remove);
+      wrapper.appendChild(input);
+      wrapper.appendChild(buttons);
+    }
+    // Tiles
+    {
+      const label = this.add('label');
+      label.innerText = 'Tiles';
+      const tiles = [
+        'Air',
+        'Tile',
+        'Wall',
+        'Window',
+        'Door',
+        'Dude',
+      ].map((label, tile) => {
+        const button = this.add('button');
+        button.innerText = label;
+        button.addEventListener('click', () => {
+          this.setTool('paint', tile);
+        }, false);
+        return button;
+      });
+      const wrapper = this.add('div');
+      tiles.forEach(button => wrapper.appendChild(button));
+      this.tiles = tiles;
+    }
+    // Color
+    {
+      const label = this.add('label');
+      label.innerText = 'Color';
+      const input = this.add('input');
+      input.type = 'color';
+      input.addEventListener('change', ({ target: { value: color } }) => {
+        this.setColor(color);
+      }, false);
+      this.colorInput = input;
+      const button = this.add('button');
+      button.innerText = 'Pick';
+      button.addEventListener('click', () => {
+        const { tool, modifier } = this.tool;
+        this.setTool('pick', tool === 'paint' ? modifier : 1);
+      }, false);
+      this.pickButton = button;
+      const wrapper = this.add('div');
+      wrapper.appendChild(input);
+      wrapper.appendChild(button);
     }
     // Save
     const save = this.add('button');
@@ -74,6 +88,12 @@ class EditorUI extends UI {
     save.innerText = 'Save';
     save.addEventListener('click', onSave, false);
     this.saveButton = save;
+    // Initial state
+    this.setFloorCount(floorCount);
+    this.setFloor(0);
+    this.setTool('paint', 1);
+    this.setColor('#aaaaaa');
+    // Mount UI
     this.mount();
   }
 

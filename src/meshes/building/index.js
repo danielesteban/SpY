@@ -14,6 +14,13 @@ class Building extends Object3D {
     this.computeHeightmap();
   }
 
+  onAnimationTick(animation) {
+    const { floors } = this;
+    floors.forEach(floor => (
+      floor.entities.children.forEach(actor => actor.onAnimationTick(animation))
+    ));
+  }
+
   computeHeightmap() {
     const { floors } = this;
     const heightmap = [];

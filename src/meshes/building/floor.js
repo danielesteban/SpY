@@ -10,24 +10,53 @@ import {
   VertexColors,
   Object3D,
 } from 'three';
+import Dude from '@/actors/dude';
+import ThiccBoi from '@/actors/thiccboi';
 import GridMaterial from '@/materials/grid';
+
+const Actors = [Dude, ThiccBoi];
 
 class Floor extends Object3D {
   constructor({ grid, number } = { number: 0 }) {
     super();
     this.setNumber(number);
+    this.entities = new Object3D();
+    this.add(this.entities);
     const { width, height } = Floor.defaultGridSize;
     this.grid = new Grid(width, height);
-    this.grid.setTile = function setTile({
+    this.grid.setTile = ({
       color,
       type,
       x,
       y,
-    }) {
-      const tile = this.nodes[y][x];
+    }) => {
+      const { entities, grid } = this;
+      const tile = grid.nodes[y][x];
+      if (~[tile.type, type].indexOf(Floor.tiles.actor)) {
+        const already = entities.children.findIndex(({ spawn }) => (
+          x === spawn.x && y === spawn.y
+        ));
+        if (~already) {
+          entities.remove(entities.children[already]);
+        }
+      }
       tile.color = color;
       tile.type = type;
       tile.walkable = type !== Floor.tiles.tile;
+      if (type === Floor.tiles.actor) {
+        const Actor = Actors[Math.floor(Math.random() * Actors.length)];
+        const actor = new Actor({
+          arms: 0x222222,
+          eyes: 0x999999 * Math.random(),
+          hat: Math.random() > 0.5 ? (0x999999 * Math.random()) : false,
+          head: 0x999999 * Math.random(),
+          legs: 0x222222,
+          torso: 0x999999 * Math.random(),
+        });
+        actor.spawn = { x, y };
+        actor.position.set(x + 0.5, 0.1, y + 0.5);
+        entities.add(actor);
+      }
     };
     for (let y = 0; y < height; y += 1) {
       for (let x = 0; x < width; x += 1) {
@@ -90,6 +119,11 @@ class Floor extends Object3D {
     }
   }
 
+  setNumber(number) {
+    this.number = number;
+    this.position.set(0, Floor.height * number, 0);
+  }
+
   setTile({
     color,
     type,
@@ -137,13 +171,12 @@ class Floor extends Object3D {
     }
   }
 
-  setNumber(number) {
-    this.number = number;
-    this.position.set(0, Floor.height * number, 0);
-  }
-
   updateChunk(cx, cy) {
-    const { chunks, grid, number } = this;
+    const {
+      chunks,
+      grid,
+      number,
+    } = this;
     const indices = [];
     const vertices = [];
     const colors = [];
@@ -374,21 +407,22 @@ class Floor extends Object3D {
         x += 1
       ) {
         const tile = grid.getNodeAt(x, y);
-        if (tile.type !== Floor.tiles.air) {
-          switch (tile.type) {
-            case Floor.tiles.door:
-              pushDoor(x, y, tile.color);
-              break;
-            case Floor.tiles.wall:
-              pushWall(x, y, tile.color);
-              break;
-            case Floor.tiles.window:
-              pushWindow(x, y, tile.color);
-              break;
-            default:
-              pushTile(x, y, tile.color);
-              break;
-          }
+        switch (tile.type) {
+          case Floor.tiles.air:
+            break;
+          case Floor.tiles.door:
+            pushDoor(x, y, tile.color);
+            break;
+          case Floor.tiles.wall:
+            pushWall(x, y, tile.color);
+            break;
+          case Floor.tiles.window:
+            pushWindow(x, y, tile.color);
+            break;
+          case Floor.tiles.dude:
+          default:
+            pushTile(x, y, tile.color);
+            break;
         }
       }
     }
@@ -419,6 +453,7 @@ Floor.tiles = {
   wall: 2,
   window: 3,
   door: 4,
+  actor: 5,
 };
 
 Floor.defaultGridSize = {

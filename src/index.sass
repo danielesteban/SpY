@@ -74,68 +74,55 @@ canvas
   position: fixed
   left: 0
   top: 50%
-  transform: translate(0, -60%)
+  transform: translate(0, -50%)
   background: rgba(0, 0, 0, .5)
-  border-radius: 0 1rem 1rem 0
   padding: 1rem
+  button, input
+    padding: 1rem 0
+    border: 0
+    margin: 0
+    outline: 0
+    font-family: inherit
+    font-size: inherit
+    font-weight: inherit
+    background: #333
+    color: #bebebe
+    cursor: pointer
   > div
-    width: 4.5rem
-    display: flex
-    flex-direction: column
-    align-items: center
-    justify-content: space-around
-    button
-      width: 100%
-      margin: 0 0 1rem
-      padding: 1rem 0
-      border: 0
-      outline: 0
-      background: #aaa
-      font-family: inherit
-      font-size: inherit
-      font-weight: inherit
-      cursor: pointer
-      &.active
-        background: #333
-        color: #fff
-        cursor: default
-      &.save
-        margin-top: 1rem
-        &.modified
-          background: #600
-          color: #fff
+    width: 10rem
     > div
-      display: flex;
-      width: 100%;
-      > button
-        margin-bottom: 0
-        &:first-child
-          margin-right: 0.1rem;
-        &:last-child
-          margin-left: 0.1rem;
-    > label
-      margin-top: 1rem
-      &:first-child
-        margin-top: 0
-    > input[type=color], > input[type=number]
-      width: 100%
-      border: 0
-      outline: 0
-      background: #333
-      color: #aaa
-      margin: 0 0 1rem
-      padding: 0
-      height: 45px
-      cursor: pointer
-    > input[type=number]
-      box-sizing: border-box
-      padding: 0 0.5rem
-      font-size: 2em;
-      text-align: center
-      &::-webkit-inner-spin-button, 
-      &::-webkit-outer-spin-button
-        opacity: 1
-  
+      display: flex
+      flex-wrap: wrap
+      margin-bottom: 1rem
+      button, input
+        width: 50%
+      > button:hover
+        color: #fff
+      > button.active, > button.active:hover
+        background: #fff
+        color: #333
+        cursor: default
+      > input[type=color], > input[type=number]
+        padding: 0
+        height: 45px
+        cursor: pointer
+      > input[type=number]
+        width: 60%
+        background: #222
+        box-sizing: border-box
+        padding: 0 0.5rem
+        font-size: 2em
+        text-align: center
+        &::-webkit-inner-spin-button, 
+        &::-webkit-outer-spin-button
+          opacity: 1
+      > div
+        width: 40%
+  .save
+    width: 100%
+    &.modified
+      background: #600
+ 
 #credits
   margin-right: 3rem
   h1
