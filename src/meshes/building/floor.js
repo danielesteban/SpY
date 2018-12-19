@@ -15,8 +15,6 @@ import ThiccBoi from '@/actors/thiccboi';
 import GridMaterial from '@/materials/grid';
 import Door from './door';
 
-const Actors = [Dude, ThiccBoi];
-
 class Floor extends Object3D {
   constructor({ grid, number } = { number: 0 }) {
     super();
@@ -44,8 +42,20 @@ class Floor extends Object3D {
       tile.type = type;
       tile.walkable = type !== Floor.tiles.tile;
       switch (type) {
-        case Floor.tiles.actor: {
-          const Actor = Actors[Math.floor(Math.random() * Actors.length)];
+        case Floor.tiles.dude:
+        case Floor.tiles.thiccboi:
+        {
+          let Actor;
+          switch (type) {
+            case Floor.tiles.dude:
+              Actor = Dude;
+              break;
+            case Floor.tiles.thiccboi:
+              Actor = ThiccBoi;
+              break;
+            default:
+              break;
+          }
           const actor = new Actor({
             arms: 0x222222,
             eyes: 0x999999 * Math.random(),
@@ -227,7 +237,10 @@ class Floor extends Object3D {
       };
       const hw = width * 0.5;
       const hl = length * 0.5;
-      const bottomAO = 0.8 + (0.2 * z / Floor.height);
+      const wallAO = {
+        bottom: 0.8 + (0.2 * z / Floor.height),
+        top: 0.8 + (0.2 * (z + height) / Floor.height),
+      };
       if (!testNeighbor(x, y + 1)) {
         pushFace(
           [
@@ -237,10 +250,10 @@ class Floor extends Object3D {
             o.x - hw, z + height, o.y + hl,
           ],
           [
-            r * bottomAO, g * bottomAO, b * bottomAO,
-            r * bottomAO, g * bottomAO, b * bottomAO,
-            r, g, b,
-            r, g, b,
+            r * wallAO.bottom, g * wallAO.bottom, b * wallAO.bottom,
+            r * wallAO.bottom, g * wallAO.bottom, b * wallAO.bottom,
+            r * wallAO.top, g * wallAO.top, b * wallAO.top,
+            r * wallAO.top, g * wallAO.top, b * wallAO.top,
           ],
           [
             0, 0, 1,
@@ -259,10 +272,10 @@ class Floor extends Object3D {
             o.x + hw, z + height, o.y - hl,
           ],
           [
-            r * bottomAO, g * bottomAO, b * bottomAO,
-            r * bottomAO, g * bottomAO, b * bottomAO,
-            r, g, b,
-            r, g, b,
+            r * wallAO.bottom, g * wallAO.bottom, b * wallAO.bottom,
+            r * wallAO.bottom, g * wallAO.bottom, b * wallAO.bottom,
+            r * wallAO.top, g * wallAO.top, b * wallAO.top,
+            r * wallAO.top, g * wallAO.top, b * wallAO.top,
           ],
           [
             0, 0, -1,
@@ -281,10 +294,10 @@ class Floor extends Object3D {
             o.x - hw, z + height, o.y - hl,
           ],
           [
-            r * bottomAO, g * bottomAO, b * bottomAO,
-            r * bottomAO, g * bottomAO, b * bottomAO,
-            r, g, b,
-            r, g, b,
+            r * wallAO.bottom, g * wallAO.bottom, b * wallAO.bottom,
+            r * wallAO.bottom, g * wallAO.bottom, b * wallAO.bottom,
+            r * wallAO.top, g * wallAO.top, b * wallAO.top,
+            r * wallAO.top, g * wallAO.top, b * wallAO.top,
           ],
           [
             1, 0, 0,
@@ -303,10 +316,10 @@ class Floor extends Object3D {
             o.x + hw, z + height, o.y + hl,
           ],
           [
-            r * bottomAO, g * bottomAO, b * bottomAO,
-            r * bottomAO, g * bottomAO, b * bottomAO,
-            r, g, b,
-            r, g, b,
+            r * wallAO.bottom, g * wallAO.bottom, b * wallAO.bottom,
+            r * wallAO.bottom, g * wallAO.bottom, b * wallAO.bottom,
+            r * wallAO.top, g * wallAO.top, b * wallAO.top,
+            r * wallAO.top, g * wallAO.top, b * wallAO.top,
           ],
           [
             -1, 0, 0,
@@ -362,7 +375,15 @@ class Floor extends Object3D {
     const testTileNeighbor = (x, y) => this.testTile(
       x,
       y,
-      [Floor.tiles.door, Floor.tiles.tile, Floor.tiles.wall, Floor.tiles.window]
+      [
+        Floor.tiles.tile,
+        Floor.tiles.wall,
+        Floor.tiles.window,
+        Floor.tiles.fence,
+        Floor.tiles.door,
+        Floor.tiles.dude,
+        Floor.tiles.thiccboi,
+      ]
     );
     const testWallNeighbor = (x, y) => this.testTile(x, y, [Floor.tiles.wall]);
     const testWindowNeighbor = (x, y) => this.testTile(x, y, [
@@ -370,7 +391,7 @@ class Floor extends Object3D {
       Floor.tiles.window,
     ]);
     const tileAO = (x, y, s = 0.2) => (
-      this.testTile(x, y, [Floor.tiles.wall, Floor.tiles.window]) ? s : 0
+      this.testTile(x, y, [Floor.tiles.wall, Floor.tiles.window, Floor.tiles.fence]) ? s : 0
     );
     const windowAO = (x, y, s = 0.2) => (
       this.testTile(x, y, [Floor.tiles.wall]) ? s : 0
@@ -406,13 +427,16 @@ class Floor extends Object3D {
     const pushWall = (x, y, color) => (
       pushBox(x, y, 1, 1, Floor.height, color, testWallNeighbor, [1, 1, 1, 1])
     );
-    const pushWindow = (x, y, color) => {
+    const pushFence = (x, y, color) => {
       pushBox(x, y, 1, 1, Floor.height * (1 / 3), color, testWindowNeighbor, [
         1 - Math.min(windowAO(x, y + 1) + windowAO(x - 1, y) + windowAO(x - 1, y + 1, 0.1), 0.4),
         1 - Math.min(windowAO(x, y + 1) + windowAO(x + 1, y) + windowAO(x + 1, y + 1, 0.1), 0.4),
         1 - Math.min(windowAO(x, y - 1) + windowAO(x + 1, y) + windowAO(x + 1, y - 1, 0.1), 0.4),
         1 - Math.min(windowAO(x, y - 1) + windowAO(x - 1, y) + windowAO(x - 1, y - 1, 0.1), 0.4),
       ]);
+    };
+    const pushWindow = (x, y, color) => {
+      pushFence(x, y, color);
       pushBox(
         x,
         y,
@@ -439,16 +463,18 @@ class Floor extends Object3D {
         switch (tile.type) {
           case Floor.tiles.air:
             break;
-          case Floor.tiles.door:
-            pushDoorway(x, y, tile.color);
-            break;
           case Floor.tiles.wall:
             pushWall(x, y, tile.color);
             break;
           case Floor.tiles.window:
             pushWindow(x, y, tile.color);
             break;
-          case Floor.tiles.dude:
+          case Floor.tiles.fence:
+            pushFence(x, y, tile.color);
+            break;
+          case Floor.tiles.door:
+            pushDoorway(x, y, tile.color);
+            break;
           default:
             pushTile(x, y, tile.color);
             break;
@@ -481,8 +507,10 @@ Floor.tiles = {
   tile: 1,
   wall: 2,
   window: 3,
-  door: 4,
-  actor: 5,
+  fence: 4,
+  door: 5,
+  dude: 6,
+  thiccboi: 7,
 };
 
 Floor.defaultGridSize = {

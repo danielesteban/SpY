@@ -7,7 +7,7 @@ import {
 
 class Camera extends PerspectiveCamera {
   constructor() {
-    super(60, 1, 0.1, 2048);
+    super(90, 1, 0.1, 2048);
     this.distance = 5;
     this.maxDistance = 16;
     this.minHeight = -Infinity;

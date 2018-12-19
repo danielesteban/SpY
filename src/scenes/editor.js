@@ -1,3 +1,6 @@
+import pako from 'pako';
+import ab2str from 'arraybuffer-to-string';
+import str2ab from 'string-to-arraybuffer';
 import Building from '@/meshes/building';
 import EditorUI from '@/ui/editor';
 import History from '@/core/history';
@@ -14,7 +17,7 @@ export default ({ input, scene }) => {
   // Spawn building
   const stored = localStorage.getItem('SpY::EditorTestLevel');
   const building = new Building(
-    stored ? JSON.parse(stored) : {}
+    stored ? JSON.parse(ab2str(pako.inflate(new Uint8Array(str2ab(stored))))) : {}
   );
   scene.root.add(building);
   rain.position.x = building.heightmap[0].length * 0.5;
@@ -75,7 +78,8 @@ export default ({ input, scene }) => {
     },
     onSave() {
       const meta = building.export();
-      localStorage.setItem('SpY::EditorTestLevel', JSON.stringify(meta));
+      const encoded = ab2str(pako.deflate(new Uint8Array(str2ab(JSON.stringify(meta)))), 'base64');
+      localStorage.setItem('SpY::EditorTestLevel', encoded);
       ui.setModified(false);
     },
     onSetFloor(floor) {

@@ -38,29 +38,6 @@ class EditorUI extends UI {
       wrapper.appendChild(input);
       wrapper.appendChild(buttons);
     }
-    // Tiles
-    {
-      const label = this.add('label');
-      label.innerText = 'Tiles';
-      const tiles = [
-        'Air',
-        'Tile',
-        'Wall',
-        'Window',
-        'Door',
-        'Dude',
-      ].map((label, tile) => {
-        const button = this.add('button');
-        button.innerText = label;
-        button.addEventListener('click', () => {
-          this.setTool('paint', tile);
-        }, false);
-        return button;
-      });
-      const wrapper = this.add('div');
-      tiles.forEach(button => wrapper.appendChild(button));
-      this.tiles = tiles;
-    }
     // Color
     {
       const label = this.add('label');
@@ -81,6 +58,39 @@ class EditorUI extends UI {
       const wrapper = this.add('div');
       wrapper.appendChild(input);
       wrapper.appendChild(button);
+    }
+    // Tiles
+    {
+      const tiles = [
+        'Air',
+        'Tile',
+        'Wall',
+        'Window',
+        'Fence',
+        'Door',
+        'Dude',
+        'ThiccBoi',
+      ].map((label, tile) => {
+        const button = this.add('button');
+        button.innerText = label;
+        button.addEventListener('click', () => {
+          this.setTool('paint', tile);
+        }, false);
+        return button;
+      });
+      {
+        const label = this.add('label');
+        label.innerText = 'Tiles';
+        const wrapper = this.add('div');
+        tiles.slice(0, 6).forEach(button => wrapper.appendChild(button));
+      }
+      {
+        const label = this.add('label');
+        label.innerText = 'Actors';
+        const wrapper = this.add('div');
+        tiles.slice(6).forEach(button => wrapper.appendChild(button));
+      }
+      this.tiles = tiles;
     }
     // Save
     const save = this.add('button');
