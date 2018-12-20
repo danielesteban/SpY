@@ -82,6 +82,31 @@ export default ({ input, scene }) => {
       localStorage.setItem('SpY::EditorTestLevel', encoded);
       ui.setModified(false);
     },
+    onImport() {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.onchange = () => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          localStorage.setItem('SpY::EditorTestLevel', ab2str(reader.result, 'base64'));
+          window.location.reload();
+        };
+        reader.readAsArrayBuffer(input.files[0]);
+      };
+      input.click();
+    },
+    onExport() {
+      const meta = building.export();
+      const blob = new Blob([
+        pako.deflate(new Uint8Array(str2ab(JSON.stringify(meta)))),
+      ]);
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'SpYEditorLevel.bin';
+      a.click();
+      setImmediate(() => URL.revokeObjectURL(url));
+    },
     onSetFloor(floor) {
       building.activeFloor = floor;
       const { height } = building.floors[building.activeFloor].constructor;

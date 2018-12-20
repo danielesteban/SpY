@@ -7,6 +7,8 @@ class EditorUI extends UI {
     onRemoveFloor,
     onSave,
     onSetFloor,
+    onImport,
+    onExport,
   }) {
     super('toolbar');
     this.onKeyup = this.onKeyup.bind(this);
@@ -98,6 +100,18 @@ class EditorUI extends UI {
     save.innerText = 'Save';
     save.addEventListener('click', onSave, false);
     this.saveButton = save;
+    {
+      // Import/Export
+      const importButton = this.add('button');
+      importButton.innerText = 'Import';
+      importButton.addEventListener('click', onImport, false);
+      const exportButton = this.add('button');
+      exportButton.innerText = 'Export';
+      exportButton.addEventListener('click', onExport, false);
+      const wrapper = this.add('div');
+      wrapper.appendChild(importButton);
+      wrapper.appendChild(exportButton);
+    }
     // Initial state
     this.setFloorCount(floorCount);
     this.setFloor(0);

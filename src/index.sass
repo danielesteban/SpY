@@ -95,7 +95,12 @@ canvas
       flex-wrap: wrap
       margin-bottom: 1rem
       button, input
-        width: 50%
+        width: calc(50% - 0.125rem)
+        margin: 0.125rem 0
+        &:nth-child(odd)
+          margin-right: 0.125rem
+        &:nth-child(even)
+          margin-left: 0.125rem
       button:hover
         color: #fff
       > button.active, > button.active:hover
@@ -104,10 +109,11 @@ canvas
         cursor: default
       > input[type=color], > input[type=number]
         padding: 0
+        margin: 0
         height: 45px
         cursor: pointer
       > input[type=number]
-        width: 60%
+        width: 55%
         background: #222
         box-sizing: border-box
         padding: 0 0.5rem
@@ -117,9 +123,10 @@ canvas
         &::-webkit-outer-spin-button
           opacity: 1
       > div
-        width: 40%
+        width: 45%
   .save
     width: 100%
+    margin-bottom: 0.125rem
     &.modified
       background: #600
       color: #fff
